@@ -8,8 +8,7 @@ Thank you for your interest in contributing! This server is part of the
 ```bash
 git clone https://github.com/malkreide/parlament-mcp
 cd parlament-mcp
-pip install -e .
-pip install pytest pytest-asyncio respx ruff
+pip install -e ".[dev]"
 ```
 
 ## Running Tests

@@ -1,32 +1,40 @@
+#!/usr/bin/env python3
 """
-parlament-mcp – Swiss Parliament MCP Server
-Connects AI models to ws.parlament.ch (Curia Vista OData API).
-No authentication required (Phase 1 – No-Auth-First).
+parlament-mcp – Schweizer Parlament MCP Server – v0.1.0
+
+AI-nativer Zugang zum Schweizer Bundesparament via Curia Vista OData API:
+  · Vorstösse (Motionen, Postulate, Interpellationen, Anfragen)
+  · Abstimmungen im Rat
+  · Ratsmitglieder (National- und Ständerat)
+  · Sessionen
+  · Debatten-Transkripte (Amtliches Bulletin)
+
+Kein API-Schlüssel erforderlich. Alle Daten öffentlich zugänglich.
 """
 
 from __future__ import annotations
 
 import json
-import os
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Optional
+import sys
+from datetime import UTC, datetime
+from enum import StrEnum
+from typing import Any
 
 import httpx
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
+# ─────────────────────────── Server ────────────────────────────────────────────
+mcp = FastMCP("parlament_mcp")
 
+# ─────────────────────────── Konstanten ────────────────────────────────────────
 BASE_URL = "https://ws.parlament.ch/odata.svc"
 DEFAULT_LANG = "DE"
-DEFAULT_TIMEOUT = 20.0
+HTTP_TIMEOUT = 20.0
 DEFAULT_LIMIT = 20
 MAX_LIMIT = 100
 
-# Business type IDs (Curia Vista)
+# Geschäftstyp-IDs (Curia Vista)
 BUSINESS_TYPE_NAMES = {
     5: "Motion",
     6: "Postulat",
@@ -39,29 +47,22 @@ BUSINESS_TYPE_NAMES = {
     1: "Geschäft des Bundesrates",
 }
 
-# ---------------------------------------------------------------------------
-# FastMCP initialisation  (FastMCP v1.26.0 pattern)
-# ---------------------------------------------------------------------------
 
-mcp = FastMCP(
-    "parlament_mcp",
-    instructions=(
-        "Swiss Parliament MCP Server – access Curia Vista data: "
-        "parliamentary motions (Vorstösse), votes, members, sessions, "
-        "and debate transcripts via the ws.parlament.ch OData API."
-    ),
-)
-
-transport = os.getenv("MCP_TRANSPORT", "stdio")
-if transport == "sse":
-    mcp.settings.host = "0.0.0.0"
-    mcp.settings.port = int(os.getenv("PORT", "8080"))
-
-# ---------------------------------------------------------------------------
-# Shared HTTP client helper
-# ---------------------------------------------------------------------------
+# ─────────────────────────── Enums ─────────────────────────────────────────────
+class Language(StrEnum):
+    """Verfügbare Sprachen der Curia Vista API."""
+    DE = "DE"
+    FR = "FR"
+    IT = "IT"
 
 
+class ResponseFormat(StrEnum):
+    """Ausgabeformat für Tool-Antworten."""
+    MARKDOWN = "markdown"
+    JSON = "json"
+
+
+# ─────────────────────────── Hilfsfunktionen ───────────────────────────────────
 async def _odata_get(
     entity: str,
     filters: list[str] | None = None,
@@ -71,7 +72,7 @@ async def _odata_get(
     select: list[str] | None = None,
     lang: str = DEFAULT_LANG,
 ) -> list[dict[str, Any]]:
-    """Execute an OData GET request and return the result list."""
+    """OData-GET-Anfrage ausführen und Ergebnisliste zurückgeben."""
     params: dict[str, str] = {
         "$format": "json",
         "$top": str(min(top, MAX_LIMIT)),
@@ -79,7 +80,7 @@ async def _odata_get(
     if skip:
         params["$skip"] = str(skip)
 
-    # Always filter by language
+    # Immer nach Sprache filtern
     lang_filter = f"Language eq '{lang}'"
     all_filters = [lang_filter] + (filters or [])
     params["$filter"] = " and ".join(f"({f})" for f in all_filters)
@@ -90,7 +91,7 @@ async def _odata_get(
         params["$select"] = ",".join(select)
 
     url = f"{BASE_URL}/{entity}"
-    async with httpx.AsyncClient(timeout=DEFAULT_TIMEOUT) as client:
+    async with httpx.AsyncClient(timeout=HTTP_TIMEOUT) as client:
         resp = client.build_request("GET", url, params=params)
         response = await client.send(resp)
         response.raise_for_status()
@@ -98,19 +99,35 @@ async def _odata_get(
         return data.get("d", [])
 
 
+def _handle_error(e: Exception) -> str:
+    """Einheitliche, handlungsorientierte Fehlermeldungen (auf Deutsch)."""
+    if isinstance(e, httpx.HTTPStatusError):
+        code = e.response.status_code
+        if code == 404:
+            return "Fehler: Ressource nicht gefunden. Bitte ID oder Parameter prüfen."
+        if code == 429:
+            return "Fehler: Rate-Limit erreicht. Bitte kurz warten und erneut versuchen."
+        if code in (503, 502):
+            return "Fehler: Dienst vorübergehend nicht verfügbar. Bitte erneut versuchen."
+        return f"Fehler: API-Anfrage fehlgeschlagen (HTTP {code})."
+    if isinstance(e, httpx.TimeoutException):
+        return "Fehler: Zeitüberschreitung. Der Dienst antwortet nicht. Bitte erneut versuchen."
+    return f"Fehler: Unerwarteter Fehler ({type(e).__name__}): {e}"
+
+
 def _parse_date(ms_date: str | None) -> str:
-    """Convert OData /Date(...)/ to ISO string."""
+    """OData /Date(...)/ in ISO-String umwandeln."""
     if not ms_date:
         return ""
     try:
         ms = int(ms_date.replace("/Date(", "").replace(")/", ""))
-        return datetime.fromtimestamp(ms / 1000, tz=timezone.utc).strftime("%Y-%m-%d")
+        return datetime.fromtimestamp(ms / 1000, tz=UTC).strftime("%Y-%m-%d")
     except Exception:
         return ms_date
 
 
 def _fmt_business(b: dict) -> dict:
-    """Return a clean Business dict for tool responses."""
+    """Geschäft-Dict für Tool-Antworten aufbereiten."""
     return {
         "id": b.get("ID"),
         "short_number": b.get("BusinessShortNumber"),
@@ -127,115 +144,100 @@ def _fmt_business(b: dict) -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# Input models
-# ---------------------------------------------------------------------------
-
-
-class Language(str, Enum):
-    DE = "DE"
-    FR = "FR"
-    IT = "IT"
-
-
-class ResponseFormat(str, Enum):
-    MARKDOWN = "markdown"
-    JSON = "json"
-
-
+# ─────────────────────────── Eingabemodelle ────────────────────────────────────
 class SearchBusinessInput(BaseModel):
-    """Input for searching parliamentary businesses (Vorstösse)."""
+    """Eingabe für die Suche nach parlamentarischen Vorstössen."""
 
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    keyword: Optional[str] = Field(
+    keyword: str | None = Field(
         default=None,
         description=(
-            "Keyword to search in the title. "
-            "Examples: 'Künstliche Intelligenz', 'Bildung', 'Digitalisierung', 'Schule', 'KI'"
+            "Stichwort für die Titelsuche. "
+            "Beispiele: 'Künstliche Intelligenz', 'Bildung', 'Digitalisierung', 'Schule', 'KI'"
         ),
         max_length=200,
     )
-    keyword2: Optional[str] = Field(
+    keyword2: str | None = Field(
         default=None,
-        description="Second keyword (ANDed with keyword). Example: 'Schule' when keyword='KI'.",
+        description="Zweites Stichwort (UND-verknüpft). Beispiel: 'Schule' wenn keyword='KI'.",
         max_length=200,
     )
-    business_type: Optional[str] = Field(
+    business_type: str | None = Field(
         default=None,
         description=(
-            "Filter by business type. Valid values: 'Motion', 'Postulat', 'Interpellation', "
+            "Nach Geschäftstyp filtern. Gültige Werte: 'Motion', 'Postulat', 'Interpellation', "
             "'Parlamentarische Initiative', 'Standesinitiative', 'Anfrage', 'Einfache Anfrage'"
         ),
     )
-    status: Optional[str] = Field(
+    status: str | None = Field(
         default=None,
         description=(
-            "Filter by status. Common values: 'Eingereicht' (pending/open), "
-            "'Erledigt' (closed), 'Überwiesen an den Bundesrat' (referred to Federal Council), "
-            "'Angenommen' (accepted), 'Abgelehnt' (rejected)"
+            "Nach Status filtern. Häufige Werte: 'Eingereicht' (hängig), "
+            "'Erledigt' (abgeschlossen), 'Überwiesen an den Bundesrat', "
+            "'Angenommen', 'Abgelehnt'"
         ),
     )
-    submitted_after: Optional[str] = Field(
+    submitted_after: str | None = Field(
         default=None,
-        description="Filter businesses submitted after this date (ISO format YYYY-MM-DD).",
+        description="Vorstösse nach diesem Datum (ISO-Format JJJJ-MM-TT).",
         pattern=r"^\d{4}-\d{2}-\d{2}$",
     )
-    council: Optional[str] = Field(
+    council: str | None = Field(
         default=None,
-        description="Filter by submitting council: 'NR' (Nationalrat) or 'SR' (Ständerat).",
+        description="Nach Rat filtern: 'NR' (Nationalrat) oder 'SR' (Ständerat).",
     )
     limit: int = Field(
         default=20,
-        description="Maximum number of results (1–100).",
+        description="Maximale Anzahl Ergebnisse (1–100).",
         ge=1,
         le=MAX_LIMIT,
     )
-    offset: int = Field(default=0, description="Offset for pagination.", ge=0)
+    offset: int = Field(default=0, description="Offset für Paginierung.", ge=0)
     response_format: ResponseFormat = Field(
         default=ResponseFormat.MARKDOWN,
-        description="Output format: 'markdown' (readable) or 'json' (structured).",
+        description="Ausgabeformat: 'markdown' (lesbar) oder 'json' (strukturiert).",
     )
 
 
 class GetBusinessInput(BaseModel):
-    """Input for fetching a single business by ID."""
+    """Eingabe zum Abrufen eines einzelnen Vorstosses nach ID."""
 
     model_config = ConfigDict(extra="forbid")
 
     business_id: int = Field(
-        ..., description="The numeric Curia Vista business ID (e.g. 20254750)."
+        ..., description="Numerische Curia Vista Geschäfts-ID (z.B. 20254750)."
     )
-    language: Language = Field(default=Language.DE, description="Response language.")
+    language: Language = Field(default=Language.DE, description="Antwortsprache.")
 
 
 class SearchMembersInput(BaseModel):
-    """Input for searching council members (Parlamentarier)."""
+    """Eingabe für die Suche nach Ratsmitgliedern (Parlamentarier·innen)."""
 
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    canton: Optional[str] = Field(
+    canton: str | None = Field(
         default=None,
-        description="Filter by canton abbreviation, e.g. 'ZH', 'BE', 'GE', 'AG'.",
+        description="Nach Kanton filtern, z.B. 'ZH', 'BE', 'GE', 'AG'.",
         max_length=2,
     )
-    last_name: Optional[str] = Field(
+    last_name: str | None = Field(
         default=None,
-        description="Filter by last name (partial match).",
+        description="Nach Nachname filtern (Teilübereinstimmung).",
         max_length=100,
     )
-    council: Optional[str] = Field(
+    council: str | None = Field(
         default=None,
-        description="Filter by council: 'NR' (Nationalrat) or 'SR' (Ständerat).",
+        description="Nach Rat filtern: 'NR' (Nationalrat) oder 'SR' (Ständerat).",
     )
-    party: Optional[str] = Field(
+    party: str | None = Field(
         default=None,
-        description="Filter by party abbreviation, e.g. 'SP', 'SVP', 'FDP', 'Mitte', 'Grüne'.",
+        description="Nach Partei filtern, z.B. 'SP', 'SVP', 'FDP', 'Mitte', 'Grüne'.",
         max_length=20,
     )
     active_only: bool = Field(
         default=True,
-        description="If true, return only currently active members.",
+        description="Nur aktive Ratsmitglieder zurückgeben.",
     )
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT)
     offset: int = Field(default=0, ge=0)
@@ -243,18 +245,18 @@ class SearchMembersInput(BaseModel):
 
 
 class GetVotesInput(BaseModel):
-    """Input for fetching parliamentary votes (Abstimmungen)."""
+    """Eingabe zum Abrufen parlamentarischer Abstimmungen."""
 
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    keyword: Optional[str] = Field(
+    keyword: str | None = Field(
         default=None,
-        description="Keyword in the vote's business title (e.g. 'Bildung', 'KI').",
+        description="Stichwort im Geschäftstitel der Abstimmung (z.B. 'Bildung', 'KI').",
         max_length=200,
     )
-    session_id: Optional[int] = Field(
+    session_id: int | None = Field(
         default=None,
-        description="Filter votes from a specific session ID.",
+        description="Abstimmungen einer bestimmten Session filtern.",
     )
     limit: int = Field(default=20, ge=1, le=50)
     offset: int = Field(default=0, ge=0)
@@ -262,7 +264,7 @@ class GetVotesInput(BaseModel):
 
 
 class GetSessionsInput(BaseModel):
-    """Input for listing parliamentary sessions."""
+    """Eingabe zum Auflisten parlamentarischer Sessionen."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -272,42 +274,40 @@ class GetSessionsInput(BaseModel):
 
 
 class GetTranscriptsInput(BaseModel):
-    """Input for fetching debate transcripts."""
+    """Eingabe zum Abrufen von Debatten-Transkripten."""
 
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    keyword: Optional[str] = Field(
+    keyword: str | None = Field(
         default=None,
-        description="Keyword to search in the transcript text (e.g. 'KI', 'Schule').",
+        description="Stichwort im Transkripttext (z.B. 'KI', 'Schule').",
         max_length=200,
     )
-    speaker_name: Optional[str] = Field(
+    speaker_name: str | None = Field(
         default=None,
-        description="Filter by speaker last name.",
+        description="Nach Nachname des Redners filtern.",
         max_length=100,
     )
-    session_id: Optional[int] = Field(
+    session_id: int | None = Field(
         default=None,
-        description="Filter transcripts from a specific session.",
+        description="Transkripte einer bestimmten Session filtern.",
     )
-    council: Optional[str] = Field(
+    council: str | None = Field(
         default=None,
-        description="Filter by council: 'NR' or 'SR'.",
+        description="Nach Rat filtern: 'NR' oder 'SR'.",
     )
     limit: int = Field(default=15, ge=1, le=50)
     offset: int = Field(default=0, ge=0)
     response_format: ResponseFormat = Field(default=ResponseFormat.MARKDOWN)
 
 
-# ---------------------------------------------------------------------------
-# Tools
-# ---------------------------------------------------------------------------
+# ─────────────────────────── Tools ─────────────────────────────────────────────
 
 
 @mcp.tool(
     name="parlament_search_business",
     annotations={
-        "title": "Search Parliamentary Businesses (Vorstösse)",
+        "title": "Parlamentarische Vorstösse suchen",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -315,22 +315,14 @@ class GetTranscriptsInput(BaseModel):
     },
 )
 async def parlament_search_business(params: SearchBusinessInput) -> str:
-    """Search parliamentary businesses (motions, interpellations, postulates, etc.).
+    """Parlamentarische Vorstösse suchen (Motionen, Interpellationen, Postulate usw.).
 
-    Returns Curia Vista business records from ws.parlament.ch. Use this tool to
-    find pending motions on AI in schools, digitisation initiatives, education
-    policy, or any other topic of interest to the KI-Fachgruppe.
+    Durchsucht Curia Vista Geschäftsdaten von ws.parlament.ch. Geeignet zum
+    Finden hängiger Vorstösse zu KI in der Bildung, Digitalisierungsinitiativen
+    oder beliebigen Politikthemen.
 
-    Anchor query example: 'Welche Vorstösse zu KI in der Schule sind hängig?'
+    Anker-Abfrage: 'Welche Vorstösse zu KI in der Schule sind hängig?'
     → keyword='KI', keyword2='Schule', status='Eingereicht'
-
-    Args:
-        params (SearchBusinessInput): Search parameters including keyword(s),
-            business type, status, council, date filter, pagination.
-
-    Returns:
-        str: Formatted list of matching parliamentary businesses with ID, type,
-             title, status, submitter, and submission date.
     """
     filters: list[str] = []
 
@@ -351,13 +343,6 @@ async def parlament_search_business(params: SearchBusinessInput) -> str:
         council_name = council_map.get(params.council.upper(), params.council)
         filters.append(f"SubmissionCouncilName eq '{council_name}'")
     if params.submitted_after:
-        # OData datetime filter
-        dt_ms = int(
-            datetime.strptime(params.submitted_after, "%Y-%m-%d")
-            .replace(tzinfo=timezone.utc)
-            .timestamp()
-            * 1000
-        )
         filters.append(f"SubmissionDate gt datetime'{params.submitted_after}T00:00:00'")
 
     try:
@@ -368,10 +353,8 @@ async def parlament_search_business(params: SearchBusinessInput) -> str:
             top=params.limit,
             skip=params.offset,
         )
-    except httpx.HTTPStatusError as e:
-        return f"Fehler beim Abrufen der Daten: HTTP {e.response.status_code}"
-    except httpx.TimeoutException:
-        return "Fehler: Zeitüberschreitung beim Abrufen der Parlamentsdaten."
+    except Exception as e:
+        return _handle_error(e)
 
     if not results:
         return "Keine Vorstösse gefunden für die angegebenen Suchkriterien."
@@ -389,7 +372,7 @@ async def parlament_search_business(params: SearchBusinessInput) -> str:
             ensure_ascii=False,
         )
 
-    # Markdown output
+    # Markdown-Ausgabe
     lines = [
         f"## Parlamentarische Vorstösse ({len(cleaned)} Treffer)\n",
     ]
@@ -428,7 +411,7 @@ async def parlament_search_business(params: SearchBusinessInput) -> str:
 @mcp.tool(
     name="parlament_get_business",
     annotations={
-        "title": "Get Parliamentary Business Detail",
+        "title": "Vorstoss-Details abrufen",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -436,29 +419,19 @@ async def parlament_search_business(params: SearchBusinessInput) -> str:
     },
 )
 async def parlament_get_business(params: GetBusinessInput) -> str:
-    """Fetch full details of a single parliamentary business by its Curia Vista ID.
+    """Vollständige Details eines parlamentarischen Vorstosses nach Curia Vista ID abrufen.
 
-    Use this after a search to get complete information including the initial
-    situation, proceedings, motion text, and Federal Council response.
-
-    Args:
-        params (GetBusinessInput): Business ID and language.
-
-    Returns:
-        str: Full business details including texts, status history, and links.
+    Nach einer Suche verwenden, um vollständige Informationen inkl. Ausgangslage,
+    Vorstosstext und Antwort des Bundesrats zu erhalten.
     """
     try:
         url = f"{BASE_URL}/Business(ID={params.business_id},Language='{params.language.value}')"
-        async with httpx.AsyncClient(timeout=DEFAULT_TIMEOUT) as client:
+        async with httpx.AsyncClient(timeout=HTTP_TIMEOUT) as client:
             resp = await client.get(url, params={"$format": "json"})
             resp.raise_for_status()
             data = resp.json()
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code == 404:
-            return f"Vorstoss mit ID {params.business_id} nicht gefunden."
-        return f"API-Fehler: HTTP {e.response.status_code}"
-    except httpx.TimeoutException:
-        return "Zeitüberschreitung beim Abrufen der Daten."
+    except Exception as e:
+        return _handle_error(e)
 
     b = data.get("d", data)
     if not b or not b.get("ID"):
@@ -500,7 +473,7 @@ async def parlament_get_business(params: GetBusinessInput) -> str:
 @mcp.tool(
     name="parlament_search_members",
     annotations={
-        "title": "Search Council Members (Parlamentarier)",
+        "title": "Ratsmitglieder suchen",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -508,17 +481,11 @@ async def parlament_get_business(params: GetBusinessInput) -> str:
     },
 )
 async def parlament_search_members(params: SearchMembersInput) -> str:
-    """Search for members of the National Council (Nationalrat) or Council of States (Ständerat).
+    """National- und Ständeräte suchen.
 
-    Useful for finding all Zurich members ('ZH') or members of a specific party.
-    Synergy: combine with parlament_search_business to find who submitted motions
-    on digitisation or AI in Zurich's political sphere.
-
-    Args:
-        params (SearchMembersInput): Search filters including canton, name, council, party.
-
-    Returns:
-        str: List of council members with name, council, canton, party, and group.
+    Nützlich um alle Zürcher Ratsmitglieder ('ZH') oder Mitglieder einer
+    bestimmten Partei zu finden. Synergie: mit parlament_search_business
+    kombinieren, um Urheber von Vorstössen zu identifizieren.
     """
     filters: list[str] = []
     if params.active_only:
@@ -544,10 +511,8 @@ async def parlament_search_members(params: SearchMembersInput) -> str:
             top=params.limit,
             skip=params.offset,
         )
-    except httpx.HTTPStatusError as e:
-        return f"API-Fehler: HTTP {e.response.status_code}"
-    except httpx.TimeoutException:
-        return "Zeitüberschreitung."
+    except Exception as e:
+        return _handle_error(e)
 
     if not results:
         return "Keine Ratsmitglieder gefunden."
@@ -583,7 +548,7 @@ async def parlament_search_members(params: SearchMembersInput) -> str:
 @mcp.tool(
     name="parlament_get_votes",
     annotations={
-        "title": "Get Parliamentary Votes (Abstimmungen)",
+        "title": "Parlamentarische Abstimmungen abrufen",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -591,16 +556,10 @@ async def parlament_search_members(params: SearchMembersInput) -> str:
     },
 )
 async def parlament_get_votes(params: GetVotesInput) -> str:
-    """Fetch parliamentary votes (Abstimmungen im Rat) with Ja/Nein meaning.
+    """Parlamentarische Abstimmungen (im Rat) mit Ja/Nein-Bedeutung abrufen.
 
-    Use this to see how the council voted on specific topics like AI regulation,
-    education funding, or digitisation projects.
-
-    Args:
-        params (GetVotesInput): Keyword, session ID, pagination.
-
-    Returns:
-        str: List of votes with business title, session, and Ja/Nein semantics.
+    Zeigt, wie der Rat über bestimmte Themen wie KI-Regulierung,
+    Bildungsfinanzierung oder Digitalisierungsprojekte abgestimmt hat.
     """
     filters: list[str] = []
     if params.keyword:
@@ -617,10 +576,8 @@ async def parlament_get_votes(params: GetVotesInput) -> str:
             top=params.limit,
             skip=params.offset,
         )
-    except httpx.HTTPStatusError as e:
-        return f"API-Fehler: HTTP {e.response.status_code}"
-    except httpx.TimeoutException:
-        return "Zeitüberschreitung."
+    except Exception as e:
+        return _handle_error(e)
 
     if not results:
         return "Keine Abstimmungen gefunden."
@@ -654,7 +611,7 @@ async def parlament_get_votes(params: GetVotesInput) -> str:
 @mcp.tool(
     name="parlament_get_sessions",
     annotations={
-        "title": "List Parliamentary Sessions",
+        "title": "Parlamentarische Sessionen auflisten",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -662,15 +619,10 @@ async def parlament_get_votes(params: GetVotesInput) -> str:
     },
 )
 async def parlament_get_sessions(params: GetSessionsInput) -> str:
-    """List recent parliamentary sessions (Sessionen) with dates.
+    """Aktuelle parlamentarische Sessionen mit Daten auflisten.
 
-    Use session IDs from this list to filter votes or transcripts.
-
-    Args:
-        params (GetSessionsInput): Limit, offset, format.
-
-    Returns:
-        str: List of sessions with ID, name, start/end dates.
+    Session-IDs aus dieser Liste zum Filtern von Abstimmungen oder
+    Transkripten verwenden.
     """
     try:
         results = await _odata_get(
@@ -680,7 +632,7 @@ async def parlament_get_sessions(params: GetSessionsInput) -> str:
             skip=params.offset,
         )
     except Exception as e:
-        return f"Fehler: {e}"
+        return _handle_error(e)
 
     if not results:
         return "Keine Sessionen gefunden."
@@ -715,7 +667,7 @@ async def parlament_get_sessions(params: GetSessionsInput) -> str:
 @mcp.tool(
     name="parlament_get_transcripts",
     annotations={
-        "title": "Get Debate Transcripts (Ratsdebatten)",
+        "title": "Debatten-Transkripte abrufen (Amtliches Bulletin)",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -723,16 +675,11 @@ async def parlament_get_sessions(params: GetSessionsInput) -> str:
     },
 )
 async def parlament_get_transcripts(params: GetTranscriptsInput) -> str:
-    """Fetch excerpts from parliamentary debate transcripts (Amtliches Bulletin).
+    """Auszüge aus parlamentarischen Debatten-Transkripten (Amtliches Bulletin) abrufen.
 
-    Use this to find what specific councillors said about AI, digitisation in schools,
-    or any other topic. Synergy with fedlex-mcp: trace from law text → parliamentary debate.
-
-    Args:
-        params (GetTranscriptsInput): Keyword, speaker, session, council, pagination.
-
-    Returns:
-        str: Transcript excerpts with speaker, date, council, and text snippet.
+    Finden, was bestimmte Ratsmitglieder zu KI, Digitalisierung in der Schule
+    oder anderen Themen gesagt haben. Synergie mit fedlex-mcp: vom Gesetzestext
+    zur parlamentarischen Debatte.
     """
     filters: list[str] = []
     if params.keyword:
@@ -756,10 +703,8 @@ async def parlament_get_transcripts(params: GetTranscriptsInput) -> str:
             top=params.limit,
             skip=params.offset,
         )
-    except httpx.HTTPStatusError as e:
-        return f"API-Fehler: HTTP {e.response.status_code}"
-    except httpx.TimeoutException:
-        return "Zeitüberschreitung beim Abrufen der Debatten."
+    except Exception as e:
+        return _handle_error(e)
 
     if not results:
         return "Keine Transkripte gefunden für die angegebenen Kriterien."
@@ -801,9 +746,13 @@ async def parlament_get_transcripts(params: GetTranscriptsInput) -> str:
     return "\n".join(lines)
 
 
-# ---------------------------------------------------------------------------
-# Entrypoint
-# ---------------------------------------------------------------------------
-
+# ─────────────────────────── Einstiegspunkt ────────────────────────────────────
 if __name__ == "__main__":
-    mcp.run(transport=transport)
+    if "--http" in sys.argv:
+        port = 8080
+        for i, arg in enumerate(sys.argv):
+            if arg == "--port" and i + 1 < len(sys.argv):
+                port = int(sys.argv[i + 1])
+        mcp.run(transport="streamable-http", host="0.0.0.0", port=port)
+    else:
+        mcp.run(transport="stdio")

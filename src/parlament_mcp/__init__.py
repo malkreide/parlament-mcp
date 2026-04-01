@@ -1,3 +1,3 @@
-"""parlament-mcp – Swiss Parliament MCP Server."""
+"""parlament-mcp – Schweizer Parlament MCP Server."""
 
 __version__ = "0.1.0"

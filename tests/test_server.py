@@ -1,4 +1,8 @@
-"""Tests for parlament-mcp server."""
+"""Tests für parlament-mcp Server.
+
+Alle Tests nutzen gemockte HTTP-Antworten (kein Netzwerkzugriff nötig).
+Live-Tests sind mit @pytest.mark.live markiert und in CI ausgeschlossen.
+"""
 
 from __future__ import annotations
 
@@ -8,37 +12,36 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 from parlament_mcp.server import (
-    GetBusinessInput,
     GetSessionsInput,
-    GetVotesInput,
     SearchBusinessInput,
     SearchMembersInput,
     _fmt_business,
     _parse_date,
     parlament_get_sessions,
-    parlament_get_votes,
     parlament_search_business,
     parlament_search_members,
 )
 
-# ---------------------------------------------------------------------------
-# Unit tests – no network
-# ---------------------------------------------------------------------------
+# ─────────────────────────── Unit-Tests (kein Netzwerk) ────────────────────────
 
 
 def test_parse_date_valid():
+    """OData-Datum korrekt in ISO-String umwandeln."""
     assert _parse_date("/Date(1735689600000)/") == "2025-01-01"
 
 
 def test_parse_date_none():
+    """None ergibt leeren String."""
     assert _parse_date(None) == ""
 
 
 def test_parse_date_empty():
+    """Leerer String ergibt leeren String."""
     assert _parse_date("") == ""
 
 
 def test_fmt_business_basic():
+    """Geschäft-Dict korrekt aufbereiten."""
     raw = {
         "ID": 20261009,
         "BusinessShortNumber": "26.1009",
@@ -59,9 +62,7 @@ def test_fmt_business_basic():
     assert "Intelligenz" in result["title"]
 
 
-# ---------------------------------------------------------------------------
-# Integration tests – mocked HTTP
-# ---------------------------------------------------------------------------
+# ─────────────────────────── Integrationstests (gemockte HTTP) ─────────────────
 
 MOCK_BUSINESS = [
     {
@@ -111,13 +112,14 @@ MOCK_SESSION = [
 
 @pytest.fixture
 def mock_odata():
-    """Patch _odata_get to return mock data."""
+    """_odata_get mocken, um Testdaten zurückzugeben."""
     with patch("parlament_mcp.server._odata_get", new_callable=AsyncMock) as mock:
         yield mock
 
 
 @pytest.mark.asyncio
 async def test_search_business_markdown(mock_odata):
+    """Vorstoss-Suche: Markdown-Ausgabe prüfen."""
     mock_odata.return_value = MOCK_BUSINESS
     params = SearchBusinessInput(keyword="KI", keyword2="Schule", status="Eingereicht")
     result = await parlament_search_business(params)
@@ -128,6 +130,7 @@ async def test_search_business_markdown(mock_odata):
 
 @pytest.mark.asyncio
 async def test_search_business_json(mock_odata):
+    """Vorstoss-Suche: JSON-Ausgabe prüfen."""
     mock_odata.return_value = MOCK_BUSINESS
     params = SearchBusinessInput(keyword="KI", response_format="json")
     result = await parlament_search_business(params)
@@ -138,6 +141,7 @@ async def test_search_business_json(mock_odata):
 
 @pytest.mark.asyncio
 async def test_search_business_empty(mock_odata):
+    """Vorstoss-Suche: Leeres Ergebnis korrekt behandeln."""
     mock_odata.return_value = []
     params = SearchBusinessInput(keyword="xyz_nonexistent_12345")
     result = await parlament_search_business(params)
@@ -146,6 +150,7 @@ async def test_search_business_empty(mock_odata):
 
 @pytest.mark.asyncio
 async def test_search_members_zh(mock_odata):
+    """Ratsmitglieder-Suche: Zürcher Mitglieder finden."""
     mock_odata.return_value = MOCK_MEMBER
     params = SearchMembersInput(canton="ZH")
     result = await parlament_search_members(params)
@@ -155,21 +160,20 @@ async def test_search_members_zh(mock_odata):
 
 @pytest.mark.asyncio
 async def test_get_sessions(mock_odata):
+    """Sessionen auflisten: Ergebnisse prüfen."""
     mock_odata.return_value = MOCK_SESSION
     params = GetSessionsInput()
     result = await parlament_get_sessions(params)
     assert "Sommersession" in result
 
 
-# ---------------------------------------------------------------------------
-# Live tests – hit real API (excluded from CI)
-# ---------------------------------------------------------------------------
+# ─────────────────────────── Live-Tests (echte API, CI-ausgeschlossen) ─────────
 
 
 @pytest.mark.live
 @pytest.mark.asyncio
 async def test_live_search_ki():
-    """Live: search for 'Künstliche Intelligenz' motions."""
+    """Live: Suche nach 'Künstliche Intelligenz'-Vorstössen."""
     params = SearchBusinessInput(keyword="Künstliche Intelligenz", limit=5)
     result = await parlament_search_business(params)
     assert len(result) > 50
@@ -179,7 +183,7 @@ async def test_live_search_ki():
 @pytest.mark.live
 @pytest.mark.asyncio
 async def test_live_zh_members():
-    """Live: fetch active ZH council members."""
+    """Live: Aktive Zürcher Ratsmitglieder abrufen."""
     params = SearchMembersInput(canton="ZH", active_only=True, limit=5)
     result = await parlament_search_members(params)
     assert "ZH" in result
@@ -188,7 +192,7 @@ async def test_live_zh_members():
 @pytest.mark.live
 @pytest.mark.asyncio
 async def test_live_sessions():
-    """Live: list most recent sessions."""
+    """Live: Aktuelle Sessionen auflisten."""
     params = GetSessionsInput(limit=5)
     result = await parlament_get_sessions(params)
     assert "Session" in result or "5" in result
