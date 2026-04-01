@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "parlament-mcp"
+version = "0.1.0"
+description = "MCP server for the Swiss Parliament (Curia Vista OData API)"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+keywords = [
+  "mcp",
+  "swiss parliament",
+  "curia vista",
+  "parlament",
+  "vorstösse",
+  "abstimmungen",
+  "ai",
+  "switzerland",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "fastmcp>=1.26.0",
+  "httpx>=0.27.0",
+  "pydantic>=2.7.0",
+]
+
+[project.scripts]
+parlament-mcp = "parlament_mcp.server:mcp.run"
+
+[project.urls]
+Homepage = "https://github.com/malkreide/parlament-mcp"
+Repository = "https://github.com/malkreide/parlament-mcp"
+Issues = "https://github.com/malkreide/parlament-mcp/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/parlament_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = ["live: marks tests that call the real API (deselect with -m 'not live')"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
