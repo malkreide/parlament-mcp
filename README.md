@@ -141,4 +141,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT © [malkreide](https://github.com/malkreide)
+MIT [malkreide](https://github.com/malkreide)
