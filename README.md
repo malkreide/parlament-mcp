@@ -23,6 +23,10 @@ with **no API key required** (Phase 1 – No-Auth-First).
 Perfect for the **KI-Fachgruppe Stadtverwaltung Zürich**: find pending motions
 on AI in education, digitisation initiatives, or any policy topic – instantly.
 
+<p align="center">
+  <img src="assets/demo.svg" alt="Demo: Claude queries pending AI motions via MCP tool call" width="720">
+</p>
+
 ---
 
 ## 🔧 Tools
@@ -121,6 +125,20 @@ MCP_TRANSPORT=sse PORT=8080 python -m parlament_mcp.server
 - **Protocol:** OData v3 / JSON
 - **Coverage:** All parliamentary businesses since 1978; votes and transcripts
 - **Update cycle:** Real-time (official government data)
+
+---
+
+## 🛡️ Safety & Limits
+
+| Aspect | Details |
+|--------|---------|
+| **Access** | Read-only (`readOnlyHint: true`) — the server cannot modify or delete any data |
+| **Personal data** | Parliamentary businesses are public record by law (BGÖ). No private data is accessed or stored. |
+| **Rate limits** | Built-in per-query caps: max. 100 results (businesses/members), 50 (votes/transcripts), 10 (sessions) |
+| **Timeout** | 20 seconds per API call |
+| **Authentication** | No API keys required — Curia Vista is publicly accessible |
+| **Data source** | Official Swiss federal government data (Schweizerische Parlamentsdienste) |
+| **Terms of Service** | Subject to ToS of [ws.parlament.ch](https://ws.parlament.ch/) — Schweizerische Parlamentsdienste |
 
 ---
 

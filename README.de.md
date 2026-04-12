@@ -25,6 +25,10 @@ Zugriff auf Vorstösse, Abstimmungen, Ratsmitglieder, Sessionen und Debatten-Tra
 Ideal für die **KI-Fachgruppe Stadtverwaltung Zürich**: Offene Vorstösse zu KI in der Bildung,
 Digitalisierungsinitiativen oder beliebigen Politikthemen – sofort abrufbar.
 
+<p align="center">
+  <img src="assets/demo.svg" alt="Demo: Claude fragt hängige KI-Vorstösse via MCP Tool Call ab" width="720">
+</p>
+
 ---
 
 ## 🔧 Tools
@@ -149,6 +153,20 @@ parlament_get_transcripts(speaker_name="Müller", keyword="KI")
 - **Protokoll:** OData v3 / JSON
 - **Abdeckung:** Alle Parlamentsgeschäfte seit 1978; Abstimmungen und Transkripte
 - **Aktualisierung:** Echtzeit (offizieller Datendienst des Bundes)
+
+---
+
+## 🛡️ Safety & Limits
+
+| Aspekt | Details |
+|--------|---------|
+| **Zugriff** | Nur lesend (`readOnlyHint: true`) — der Server kann keine Daten ändern oder löschen |
+| **Personendaten** | Parlamentsgeschäfte sind öffentliche Amtshandlungen (BGÖ). Es werden keine privaten Daten abgerufen oder gespeichert. |
+| **Rate Limits** | Eingebaute Obergrenzen pro Abfrage: max. 100 Treffer (Geschäfte/Mitglieder), 50 (Abstimmungen/Transkripte), 10 (Sessionen) |
+| **Timeout** | 20 Sekunden pro API-Aufruf |
+| **Authentifizierung** | Keine API-Keys nötig — Curia Vista ist öffentlich zugänglich |
+| **Datenquelle** | Offizieller Datendienst des Bundes (Schweizerische Parlamentsdienste) |
+| **Nutzungsbedingungen** | Es gelten die ToS von [ws.parlament.ch](https://ws.parlament.ch/) — Schweizerische Parlamentsdienste |
 
 ---
 
