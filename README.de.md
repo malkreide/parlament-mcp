@@ -21,6 +21,8 @@ Zugriff auf Vorstösse, Abstimmungen, Ratsmitglieder, Sessionen und Debatten-Tra
 
 > *«Welche Vorstösse zu KI in der Schule sind hängig?»*
 > → `parlament_search_business(keyword="KI", keyword2="Schule", status="Eingereicht")`
+>
+> [→ Weitere Anwendungsbeispiele nach Zielgruppe →](EXAMPLES.md)
 
 Ideal für die **KI-Fachgruppe Stadtverwaltung Zürich**: Offene Vorstösse zu KI in der Bildung,
 Digitalisierungsinitiativen oder beliebigen Politikthemen – sofort abrufbar.

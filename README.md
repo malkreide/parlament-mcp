@@ -19,6 +19,8 @@ with **no API key required** (Phase 1 – No-Auth-First).
 
 > *"Welche Vorstösse zu KI in der Schule sind hängig?"*
 > → `parlament_search_business(keyword="KI", keyword2="Schule", status="Eingereicht")`
+>
+> [→ More use cases by audience →](EXAMPLES.md)
 
 Perfect for the **KI-Fachgruppe Stadtverwaltung Zürich**: find pending motions
 on AI in education, digitisation initiatives, or any policy topic – instantly.
