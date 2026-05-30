@@ -15,7 +15,9 @@ Kein API-Schlüssel erforderlich. Alle Daten öffentlich zugänglich.
 from __future__ import annotations
 
 import json
+import os
 import sys
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
@@ -24,15 +26,41 @@ import httpx
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field
 
-# ─────────────────────────── Server ────────────────────────────────────────────
-mcp = FastMCP("parlament_mcp")
-
 # ─────────────────────────── Konstanten ────────────────────────────────────────
 BASE_URL = "https://ws.parlament.ch/odata.svc"
 DEFAULT_LANG = "DE"
 HTTP_TIMEOUT = 20.0
 DEFAULT_LIMIT = 20
 MAX_LIMIT = 100
+
+# ─────────────────────────── HTTP-Client (geteilt) ─────────────────────────────
+# Ein gepoolter AsyncClient über die Server-Lebensdauer statt ein neuer Client
+# pro Tool-Call. Der Lifespan baut den Connection-Pool auf und schliesst ihn.
+_http_client: httpx.AsyncClient | None = None
+
+
+def _get_client() -> httpx.AsyncClient:
+    """Geteilten AsyncClient zurückgeben (lazy, falls kein Lifespan aktiv ist)."""
+    global _http_client
+    if _http_client is None or _http_client.is_closed:
+        _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
+    return _http_client
+
+
+@asynccontextmanager
+async def _lifespan(_server: FastMCP):
+    """FastMCP-Lifespan: HTTP-Connection-Pool auf- und sauber wieder abbauen."""
+    global _http_client
+    _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
+    try:
+        yield
+    finally:
+        await _http_client.aclose()
+        _http_client = None
+
+
+# ─────────────────────────── Server ────────────────────────────────────────────
+mcp = FastMCP("parlament_mcp", lifespan=_lifespan)
 
 # Geschäftstyp-IDs (Curia Vista)
 BUSINESS_TYPE_NAMES = {
@@ -91,12 +119,12 @@ async def _odata_get(
         params["$select"] = ",".join(select)
 
     url = f"{BASE_URL}/{entity}"
-    async with httpx.AsyncClient(timeout=HTTP_TIMEOUT) as client:
-        resp = client.build_request("GET", url, params=params)
-        response = await client.send(resp)
-        response.raise_for_status()
-        data = response.json()
-        return data.get("d", [])
+    client = _get_client()
+    request = client.build_request("GET", url, params=params)
+    response = await client.send(request)
+    response.raise_for_status()
+    data = response.json()
+    return data.get("d", [])
 
 
 def _handle_error(e: Exception) -> str:
@@ -426,10 +454,10 @@ async def parlament_get_business(params: GetBusinessInput) -> str:
     """
     try:
         url = f"{BASE_URL}/Business(ID={params.business_id},Language='{params.language.value}')"
-        async with httpx.AsyncClient(timeout=HTTP_TIMEOUT) as client:
-            resp = await client.get(url, params={"$format": "json"})
-            resp.raise_for_status()
-            data = resp.json()
+        client = _get_client()
+        resp = await client.get(url, params={"$format": "json"})
+        resp.raise_for_status()
+        data = resp.json()
     except Exception as e:
         return _handle_error(e)
 
@@ -747,12 +775,54 @@ async def parlament_get_transcripts(params: GetTranscriptsInput) -> str:
 
 
 # ─────────────────────────── Einstiegspunkt ────────────────────────────────────
-if __name__ == "__main__":
+def _resolve_transport() -> str:
+    """Transport bestimmen: MCP_TRANSPORT-Env hat Vorrang, --http als Alias.
+    Default ist stdio (lokaler Standard ohne offenen Netzwerk-Port)."""
+    transport = os.environ.get("MCP_TRANSPORT")
+    if transport:
+        return "streamable-http" if transport == "http" else transport
     if "--http" in sys.argv:
-        port = 8080
-        for i, arg in enumerate(sys.argv):
-            if arg == "--port" and i + 1 < len(sys.argv):
-                port = int(sys.argv[i + 1])
-        mcp.run(transport="streamable-http", host="0.0.0.0", port=port)
-    else:
+        return "streamable-http"
+    return "stdio"
+
+
+def _resolve_port() -> int:
+    """Port aus --port, sonst MCP_PORT/PORT (Railway/Render), sonst 8080."""
+    for i, arg in enumerate(sys.argv):
+        if arg == "--port" and i + 1 < len(sys.argv):
+            return int(sys.argv[i + 1])
+    return int(os.environ.get("MCP_PORT") or os.environ.get("PORT") or "8080")
+
+
+def _resolve_host() -> str:
+    """Bind-Host. Default 127.0.0.1 (lokal sicher); 0.0.0.0 nur via expliziter
+    MCP_HOST-Env, z.B. im Container. Warnt bei riskanter Bindung ausserhalb
+    eines Container-Kontexts (NeighborJack-Risiko)."""
+    host = os.environ.get("MCP_HOST", "127.0.0.1")
+    if host in ("0.0.0.0", "::"):
+        in_container = (
+            os.path.exists("/.dockerenv")
+            or os.environ.get("KUBERNETES_SERVICE_HOST")
+            or os.environ.get("RAILWAY_PROJECT_ID")
+            or os.environ.get("RENDER")
+        )
+        if not in_container:
+            sys.stderr.write(
+                f"WARNUNG: Bindung an {host} ausserhalb eines Container-Kontexts "
+                "exponiert den Server im lokalen Netzwerk (NeighborJack-Risiko). "
+                "Für lokale Nutzung MCP_HOST=127.0.0.1 setzen.\n"
+            )
+    return host
+
+
+if __name__ == "__main__":
+    _transport = _resolve_transport()
+    if _transport == "stdio":
         mcp.run(transport="stdio")
+    elif _transport in ("sse", "streamable-http"):
+        mcp.run(transport=_transport, host=_resolve_host(), port=_resolve_port())
+    else:
+        raise SystemExit(
+            f"Unbekannter MCP_TRANSPORT: {_transport!r} "
+            "(erlaubt: stdio, sse, streamable-http)"
+        )
