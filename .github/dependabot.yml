@@ -23,3 +23,9 @@ updates:
       interval: "monthly"
     labels:
       - "dependencies"
+    groups:
+      # upload-/download-artifact müssen denselben Major teilen — gemeinsam bumpen.
+      artifact-actions:
+        patterns:
+          - "actions/upload-artifact"
+          - "actions/download-artifact"
