@@ -113,6 +113,18 @@ if you do so outside a detected container.
 Transport is selected via `MCP_TRANSPORT` (`stdio` default, or `sse` /
 `streamable-http`); `--http` is kept as an alias for `streamable-http`.
 
+### Docker
+
+```bash
+docker compose up --build          # binds 127.0.0.1:8080 only
+# or build the hardened image directly (non-root, read-only FS):
+docker build -t parlament-mcp .
+```
+
+Kubernetes manifests (hardened `securityContext`, resource limits, egress
+`NetworkPolicy`, `Mcp-Session-Id` sticky routing) live in [`deploy/k8s/`](deploy/k8s/);
+an HAProxy stick-table example is in [`deploy/haproxy.cfg`](deploy/haproxy.cfg).
+
 ---
 
 ## 🔗 Synergies
@@ -138,6 +150,56 @@ Transport is selected via `MCP_TRANSPORT` (`stdio` default, or `sse` /
 - **Protocol:** OData v3 / JSON
 - **Coverage:** All parliamentary businesses since 1978; votes and transcripts
 - **Update cycle:** Real-time (official government data)
+
+---
+
+## 📜 Data sources & licenses
+
+| Source | License | Attribution |
+|---|---|---|
+| Curia Vista (ws.parlament.ch) | CC BY 4.0 | © Schweizer Parlament, CC BY 4.0 |
+
+Every tool answer carries the source/license: Markdown responses include a
+`_Quelle: … · Lizenz: CC BY 4.0_` footer, JSON responses include `source`,
+`license` and `provenance` fields. Data is passed through unmodified.
+
+## 🧭 Phase
+
+This server is in **Phase 1 — Read-only Wrapper** (all tools `readOnlyHint: true`,
+no writes). The full phase model and transition criteria are in
+[`docs/roadmap.md`](docs/roadmap.md).
+
+## 🔖 MCP Protocol Version
+
+Tested/targeted against MCP spec **`2025-06-18`** (pinned as `PROTOCOL_VERSION`
+in `src/parlament_mcp/config.py`). SDK updates are proposed monthly via
+Dependabot; spec-version bumps are recorded in [`CHANGELOG.md`](CHANGELOG.md).
+
+## 🧱 MCP primitives
+
+Phase 1 uses **Tools only** — rationale and the Phase-2 Resources plan are in
+[`docs/adr/ADR-003-mcp-primitives.md`](docs/adr/ADR-003-mcp-primitives.md).
+
+## 🏷️ Tool annotations
+
+All tools declare explicit annotations consistent with their behaviour:
+
+| Tool | readOnly | destructive | idempotent | openWorld |
+|---|:--:|:--:|:--:|:--:|
+| `parlament_search_business`  | ✅ | — | ✅ | ✅ |
+| `parlament_get_business`     | ✅ | — | ✅ | ✅ |
+| `parlament_search_members`   | ✅ | — | ✅ | ✅ |
+| `parlament_get_votes`        | ✅ | — | ✅ | ✅ |
+| `parlament_get_sessions`     | ✅ | — | ✅ | ✅ |
+| `parlament_get_transcripts`  | ✅ | — | ✅ | ✅ |
+
+## 📈 Observability
+
+Structured JSON logs go to **stderr** (stdout stays reserved for the stdio
+protocol). OpenTelemetry tracing wraps each tool call and auto-instruments
+outgoing HTTP; set `OTEL_EXPORTER_OTLP_ENDPOINT` (with the `otel-export` extra)
+to ship spans. See [`docs/security.md`](docs/security.md) for the full security
+posture (Lethal-Trifecta assessment, egress allow-list, gateway hardening).
 
 ---
 
