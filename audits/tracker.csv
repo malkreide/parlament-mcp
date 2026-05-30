@@ -1,0 +1,2 @@
+server_name,audit_status,findings,last_audit_run,last_audit_at,production_ready,released_version,notes
+parlament-mcp,Findings dokumentiert,29,2026-05-30T105608-Z-parlament-mcp,2026-05-30,False,,
