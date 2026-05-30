@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.0] - 2026-05-30
+## [0.3.0] - 2026-05-30
 
+> Version `0.2.0` was already taken by an earlier PyPI release, so this
+> audit-hardening release ships as `0.3.0`.
+>
 > Targets MCP protocol version `2025-06-18`. Tool definitions are pinned in
 > `tool-hashes.json` (CI-verified). **Tool input/output schemas changed in this
 > release** (see BREAKING) — `tool-hashes.json` updated accordingly; clients
