@@ -117,6 +117,19 @@ Containers gibt der Server eine Warnung aus.
 Der Transport wird über `MCP_TRANSPORT` gewählt (`stdio` als Default, oder
 `sse` / `streamable-http`); `--http` bleibt als Alias für `streamable-http`.
 
+### Docker
+
+```bash
+docker compose up --build          # bindet nur 127.0.0.1:8080
+# oder das gehärtete Image direkt bauen (non-root, read-only FS):
+docker build -t parlament-mcp .
+```
+
+Kubernetes-Manifeste (gehärteter `securityContext`, Resource-Limits, Egress-
+`NetworkPolicy`, `Mcp-Session-Id`-Sticky-Routing) liegen unter
+[`deploy/k8s/`](deploy/k8s/); ein HAProxy-Stick-Table-Beispiel in
+[`deploy/haproxy.cfg`](deploy/haproxy.cfg).
+
 ---
 
 ## 💡 Beispielabfragen
@@ -166,6 +179,57 @@ parlament_get_transcripts(speaker_name="Müller", keyword="KI")
 - **Protokoll:** OData v3 / JSON
 - **Abdeckung:** Alle Parlamentsgeschäfte seit 1978; Abstimmungen und Transkripte
 - **Aktualisierung:** Echtzeit (offizieller Datendienst des Bundes)
+
+---
+
+## 📜 Datenquellen & Lizenzen
+
+| Quelle | Lizenz | Attribution |
+|---|---|---|
+| Curia Vista (ws.parlament.ch) | CC BY 4.0 | © Schweizer Parlament, CC BY 4.0 |
+
+Jede Tool-Antwort führt Quelle/Lizenz mit: Markdown-Antworten enthalten einen
+`_Quelle: … · Lizenz: CC BY 4.0_`-Footer, JSON-Antworten die Felder `source`,
+`license` und `provenance`. Die Daten werden unverändert weitergegeben.
+
+## 🧭 Phase
+
+Dieser Server ist in **Phase 1 — Read-only Wrapper** (alle Tools
+`readOnlyHint: true`, kein Write). Das Phasenmodell steht in
+[`docs/roadmap.md`](docs/roadmap.md).
+
+## 🔖 MCP-Protokoll-Version
+
+Getestet/gepinnt gegen MCP-Spec **`2025-06-18`** (`PROTOCOL_VERSION` in
+`src/parlament_mcp/config.py`). SDK-Updates kommen monatlich via Dependabot;
+Spec-Bumps werden im [`CHANGELOG.md`](CHANGELOG.md) festgehalten.
+
+## 🧱 MCP-Primitive
+
+Phase 1 nutzt **nur Tools** — Begründung und Phase-2-Resources-Plan in
+[`docs/adr/ADR-003-mcp-primitives.md`](docs/adr/ADR-003-mcp-primitives.md).
+
+## 🏷️ Tool-Annotations
+
+Alle Tools deklarieren explizite, verhaltenskonsistente Annotations:
+
+| Tool | readOnly | destructive | idempotent | openWorld |
+|---|:--:|:--:|:--:|:--:|
+| `parlament_search_business`  | ✅ | — | ✅ | ✅ |
+| `parlament_get_business`     | ✅ | — | ✅ | ✅ |
+| `parlament_search_members`   | ✅ | — | ✅ | ✅ |
+| `parlament_get_votes`        | ✅ | — | ✅ | ✅ |
+| `parlament_get_sessions`     | ✅ | — | ✅ | ✅ |
+| `parlament_get_transcripts`  | ✅ | — | ✅ | ✅ |
+
+## 📈 Observability
+
+Strukturierte JSON-Logs gehen auf **stderr** (stdout bleibt dem stdio-Protokoll
+vorbehalten). OpenTelemetry-Tracing umschliesst jeden Tool-Call und
+instrumentiert ausgehendes HTTP automatisch; mit gesetztem
+`OTEL_EXPORTER_OTLP_ENDPOINT` (Extra `otel-export`) werden Spans exportiert.
+Vollständige Security-Posture (Lethal-Trifecta-Bewertung, Egress-Allow-List,
+Gateway-Härtung) in [`docs/security.md`](docs/security.md).
 
 ---
 
