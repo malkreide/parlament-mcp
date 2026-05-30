@@ -6,7 +6,6 @@ Live-Tests sind mit @pytest.mark.live markiert und in CI ausgeschlossen.
 
 from __future__ import annotations
 
-import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -118,53 +117,55 @@ def mock_odata():
 
 
 @pytest.mark.asyncio
-async def test_search_business_markdown(mock_odata):
-    """Vorstoss-Suche: Markdown-Ausgabe prüfen."""
+async def test_search_business_fields(mock_odata):
+    """Vorstoss-Suche: strukturierte Felder prüfen."""
     mock_odata.return_value = MOCK_BUSINESS
     params = SearchBusinessInput(keyword="KI", keyword2="Schule", status="Eingereicht")
     result = await parlament_search_business(params)
-    assert "Künstliche Intelligenz" in result
-    assert "Eingereicht" in result
-    assert "Curia Vista" in result
+    assert result.count == 1
+    assert "Künstliche Intelligenz" in result.results[0].title
+    assert result.results[0].status == "Eingereicht"
+    assert result.results[0].url and "AffairId=" in result.results[0].url
 
 
 @pytest.mark.asyncio
-async def test_search_business_json(mock_odata):
-    """Vorstoss-Suche: JSON-Ausgabe prüfen."""
+async def test_search_business_envelope(mock_odata):
+    """Vorstoss-Suche: Envelope (source/license/match_type) prüfen."""
     mock_odata.return_value = MOCK_BUSINESS
-    params = SearchBusinessInput(keyword="KI", response_format="json")
-    result = await parlament_search_business(params)
-    data = json.loads(result)
-    assert data["count"] == 1
-    assert data["results"][0]["type"] == "Anfrage"
+    result = await parlament_search_business(SearchBusinessInput(keyword="KI"))
+    assert result.count == 1
+    assert result.results[0].type == "Anfrage"
+    assert result.source.startswith("Curia Vista")
+    assert result.license == "CC BY 4.0"
+    assert result.match_type == "exact"
 
 
 @pytest.mark.asyncio
 async def test_search_business_empty(mock_odata):
-    """Vorstoss-Suche: Leeres Ergebnis korrekt behandeln."""
+    """Vorstoss-Suche: Leeres Ergebnis → match_type none + Vorschläge."""
     mock_odata.return_value = []
-    params = SearchBusinessInput(keyword="xyz_nonexistent_12345")
-    result = await parlament_search_business(params)
-    assert "Keine Vorstösse" in result
+    result = await parlament_search_business(SearchBusinessInput(keyword="xyz_nonexistent_12345"))
+    assert result.match_type == "none"
+    assert result.count == 0
+    assert "Keine Vorstösse" in result.note
+    assert result.suggestions
 
 
 @pytest.mark.asyncio
 async def test_search_members_zh(mock_odata):
     """Ratsmitglieder-Suche: Zürcher Mitglieder finden."""
     mock_odata.return_value = MOCK_MEMBER
-    params = SearchMembersInput(canton="ZH")
-    result = await parlament_search_members(params)
-    assert "Anna Tester" in result
-    assert "ZH" in result
+    result = await parlament_search_members(SearchMembersInput(canton="ZH"))
+    assert result.results[0].name == "Anna Tester"
+    assert result.results[0].canton == "ZH"
 
 
 @pytest.mark.asyncio
 async def test_get_sessions(mock_odata):
     """Sessionen auflisten: Ergebnisse prüfen."""
     mock_odata.return_value = MOCK_SESSION
-    params = GetSessionsInput()
-    result = await parlament_get_sessions(params)
-    assert "Sommersession" in result
+    result = await parlament_get_sessions(GetSessionsInput())
+    assert "Sommersession" in result.results[0].name
 
 
 # ─────────────────────────── Live-Tests (echte API, CI-ausgeschlossen) ─────────
@@ -174,25 +175,26 @@ async def test_get_sessions(mock_odata):
 @pytest.mark.asyncio
 async def test_live_search_ki():
     """Live: Suche nach 'Künstliche Intelligenz'-Vorstössen."""
-    params = SearchBusinessInput(keyword="Künstliche Intelligenz", limit=5)
-    result = await parlament_search_business(params)
-    assert len(result) > 50
-    assert "Künstliche Intelligenz" in result or "Keine Vorstösse" in result
+    result = await parlament_search_business(
+        SearchBusinessInput(keyword="Künstliche Intelligenz", limit=5)
+    )
+    assert result.count >= 0
+    assert result.match_type in ("exact", "none")
 
 
 @pytest.mark.live
 @pytest.mark.asyncio
 async def test_live_zh_members():
     """Live: Aktive Zürcher Ratsmitglieder abrufen."""
-    params = SearchMembersInput(canton="ZH", active_only=True, limit=5)
-    result = await parlament_search_members(params)
-    assert "ZH" in result
+    result = await parlament_search_members(
+        SearchMembersInput(canton="ZH", active_only=True, limit=5)
+    )
+    assert all(m.canton == "ZH" for m in result.results)
 
 
 @pytest.mark.live
 @pytest.mark.asyncio
 async def test_live_sessions():
     """Live: Aktuelle Sessionen auflisten."""
-    params = GetSessionsInput(limit=5)
-    result = await parlament_get_sessions(params)
-    assert "Session" in result or "5" in result
+    result = await parlament_get_sessions(GetSessionsInput(limit=5))
+    assert result.count >= 1

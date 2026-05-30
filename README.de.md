@@ -117,6 +117,21 @@ Containers gibt der Server eine Warnung aus.
 Der Transport wird über `MCP_TRANSPORT` gewählt (`stdio` als Default, oder
 `sse` / `streamable-http`); `--http` bleibt als Alias für `streamable-http`.
 
+### Authentifizierung (optional)
+
+Der HTTP-Transport ist standardmässig offen (öffentliche read-only Daten). Für
+einen Bearer-Token-Zwang über die CORS/Auth-App-Factory `MCP_BEARER_TOKENS`
+setzen:
+
+```bash
+MCP_BEARER_TOKENS="alice:tok_abc,bob:tok_def" MCP_ALLOWED_ORIGINS="https://claude.ai" \
+  uvicorn parlament_mcp.server:create_http_app --factory --host 0.0.0.0 --port 8080
+```
+
+Jeder Request braucht dann `Authorization: Bearer <token>`; die Identität kommt
+aus dem validierten Token, nicht aus einem Session-Header (siehe
+[`docs/security.md`](docs/security.md)).
+
 ### Docker
 
 ```bash
@@ -188,9 +203,9 @@ parlament_get_transcripts(speaker_name="Müller", keyword="KI")
 |---|---|---|
 | Curia Vista (ws.parlament.ch) | CC BY 4.0 | © Schweizer Parlament, CC BY 4.0 |
 
-Jede Tool-Antwort führt Quelle/Lizenz mit: Markdown-Antworten enthalten einen
-`_Quelle: … · Lizenz: CC BY 4.0_`-Footer, JSON-Antworten die Felder `source`,
-`license` und `provenance`. Die Daten werden unverändert weitergegeben.
+Jede Tool-Antwort ist ein typisiertes strukturiertes Objekt (FastMCP exponiert
+das Output-Schema) mit `source`, `license`, `provenance`, `match_type` und
+`count` plus typisierten `results`. Die Daten werden unverändert weitergegeben.
 
 ## 🧭 Phase
 

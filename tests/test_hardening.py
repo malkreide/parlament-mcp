@@ -4,7 +4,6 @@ Input-Validation (SEC-018), Egress-Allow-List (SEC-021), Fehler-Handling
 
 from __future__ import annotations
 
-import json
 import re
 
 import httpx
@@ -76,37 +75,37 @@ MOCK_BUSINESS_ONE = {
 
 
 @respx.mock
-async def test_get_votes_json_envelope():
+async def test_get_votes_envelope():
     respx.route(method="GET", url__regex=rf"{re.escape(BASE_URL)}/Vote.*").mock(
         return_value=httpx.Response(200, json={"d": MOCK_VOTE})
     )
-    res = await parlament_get_votes(GetVotesInput(keyword="Bildung", response_format="json"))
-    data = json.loads(res)
-    assert data["count"] == 1
-    assert data["source"].startswith("Curia Vista")
-    assert data["license"] == "CC BY 4.0"
-    assert data["match_type"] == "exact"
-    assert data["results"][0]["meaning_yes"] == "Annahme"
+    res = await parlament_get_votes(GetVotesInput(keyword="Bildung"))
+    assert res.count == 1
+    assert res.source.startswith("Curia Vista")
+    assert res.license == "CC BY 4.0"
+    assert res.match_type == "exact"
+    assert res.results[0].meaning_yes == "Annahme"
 
 
 @respx.mock
-async def test_get_transcripts_markdown():
+async def test_get_transcripts_structured():
     respx.route(method="GET", url__regex=rf"{re.escape(BASE_URL)}/Transcript.*").mock(
         return_value=httpx.Response(200, json={"d": MOCK_TRANSCRIPT})
     )
     res = await parlament_get_transcripts(GetTranscriptsInput(keyword="KI"))
-    assert "Anna Tester" in res
-    assert "Quelle: Curia Vista" in res  # CH-004 Attribution-Footer
+    assert res.results[0].speaker == "Anna Tester"
+    assert res.source.startswith("Curia Vista")  # CH-004 Attribution im Envelope
 
 
 @respx.mock
-async def test_get_business_markdown():
+async def test_get_business_detail():
     respx.route(method="GET", url__regex=rf"{re.escape(BASE_URL)}/Business.*").mock(
         return_value=httpx.Response(200, json=MOCK_BUSINESS_ONE)
     )
     res = await parlament_get_business(GetBusinessInput(business_id=20254750))
-    assert "KI in der Volksschule" in res
-    assert "Motion" in res
+    assert res.found is True
+    assert res.title == "KI in der Volksschule"
+    assert res.type == "Motion"
 
 
 @respx.mock
@@ -114,10 +113,9 @@ async def test_empty_results_include_suggestions():
     respx.route(method="GET", url__regex=rf"{re.escape(BASE_URL)}/Vote.*").mock(
         return_value=httpx.Response(200, json={"d": []})
     )
-    res = await parlament_get_votes(GetVotesInput(keyword="xyz", response_format="json"))
-    data = json.loads(res)
-    assert data["match_type"] == "none"
-    assert data["suggestions"]  # ARCH-003: keine blanke Leerantwort
+    res = await parlament_get_votes(GetVotesInput(keyword="xyz"))
+    assert res.match_type == "none"
+    assert res.suggestions  # ARCH-003: keine blanke Leerantwort
 
 
 # ─────────────────────── OBS-001: Ausführungsfehler werden ToolError ────────────
@@ -219,4 +217,83 @@ def test_http_app_exposes_mcp_session_id():
     assert cors, "CORSMiddleware muss konfiguriert sein"
     expose = cors[0].kwargs.get("expose_headers", [])
     assert "Mcp-Session-Id" in expose
+
+
+# ─────────────────────── SEC-009: Session-Binding & Bearer-Auth ─────────────────
+
+from parlament_mcp.auth import AuthError, SessionSigner, new_session_id  # noqa: E402
+
+
+def test_session_id_entropy():
+    sid = new_session_id()
+    assert len(sid) >= 40  # token_urlsafe(32) ≈ 43 Zeichen
+    assert sid != new_session_id()
+
+
+def test_session_token_roundtrip_and_binding():
+    signer = SessionSigner(secret="test-secret")
+    token = signer.create("alice")
+    data = signer.validate(token, "alice")
+    assert data["user_id"] == "alice"
+    # an anderen User gebunden → abgelehnt
+    with pytest.raises(AuthError):
+        signer.validate(token, "bob")
+
+
+def test_session_token_tamper_rejected():
+    signer = SessionSigner(secret="test-secret")
+    token = signer.create("alice")
+    tampered = token[:-2] + ("aa" if not token.endswith("aa") else "bb")
+    with pytest.raises(AuthError):
+        signer.validate(tampered, "alice")
+
+
+def test_session_token_expiry():
+    signer = SessionSigner(secret="test-secret", ttl=-10)  # bereits abgelaufen
+    token = signer.create("alice")
+    with pytest.raises(AuthError):
+        signer.validate(token, "alice")
+
+
+def test_session_revocation():
+    signer = SessionSigner(secret="test-secret")
+    token = signer.create("alice")
+    signer.revoke(token)
+    with pytest.raises(AuthError):
+        signer.validate(token, "alice")
+
+
+def test_bearer_middleware_enforced(monkeypatch):
+    from starlette.applications import Starlette
+    from starlette.responses import PlainTextResponse
+    from starlette.routing import Route
+    from starlette.testclient import TestClient
+
+    from parlament_mcp.auth import build_bearer_middleware
+
+    monkeypatch.setenv("MCP_BEARER_TOKENS", "alice:tok_secret")
+    app = Starlette(routes=[Route("/", lambda r: PlainTextResponse("ok"))])
+    app.add_middleware(build_bearer_middleware())
+    client = TestClient(app)
+
+    assert client.get("/").status_code == 401  # kein Token
+    assert client.get("/", headers={"Authorization": "Bearer wrong"}).status_code == 401
+    ok = client.get("/", headers={"Authorization": "Bearer tok_secret"})
+    assert ok.status_code == 200 and ok.text == "ok"
+
+
+def test_bearer_middleware_noop_without_tokens(monkeypatch):
+    from starlette.applications import Starlette
+    from starlette.responses import PlainTextResponse
+    from starlette.routing import Route
+    from starlette.testclient import TestClient
+
+    from parlament_mcp.auth import build_bearer_middleware
+
+    monkeypatch.delenv("MCP_BEARER_TOKENS", raising=False)
+    app = Starlette(routes=[Route("/", lambda r: PlainTextResponse("ok"))])
+    app.add_middleware(build_bearer_middleware())
+    client = TestClient(app)
+    # Ohne konfigurierte Tokens: offen (Public-Open-Data-Default).
+    assert client.get("/").status_code == 200
 

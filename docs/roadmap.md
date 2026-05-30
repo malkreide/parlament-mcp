@@ -13,6 +13,8 @@ Read-only zuerst, Schreibzugriffe erst nach Sicherheits-Review.
 - [x] Container-Sandboxing (Dockerfile non-root, read-only FS) (SEC-007/SCALE-004)
 - [x] Audit-Lauf gegen `mcp-audit-skill` (siehe `audits/`)
 - [x] Tool-Definition-Hash-Pinning (SEC-022)
+- [x] Strukturierte, typisierte Tool-Returns mit Output-Schema (SDK-002)
+- [x] Optionale Bearer-Auth + Session-Binding für HTTP (SEC-009, opt-in)
 
 ## Phase 2 — Semantic Layer  (geplant)
 

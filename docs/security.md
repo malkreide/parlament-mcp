@@ -47,14 +47,30 @@ Defense-in-Depth in zwei Layern:
    nur HTTPS/443 + DNS nach aussen, interne Ranges (Cloud-Metadata, RFC1918)
    blockiert.
 
-## Session-Handling (SEC-009)
+## Authentifizierung & Session-Binding (SEC-009)
 
-Im HTTP-Transport vergibt das MCP-SDK kryptografisch sichere `Mcp-Session-Id`s.
-Ein Binding an eine **authentifizierte** User-Identität ist im aktuellen
-No-Auth-Profil nicht möglich — und auch nicht nötig: der Server liefert
-ausschliesslich öffentliche, read-only Daten, ein Session-Hijack erlaubt also
-keinen Zugriff, den ein Angreifer nicht ohnehin hätte. **Sobald Auth/Write
-hinzukommt (Phase 3), wird User-gebundenes Session-Binding verpflichtend.**
+Optionale Bearer-Authentifizierung für den HTTP-Transport
+(`parlament_mcp.auth`), **opt-in** und default aus (Public Open Data):
+
+- **Aus (Default):** keine Tokens konfiguriert -> offener Zugriff wie bisher.
+- **Ein:** `MCP_BEARER_TOKENS="alice:tok_abc,bob:tok_def"` setzen. Dann verlangt
+  `create_http_app()` pro Request ein gültiges `Authorization: Bearer`-Token
+  (sonst 401). Die User-Identität kommt damit aus dem **validierten Token** —
+  nicht aus einem spoofbaren `Mcp-Session-Id`-Header. Ein geleaktes/erratenes
+  Session-Id genügt also nicht, um als anderer User zu agieren.
+
+Zusätzlich liefert `auth.SessionSigner` signierte, an die `user_id` gebundene
+Session-Tokens (HMAC-SHA256, TTL, Revocation) für Deployments mit eigener
+Session-Schicht:
+
+- kryptografisch sichere Generierung via `secrets.token_urlsafe(32)` (256 Bit);
+- `create(user_id)` -> signiertes Token; `validate(token, user_id)` prüft
+  Signatur, Ablauf und **User-Bindung** (Mismatch -> `AuthError`);
+- `revoke(token)` invalidiert serverseitig (Logout). Signing-Secret via
+  `MCP_SESSION_SECRET` (sonst ephemer pro Prozess).
+
+Da der Server read-only Public Open Data liefert, ist Auth in Phase 1 optional;
+für Phase 3 (Write) wird sie verpflichtend (siehe `docs/roadmap.md`).
 
 ## MCP-Gateway: Tool-Allow-Listing & Poisoning-Detection (SEC-014/SEC-015)
 

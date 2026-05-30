@@ -8,7 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 > Targets MCP protocol version `2025-06-18`. Tool definitions are pinned in
-> `tool-hashes.json` (CI-verified) — no tool-definition changes in this release.
+> `tool-hashes.json` (CI-verified). **Tool input/output schemas changed in this
+> release** (see BREAKING) — `tool-hashes.json` updated accordingly; clients
+> should re-approve the tools.
+
+### BREAKING
+- Tools now return **typed structured Pydantic responses** instead of strings
+  (SDK-002): search/list tools return an envelope (`source`, `license`,
+  `provenance`, `match_type`, `count`, typed `results`); `parlament_get_business`
+  returns a `BusinessDetail`. The `response_format` parameter was removed
+  (output is always structured; no more Markdown/JSON toggle).
+
+### Security
+- Optional bearer authentication + cryptographic session binding for the HTTP
+  transport (`parlament_mcp.auth`, SEC-009): set `MCP_BEARER_TOKENS` to require
+  `Authorization: Bearer` per request; `SessionSigner` issues HMAC-signed,
+  user-bound session tokens (TTL + revocation). Off by default (public data).
+  `create_http_app()` now wires the bearer middleware alongside CORS.
 
 ### Security
 - Bind to `127.0.0.1` by default; `0.0.0.0` now requires an explicit
