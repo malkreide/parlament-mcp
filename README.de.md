@@ -102,9 +102,20 @@ python -m parlament_mcp.server
 ### Cloud / Railway (SSE)
 
 ```bash
-MCP_TRANSPORT=sse PORT=8080 python -m parlament_mcp.server
+MCP_TRANSPORT=sse MCP_HOST=0.0.0.0 PORT=8080 python -m parlament_mcp.server
 # SSE-Endpunkt: http://dein-host:8080/sse
 ```
+
+### Netzwerk-Bindung
+
+Standardmässig bindet der Server an `127.0.0.1` (nur localhost). Setze
+`MCP_HOST=0.0.0.0` **nur** im Container-/Cloud-Kontext (Docker, Railway,
+Render, Kubernetes). Niemals lokal auf `0.0.0.0` binden – das exponiert den
+Server im lokalen Netzwerk (NeighborJack-Risiko); ausserhalb eines erkannten
+Containers gibt der Server eine Warnung aus.
+
+Der Transport wird über `MCP_TRANSPORT` gewählt (`stdio` als Default, oder
+`sse` / `streamable-http`); `--http` bleibt als Alias für `streamable-http`.
 
 ---
 

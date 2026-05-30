@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- Bind to `127.0.0.1` by default; `0.0.0.0` now requires an explicit
+  `MCP_HOST` env var and logs a NeighborJack warning outside container
+  contexts (audit finding SEC-016).
+
+### Changed
+- HTTP transport selection is now env-driven (`MCP_TRANSPORT`, `MCP_HOST`,
+  `MCP_PORT`/`PORT`); `--http` kept as an alias. Aligns runtime behaviour
+  with the documented cloud usage.
+- Reuse a single pooled `httpx.AsyncClient` for the server lifetime via a
+  FastMCP lifespan instead of creating a client per tool call (audit
+  finding SDK-001).
+
 ## [0.1.0] - 2026-04-01
 
 ### Added
