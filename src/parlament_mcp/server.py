@@ -10,17 +10,19 @@ AI-nativer Zugang zum Schweizer Bundesparlament via Curia Vista OData API:
   · Debatten-Transkripte (Amtliches Bulletin)
 
 Kein API-Schlüssel erforderlich. Alle Daten öffentlich zugänglich.
+
+Tools liefern strukturierte Pydantic-Modelle (typisierte `results` + Envelope
+mit source/license/provenance/match_type/count). FastMCP exponiert daraus ein
+Output-Schema.
 """
 
 from __future__ import annotations
 
 import functools
-import json
-import sys
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from enum import StrEnum
-from typing import Any
+from typing import Any, Literal
 
 import httpx
 from mcp.server.fastmcp import Context, FastMCP
@@ -101,6 +103,8 @@ BUSINESS_TYPE_NAMES = {
     1: "Geschäft des Bundesrates",
 }
 
+_CURIA_URL = "https://www.parlament.ch/de/ratsbetrieb/suche-curia-vista/geschaeft?AffairId={}"
+
 
 # ─────────────────────────── Enums ─────────────────────────────────────────────
 class Language(StrEnum):
@@ -108,12 +112,6 @@ class Language(StrEnum):
     DE = "DE"
     FR = "FR"
     IT = "IT"
-
-
-class ResponseFormat(StrEnum):
-    """Ausgabeformat für Tool-Antworten."""
-    MARKDOWN = "markdown"
-    JSON = "json"
 
 
 # ─────────────────────────── Hilfsfunktionen ───────────────────────────────────
@@ -208,43 +206,6 @@ def _fmt_business(b: dict) -> dict:
     }
 
 
-# Markdown-Quellenangabe (CH-004 — OGD-CH-Attribution in jeder Antwort).
-_SOURCE_FOOTER = f"\n\n_Quelle: {DATA_SOURCE} · Lizenz: {DATA_LICENSE}_"
-
-
-def _envelope(results: list, *, match_type: str = "exact", offset: int | None = None) -> dict:
-    """Konsistenter Response-Envelope für JSON-Ausgaben (SDK-002 + CH-004)."""
-    env: dict[str, Any] = {
-        "source": DATA_SOURCE,
-        "license": DATA_LICENSE,
-        "provenance": "live_api",
-        "match_type": match_type,
-        "count": len(results),
-        "results": results,
-    }
-    if offset is not None:
-        env["offset"] = offset
-    return env
-
-
-def _json(payload: dict) -> str:
-    return json.dumps(payload, indent=2, ensure_ascii=False)
-
-
-def _empty(format_: ResponseFormat, message: str) -> str:
-    """Hilfreiche Leer-Antwort statt blankem „not found“ (ARCH-003)."""
-    if format_ == ResponseFormat.JSON:
-        env = _envelope([], match_type="none")
-        env["note"] = message
-        env["suggestions"] = _SEARCH_SUGGESTIONS
-        return _json(env)
-    tip = (
-        " Tipp: Begriff allgemeiner fassen oder andere Stichwörter probieren "
-        f"(z.B. {', '.join(_SEARCH_SUGGESTIONS[:4])})."
-    )
-    return message + tip + _SOURCE_FOOTER
-
-
 def _instrument(name: str):
     """Decorator: pro Tool-Call ein OTel-Span + strukturiertes Logging (OBS-003/006)
     und – sofern verfügbar – ein ctx.info-Lifecycle-Event (SDK-003).
@@ -278,6 +239,127 @@ def _instrument(name: str):
         return wrapper
 
     return decorator
+
+
+# ─────────────────────────── Ausgabemodelle (SDK-002) ──────────────────────────
+class ResponseEnvelope(BaseModel):
+    """Konsistenter Envelope für Such-/Listen-Tools (SDK-002 + CH-004)."""
+
+    source: str = DATA_SOURCE
+    license: str = DATA_LICENSE
+    provenance: Literal["live_api", "cached"] = "live_api"
+    match_type: Literal["exact", "fuzzy", "none"] = "exact"
+    count: int = 0
+    offset: int = 0
+    note: str | None = None
+    suggestions: list[str] = Field(default_factory=list)
+
+
+class BusinessSummary(BaseModel):
+    id: int | None = None
+    short_number: str | None = None
+    type: str | None = None
+    title: str | None = None
+    status: str | None = None
+    status_date: str | None = None
+    submitted_by: str | None = None
+    submission_date: str | None = None
+    council: str | None = None
+    department: str | None = None
+    description: str | None = None
+    tags: str | None = None
+    url: str | None = None
+
+
+class BusinessSearchResponse(ResponseEnvelope):
+    results: list[BusinessSummary] = Field(default_factory=list)
+
+
+class BusinessDetail(BaseModel):
+    found: bool = True
+    source: str = DATA_SOURCE
+    license: str = DATA_LICENSE
+    id: int | None = None
+    short_number: str | None = None
+    title: str | None = None
+    type: str | None = None
+    status: str | None = None
+    status_date: str | None = None
+    submitted_by: str | None = None
+    council: str | None = None
+    submission_date: str | None = None
+    department: str | None = None
+    url: str | None = None
+    description: str | None = None
+    initial_situation: str | None = None
+    submitted_text: str | None = None
+    motion_text: str | None = None
+    federal_council_response: str | None = None
+    proceedings: str | None = None
+    tags: str | None = None
+
+
+class MemberResult(BaseModel):
+    id: int | None = None
+    name: str | None = None
+    council: str | None = None
+    canton: str | None = None
+    party: str | None = None
+    group: str | None = None
+    active: bool | None = None
+    joining: str | None = None
+
+
+class MemberSearchResponse(ResponseEnvelope):
+    results: list[MemberResult] = Field(default_factory=list)
+
+
+class VoteResult(BaseModel):
+    id: int | None = None
+    business_number: str | None = None
+    business_title: str | None = None
+    session: str | int | None = None
+    meaning_yes: str | None = None
+    meaning_no: str | None = None
+    vote_end: str | None = None
+
+
+class VotesResponse(ResponseEnvelope):
+    results: list[VoteResult] = Field(default_factory=list)
+
+
+class SessionResult(BaseModel):
+    id: int | None = None
+    name: str | None = None
+    start: str | None = None
+    end: str | None = None
+    type: str | None = None
+    legislative_period: int | None = None
+
+
+class SessionsResponse(ResponseEnvelope):
+    results: list[SessionResult] = Field(default_factory=list)
+
+
+class TranscriptResult(BaseModel):
+    speaker: str | None = None
+    function: str | None = None
+    canton: str | None = None
+    group: str | None = None
+    council: str | None = None
+    date: str | None = None
+    session: int | None = None
+    business_title: str | None = None
+    text_snippet: str | None = None
+
+
+class TranscriptsResponse(ResponseEnvelope):
+    results: list[TranscriptResult] = Field(default_factory=list)
+
+
+def _none_envelope(cls, message: str):
+    """Leer-Antwort mit Vorschlägen statt blankem „not found“ (ARCH-003)."""
+    return cls(match_type="none", count=0, note=message, suggestions=_SEARCH_SUGGESTIONS)
 
 
 # ─────────────────────────── Eingabemodelle ────────────────────────────────────
@@ -329,17 +411,9 @@ class SearchBusinessInput(BaseModel):
         max_length=20,
     )
     limit: int = Field(
-        default=20,
-        description="Maximale Anzahl Ergebnisse (1–100).",
-        ge=1,
-        le=MAX_LIMIT,
-        strict=True,
+        default=20, description="Maximale Anzahl Ergebnisse (1–100).", ge=1, le=MAX_LIMIT, strict=True
     )
     offset: int = Field(default=0, description="Offset für Paginierung.", ge=0, strict=True)
-    response_format: ResponseFormat = Field(
-        default=ResponseFormat.MARKDOWN,
-        description="Ausgabeformat: 'markdown' (lesbar) oder 'json' (strukturiert).",
-    )
 
 
 class GetBusinessInput(BaseModel):
@@ -359,34 +433,20 @@ class SearchMembersInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
     canton: str | None = Field(
-        default=None,
-        description="Nach Kanton filtern, z.B. 'ZH', 'BE', 'GE', 'AG'.",
-        min_length=2,
-        max_length=2,
+        default=None, description="Nach Kanton filtern, z.B. 'ZH', 'BE', 'GE', 'AG'.", min_length=2, max_length=2
     )
     last_name: str | None = Field(
-        default=None,
-        description="Nach Nachname filtern (Teilübereinstimmung).",
-        min_length=1,
-        max_length=100,
+        default=None, description="Nach Nachname filtern (Teilübereinstimmung).", min_length=1, max_length=100
     )
     council: str | None = Field(
-        default=None,
-        description="Nach Rat filtern: 'NR' (Nationalrat) oder 'SR' (Ständerat).",
-        max_length=20,
+        default=None, description="Nach Rat filtern: 'NR' (Nationalrat) oder 'SR' (Ständerat).", max_length=20
     )
     party: str | None = Field(
-        default=None,
-        description="Nach Partei filtern, z.B. 'SP', 'SVP', 'FDP', 'Mitte', 'Grüne'.",
-        max_length=20,
+        default=None, description="Nach Partei filtern, z.B. 'SP', 'SVP', 'FDP', 'Mitte', 'Grüne'.", max_length=20
     )
-    active_only: bool = Field(
-        default=True,
-        description="Nur aktive Ratsmitglieder zurückgeben.",
-    )
+    active_only: bool = Field(default=True, description="Nur aktive Ratsmitglieder zurückgeben.")
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
-    response_format: ResponseFormat = Field(default=ResponseFormat.MARKDOWN)
 
 
 class GetVotesInput(BaseModel):
@@ -395,20 +455,13 @@ class GetVotesInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
     keyword: str | None = Field(
-        default=None,
-        description="Stichwort im Geschäftstitel der Abstimmung (z.B. 'Bildung', 'KI').",
-        min_length=1,
-        max_length=200,
+        default=None, description="Stichwort im Geschäftstitel der Abstimmung (z.B. 'Bildung', 'KI').", min_length=1, max_length=200
     )
     session_id: int | None = Field(
-        default=None,
-        description="Abstimmungen einer bestimmten Session filtern.",
-        gt=0,
-        strict=True,
+        default=None, description="Abstimmungen einer bestimmten Session filtern.", gt=0, strict=True
     )
     limit: int = Field(default=20, ge=1, le=50, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
-    response_format: ResponseFormat = Field(default=ResponseFormat.MARKDOWN)
 
 
 class GetSessionsInput(BaseModel):
@@ -418,7 +471,6 @@ class GetSessionsInput(BaseModel):
 
     limit: int = Field(default=10, ge=1, le=50, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
-    response_format: ResponseFormat = Field(default=ResponseFormat.MARKDOWN)
 
 
 class GetTranscriptsInput(BaseModel):
@@ -427,31 +479,17 @@ class GetTranscriptsInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
     keyword: str | None = Field(
-        default=None,
-        description="Stichwort im Transkripttext (z.B. 'KI', 'Schule').",
-        min_length=1,
-        max_length=200,
+        default=None, description="Stichwort im Transkripttext (z.B. 'KI', 'Schule').", min_length=1, max_length=200
     )
     speaker_name: str | None = Field(
-        default=None,
-        description="Nach Nachname des Redners filtern.",
-        min_length=1,
-        max_length=100,
+        default=None, description="Nach Nachname des Redners filtern.", min_length=1, max_length=100
     )
     session_id: int | None = Field(
-        default=None,
-        description="Transkripte einer bestimmten Session filtern.",
-        gt=0,
-        strict=True,
+        default=None, description="Transkripte einer bestimmten Session filtern.", gt=0, strict=True
     )
-    council: str | None = Field(
-        default=None,
-        description="Nach Rat filtern: 'NR' oder 'SR'.",
-        max_length=20,
-    )
+    council: str | None = Field(default=None, description="Nach Rat filtern: 'NR' oder 'SR'.", max_length=20)
     limit: int = Field(default=15, ge=1, le=50, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
-    response_format: ResponseFormat = Field(default=ResponseFormat.MARKDOWN)
 
 
 # ─────────────────────────── Tools ─────────────────────────────────────────────
@@ -470,7 +508,7 @@ class GetTranscriptsInput(BaseModel):
 @_instrument("parlament_search_business")
 async def parlament_search_business(
     params: SearchBusinessInput, ctx: Context | None = None
-) -> str:
+) -> BusinessSearchResponse:
     """Parlamentarische Vorstösse suchen (Motionen, Interpellationen, Postulate usw.).
 
     Durchsucht Curia Vista Geschäftsdaten von ws.parlament.ch.
@@ -483,23 +521,16 @@ async def parlament_search_business(
     Maximal 100 Treffer pro Aufruf; mit `offset` paginieren.</important_notes>
 
     <example>keyword='KI', keyword2='Schule', status='Eingereicht'</example>
-
-    Anker-Abfrage: 'Welche Vorstösse zu KI in der Schule sind hängig?'
     """
     filters: list[str] = []
-
     if params.keyword:
-        kw = params.keyword.replace("'", "''")
-        filters.append(f"substringof('{kw}',Title)")
+        filters.append(f"substringof('{params.keyword.replace(chr(39), chr(39) * 2)}',Title)")
     if params.keyword2:
-        kw2 = params.keyword2.replace("'", "''")
-        filters.append(f"substringof('{kw2}',Title)")
+        filters.append(f"substringof('{params.keyword2.replace(chr(39), chr(39) * 2)}',Title)")
     if params.business_type:
-        bt = params.business_type.replace("'", "''")
-        filters.append(f"BusinessTypeName eq '{bt}'")
+        filters.append(f"BusinessTypeName eq '{params.business_type.replace(chr(39), chr(39) * 2)}'")
     if params.status:
-        st = params.status.replace("'", "''")
-        filters.append(f"BusinessStatusText eq '{st}'")
+        filters.append(f"BusinessStatusText eq '{params.status.replace(chr(39), chr(39) * 2)}'")
     if params.council:
         council_map = {"NR": "Nationalrat", "SR": "Ständerat"}
         council_name = council_map.get(params.council.upper(), params.council)
@@ -508,58 +539,17 @@ async def parlament_search_business(
         filters.append(f"SubmissionDate gt datetime'{params.submitted_after}T00:00:00'")
 
     results = await _odata_get(
-        "Business",
-        filters=filters,
-        orderby="SubmissionDate desc",
-        top=params.limit,
-        skip=params.offset,
+        "Business", filters=filters, orderby="SubmissionDate desc", top=params.limit, skip=params.offset
     )
-
     if not results:
-        return _empty(
-            params.response_format,
-            "Keine Vorstösse gefunden für die angegebenen Suchkriterien.",
-        )
+        return _none_envelope(BusinessSearchResponse, "Keine Vorstösse gefunden für die angegebenen Suchkriterien.")
 
-    cleaned = [_fmt_business(b) for b in results]
-
-    if params.response_format == ResponseFormat.JSON:
-        return _json(_envelope(cleaned, match_type="exact", offset=params.offset))
-
-    # Markdown-Ausgabe
-    lines = [
-        f"## Parlamentarische Vorstösse ({len(cleaned)} Treffer)\n",
-    ]
-    if params.keyword:
-        kws = params.keyword
-        if params.keyword2:
-            kws += f" + {params.keyword2}"
-        lines.append(f"**Suche:** {kws}")
-    if params.status:
-        lines.append(f"**Status:** {params.status}")
-    lines.append("")
-
-    for b in cleaned:
-        lines.append(f"### {b['short_number']} – {b['title']}")
-        lines.append(f"- **Typ:** {b['type']}")
-        lines.append(f"- **Status:** {b['status']} ({b['status_date']})")
-        lines.append(f"- **Eingereicht von:** {b['submitted_by']} ({b['council']})")
-        lines.append(f"- **Datum:** {b['submission_date']}")
-        if b["department"]:
-            lines.append(f"- **Departement:** {b['department']}")
-        if b["description"]:
-            lines.append(f"- **Beschreibung:** {b['description']}")
-        lines.append(
-            f"- **Curia Vista:** https://www.parlament.ch/de/ratsbetrieb/suche-curia-vista/geschaeft?AffairId={b['id']}"
-        )
-        lines.append("")
-
-    if len(cleaned) == params.limit:
-        lines.append(
-            f"*Weitere Ergebnisse mit `offset={params.offset + params.limit}` abrufbar.*"
-        )
-
-    return "\n".join(lines) + _SOURCE_FOOTER
+    items = []
+    for b in results:
+        d = _fmt_business(b)
+        d["url"] = _CURIA_URL.format(d["id"])
+        items.append(BusinessSummary(**d))
+    return BusinessSearchResponse(count=len(items), offset=params.offset, results=items)
 
 
 @mcp.tool(
@@ -573,14 +563,16 @@ async def parlament_search_business(
     },
 )
 @_instrument("parlament_get_business")
-async def parlament_get_business(params: GetBusinessInput, ctx: Context | None = None) -> str:
+async def parlament_get_business(
+    params: GetBusinessInput, ctx: Context | None = None
+) -> BusinessDetail:
     """Vollständige Details eines parlamentarischen Vorstosses nach Curia Vista ID abrufen.
 
     <use_case>Nach einer Suche verwenden, um vollständige Informationen inkl.
     Ausgangslage, Vorstosstext und Antwort des Bundesrats zu erhalten.</use_case>
 
     <important_notes>Benötigt die numerische Geschäfts-ID (aus
-    parlament_search_business). Liefert „nicht gefunden“ bei unbekannter ID.</important_notes>
+    parlament_search_business). `found=false` bei unbekannter ID.</important_notes>
     """
     url = f"{BASE_URL}/Business(ID={params.business_id},Language='{params.language.value}')"
     assert_host_allowed(url)
@@ -591,39 +583,29 @@ async def parlament_get_business(params: GetBusinessInput, ctx: Context | None =
 
     b = data.get("d", data)
     if not b or not b.get("ID"):
-        return f"Vorstoss mit ID {params.business_id} nicht gefunden." + _SOURCE_FOOTER
+        return BusinessDetail(found=False, id=params.business_id)
 
-    lines = [
-        f"# {b.get('BusinessShortNumber')} – {b.get('Title')}",
-        "",
-        f"**Typ:** {b.get('BusinessTypeName')}",
-        f"**Status:** {b.get('BusinessStatusText')} ({_parse_date(b.get('BusinessStatusDate'))})",
-        f"**Eingereicht von:** {b.get('SubmittedBy')}",
-        f"**Rat:** {b.get('SubmissionCouncilName')}",
-        f"**Eingereicht am:** {_parse_date(b.get('SubmissionDate'))}",
-    ]
-    if b.get("ResponsibleDepartmentName"):
-        lines.append(f"**Departement:** {b.get('ResponsibleDepartmentName')}")
-    lines.append(
-        f"**Curia Vista:** https://www.parlament.ch/de/ratsbetrieb/suche-curia-vista/geschaeft?AffairId={b.get('ID')}"
+    return BusinessDetail(
+        found=True,
+        id=b.get("ID"),
+        short_number=b.get("BusinessShortNumber"),
+        title=b.get("Title"),
+        type=b.get("BusinessTypeName"),
+        status=b.get("BusinessStatusText"),
+        status_date=_parse_date(b.get("BusinessStatusDate")),
+        submitted_by=b.get("SubmittedBy"),
+        council=b.get("SubmissionCouncilName"),
+        submission_date=_parse_date(b.get("SubmissionDate")),
+        department=b.get("ResponsibleDepartmentName"),
+        url=_CURIA_URL.format(b.get("ID")),
+        description=b.get("Description") or None,
+        initial_situation=b.get("InitialSituation") or None,
+        submitted_text=b.get("SubmittedText") or None,
+        motion_text=b.get("MotionText") or None,
+        federal_council_response=b.get("FederalCouncilResponseText") or None,
+        proceedings=b.get("Proceedings") or None,
+        tags=b.get("TagNames") or None,
     )
-
-    if b.get("Description"):
-        lines += ["", "## Beschreibung", b.get("Description", "")]
-    if b.get("InitialSituation"):
-        lines += ["", "## Ausgangslage", b.get("InitialSituation", "")]
-    if b.get("SubmittedText"):
-        lines += ["", "## Vorstosstext", b.get("SubmittedText", "")]
-    if b.get("MotionText"):
-        lines += ["", "## Motion / Antrag", b.get("MotionText", "")]
-    if b.get("FederalCouncilResponseText"):
-        lines += ["", "## Antwort des Bundesrats", b.get("FederalCouncilResponseText", "")]
-    if b.get("Proceedings"):
-        lines += ["", "## Beratungen", b.get("Proceedings", "")]
-    if b.get("TagNames"):
-        lines += ["", f"**Tags:** {b.get('TagNames')}"]
-
-    return "\n".join(lines) + _SOURCE_FOOTER
 
 
 @mcp.tool(
@@ -639,7 +621,7 @@ async def parlament_get_business(params: GetBusinessInput, ctx: Context | None =
 @_instrument("parlament_search_members")
 async def parlament_search_members(
     params: SearchMembersInput, ctx: Context | None = None
-) -> str:
+) -> MemberSearchResponse:
     """National- und Ständeräte suchen.
 
     <use_case>Alle Zürcher Ratsmitglieder ('ZH') oder Mitglieder einer
@@ -655,53 +637,33 @@ async def parlament_search_members(
     if params.canton:
         filters.append(f"CantonAbbreviation eq '{params.canton.upper()}'")
     if params.last_name:
-        ln = params.last_name.replace("'", "''")
-        filters.append(f"substringof('{ln}',LastName)")
+        filters.append(f"substringof('{params.last_name.replace(chr(39), chr(39) * 2)}',LastName)")
     if params.council:
         council_map = {"NR": "Nationalrat", "SR": "Ständerat"}
-        cn = council_map.get(params.council.upper(), params.council)
-        filters.append(f"CouncilName eq '{cn}'")
+        filters.append(f"CouncilName eq '{council_map.get(params.council.upper(), params.council)}'")
     if params.party:
-        pa = params.party.replace("'", "''")
-        filters.append(f"PartyAbbreviation eq '{pa}'")
+        filters.append(f"PartyAbbreviation eq '{params.party.replace(chr(39), chr(39) * 2)}'")
 
     results = await _odata_get(
-        "MemberCouncil",
-        filters=filters,
-        orderby="LastName asc",
-        top=params.limit,
-        skip=params.offset,
+        "MemberCouncil", filters=filters, orderby="LastName asc", top=params.limit, skip=params.offset
     )
-
     if not results:
-        return _empty(params.response_format, "Keine Ratsmitglieder gefunden.")
+        return _none_envelope(MemberSearchResponse, "Keine Ratsmitglieder gefunden.")
 
-    if params.response_format == ResponseFormat.JSON:
-        cleaned = [
-            {
-                "id": m.get("ID"),
-                "name": f"{m.get('FirstName')} {m.get('LastName')}",
-                "council": m.get("CouncilAbbreviation"),
-                "canton": m.get("CantonAbbreviation"),
-                "party": m.get("PartyAbbreviation"),
-                "group": m.get("ParlGroupAbbreviation"),
-                "active": m.get("Active"),
-                "joining": _parse_date(m.get("DateJoining")),
-            }
-            for m in results
-        ]
-        return _json(_envelope(cleaned, match_type="exact", offset=params.offset))
-
-    lines = [f"## Ratsmitglieder ({len(results)} Treffer)\n"]
-    for m in results:
-        name = f"{m.get('FirstName')} {m.get('LastName')}"
-        council = m.get("CouncilAbbreviation", "")
-        canton = m.get("CantonAbbreviation", "")
-        party = m.get("PartyAbbreviation", "")
-        group = m.get("ParlGroupAbbreviation", "")
-        lines.append(f"- **{name}** ({council}, {canton}) – {party} / {group}")
-
-    return "\n".join(lines) + _SOURCE_FOOTER
+    items = [
+        MemberResult(
+            id=m.get("ID"),
+            name=f"{m.get('FirstName')} {m.get('LastName')}",
+            council=m.get("CouncilAbbreviation"),
+            canton=m.get("CantonAbbreviation"),
+            party=m.get("PartyAbbreviation"),
+            group=m.get("ParlGroupAbbreviation"),
+            active=m.get("Active"),
+            joining=_parse_date(m.get("DateJoining")),
+        )
+        for m in results
+    ]
+    return MemberSearchResponse(count=len(items), offset=params.offset, results=items)
 
 
 @mcp.tool(
@@ -715,7 +677,7 @@ async def parlament_search_members(
     },
 )
 @_instrument("parlament_get_votes")
-async def parlament_get_votes(params: GetVotesInput, ctx: Context | None = None) -> str:
+async def parlament_get_votes(params: GetVotesInput, ctx: Context | None = None) -> VotesResponse:
     """Parlamentarische Abstimmungen (im Rat) mit Ja/Nein-Bedeutung abrufen.
 
     <use_case>Zeigt, wie der Rat über Themen wie KI-Regulierung,
@@ -726,46 +688,29 @@ async def parlament_get_votes(params: GetVotesInput, ctx: Context | None = None)
     """
     filters: list[str] = []
     if params.keyword:
-        kw = params.keyword.replace("'", "''")
-        filters.append(f"substringof('{kw}',BusinessTitle)")
+        filters.append(f"substringof('{params.keyword.replace(chr(39), chr(39) * 2)}',BusinessTitle)")
     if params.session_id:
         filters.append(f"IdSession eq {params.session_id}")
 
     results = await _odata_get(
-        "Vote",
-        filters=filters,
-        orderby="ID desc",
-        top=params.limit,
-        skip=params.offset,
+        "Vote", filters=filters, orderby="ID desc", top=params.limit, skip=params.offset
     )
-
     if not results:
-        return _empty(params.response_format, "Keine Abstimmungen gefunden.")
+        return _none_envelope(VotesResponse, "Keine Abstimmungen gefunden.")
 
-    if params.response_format == ResponseFormat.JSON:
-        cleaned = [
-            {
-                "id": v.get("ID"),
-                "business_number": v.get("BusinessShortNumber"),
-                "business_title": v.get("BusinessTitle"),
-                "session": v.get("SessionName") or v.get("IdSession"),
-                "meaning_yes": v.get("MeaningYes"),
-                "meaning_no": v.get("MeaningNo"),
-                "vote_end": _parse_date(v.get("VoteEnd")),
-            }
-            for v in results
-        ]
-        return _json(_envelope(cleaned, match_type="exact", offset=params.offset))
-
-    lines = [f"## Parlamentarische Abstimmungen ({len(results)} Treffer)\n"]
-    for v in results:
-        lines.append(f"### {v.get('BusinessShortNumber')} – {v.get('BusinessTitle', '')[:80]}")
-        lines.append(f"- **Session:** {v.get('SessionName') or v.get('IdSession')}")
-        lines.append(f"- **Datum:** {_parse_date(v.get('VoteEnd'))}")
-        lines.append(f"- **Ja bedeutet:** {v.get('MeaningYes', '–')}")
-        lines.append(f"- **Nein bedeutet:** {v.get('MeaningNo', '–')}")
-        lines.append("")
-    return "\n".join(lines) + _SOURCE_FOOTER
+    items = [
+        VoteResult(
+            id=v.get("ID"),
+            business_number=v.get("BusinessShortNumber"),
+            business_title=v.get("BusinessTitle"),
+            session=v.get("SessionName") or v.get("IdSession"),
+            meaning_yes=v.get("MeaningYes"),
+            meaning_no=v.get("MeaningNo"),
+            vote_end=_parse_date(v.get("VoteEnd")),
+        )
+        for v in results
+    ]
+    return VotesResponse(count=len(items), offset=params.offset, results=items)
 
 
 @mcp.tool(
@@ -779,7 +724,7 @@ async def parlament_get_votes(params: GetVotesInput, ctx: Context | None = None)
     },
 )
 @_instrument("parlament_get_sessions")
-async def parlament_get_sessions(params: GetSessionsInput, ctx: Context | None = None) -> str:
+async def parlament_get_sessions(params: GetSessionsInput, ctx: Context | None = None) -> SessionsResponse:
     """Aktuelle parlamentarische Sessionen mit Daten auflisten.
 
     <use_case>Session-IDs aus dieser Liste zum Filtern von Abstimmungen oder
@@ -788,38 +733,22 @@ async def parlament_get_sessions(params: GetSessionsInput, ctx: Context | None =
     <important_notes>Session-Namen können für sehr aktuelle Sessionen `null`
     sein – dann die Session-ID verwenden.</important_notes>
     """
-    results = await _odata_get(
-        "Session",
-        orderby="ID desc",
-        top=params.limit,
-        skip=params.offset,
-    )
-
+    results = await _odata_get("Session", orderby="ID desc", top=params.limit, skip=params.offset)
     if not results:
-        return _empty(params.response_format, "Keine Sessionen gefunden.")
+        return _none_envelope(SessionsResponse, "Keine Sessionen gefunden.")
 
-    if params.response_format == ResponseFormat.JSON:
-        cleaned = [
-            {
-                "id": s.get("ID"),
-                "name": s.get("SessionName") or s.get("Abbreviation"),
-                "start": _parse_date(s.get("StartDate")),
-                "end": _parse_date(s.get("EndDate")),
-                "type": s.get("TypeName"),
-                "legislative_period": s.get("LegislativePeriodNumber"),
-            }
-            for s in results
-        ]
-        return _json(_envelope(cleaned, match_type="exact", offset=params.offset))
-
-    lines = ["## Parlamentarische Sessionen\n"]
-    for s in results:
-        name = s.get("SessionName") or s.get("Abbreviation") or f"Session {s.get('ID')}"
-        start = _parse_date(s.get("StartDate"))
-        end = _parse_date(s.get("EndDate"))
-        lp = s.get("LegislativePeriodNumber")
-        lines.append(f"- **{name}** (ID: {s.get('ID')}) | {start} – {end} | LP {lp}")
-    return "\n".join(lines) + _SOURCE_FOOTER
+    items = [
+        SessionResult(
+            id=s.get("ID"),
+            name=s.get("SessionName") or s.get("Abbreviation"),
+            start=_parse_date(s.get("StartDate")),
+            end=_parse_date(s.get("EndDate")),
+            type=s.get("TypeName"),
+            legislative_period=s.get("LegislativePeriodNumber"),
+        )
+        for s in results
+    ]
+    return SessionsResponse(count=len(items), offset=params.offset, results=items)
 
 
 @mcp.tool(
@@ -835,7 +764,7 @@ async def parlament_get_sessions(params: GetSessionsInput, ctx: Context | None =
 @_instrument("parlament_get_transcripts")
 async def parlament_get_transcripts(
     params: GetTranscriptsInput, ctx: Context | None = None
-) -> str:
+) -> TranscriptsResponse:
     """Auszüge aus parlamentarischen Debatten-Transkripten (Amtliches Bulletin) abrufen.
 
     <use_case>Finden, was bestimmte Ratsmitglieder zu KI, Digitalisierung in der
@@ -847,85 +776,57 @@ async def parlament_get_transcripts(
     """
     filters: list[str] = []
     if params.keyword:
-        kw = params.keyword.replace("'", "''")
-        filters.append(f"substringof('{kw}',Text)")
+        filters.append(f"substringof('{params.keyword.replace(chr(39), chr(39) * 2)}',Text)")
     if params.speaker_name:
-        sn = params.speaker_name.replace("'", "''")
-        filters.append(f"substringof('{sn}',SpeakerLastName)")
+        filters.append(f"substringof('{params.speaker_name.replace(chr(39), chr(39) * 2)}',SpeakerLastName)")
     if params.session_id:
         filters.append(f"IdSession eq {params.session_id}")
     if params.council:
         council_map = {"NR": "Nationalrat", "SR": "Ständerat"}
-        cn = council_map.get(params.council.upper(), params.council)
-        filters.append(f"CouncilName eq '{cn}'")
+        filters.append(f"CouncilName eq '{council_map.get(params.council.upper(), params.council)}'")
 
     results = await _odata_get(
-        "Transcript",
-        filters=filters,
-        orderby="MeetingDate desc",
-        top=params.limit,
-        skip=params.offset,
+        "Transcript", filters=filters, orderby="MeetingDate desc", top=params.limit, skip=params.offset
     )
-
     if not results:
-        return _empty(
-            params.response_format, "Keine Transkripte gefunden für die angegebenen Kriterien."
-        )
+        return _none_envelope(TranscriptsResponse, "Keine Transkripte gefunden für die angegebenen Kriterien.")
 
-    if params.response_format == ResponseFormat.JSON:
-        cleaned = [
-            {
-                "speaker": t.get("SpeakerFullName"),
-                "function": t.get("SpeakerFunction"),
-                "canton": t.get("CantonAbbreviation"),
-                "group": t.get("ParlGroupAbbreviation"),
-                "council": t.get("CouncilName"),
-                "date": t.get("MeetingDate", "")[:10],
-                "session": t.get("IdSession"),
-                "text_snippet": (t.get("Text") or "")[:500],
-            }
-            for t in results
-        ]
-        return _json(_envelope(cleaned, match_type="exact", offset=params.offset))
-
-    lines = [f"## Ratsdebatten ({len(results)} Treffer)\n"]
+    items = []
     total = len(results)
     for i, t in enumerate(results):
-        # Fortschritt bei (potenziell langsamer) Transkript-Aufbereitung (SDK-003).
-        if ctx is not None and i % 5 == 0:
+        if ctx is not None and i % 5 == 0:  # Fortschritt (SDK-003)
             try:
                 await ctx.report_progress(progress=i, total=total)
             except Exception:
                 pass
-        speaker = t.get("SpeakerFullName", "Unbekannt")
-        function = t.get("SpeakerFunction", "")
-        canton = t.get("CantonAbbreviation", "")
-        group = t.get("ParlGroupAbbreviation", "")
-        date = (t.get("MeetingDate") or "")[:10]
-        text = (t.get("Text") or "")[:400]
-
-        lines.append(f"### {speaker} ({function}, {canton}, {group})")
-        lines.append(
-            f"**Datum:** {date} | **Rat:** {t.get('CouncilName', '')} | **Session:** {t.get('IdSession', '')}"
+        items.append(
+            TranscriptResult(
+                speaker=t.get("SpeakerFullName"),
+                function=t.get("SpeakerFunction"),
+                canton=t.get("CantonAbbreviation"),
+                group=t.get("ParlGroupAbbreviation"),
+                council=t.get("CouncilName"),
+                date=(t.get("MeetingDate") or "")[:10],
+                session=t.get("IdSession"),
+                business_title=t.get("VoteBusinessTitle"),
+                text_snippet=(t.get("Text") or "")[:500],
+            )
         )
-        if t.get("VoteBusinessTitle"):
-            lines.append(f"**Vorstoss:** {t.get('VoteBusinessTitle')}")
-        lines.append(f"\n> {text}…\n")
-
-    if len(results) == params.limit:
-        lines.append(f"*Weitere mit `offset={params.offset + params.limit}` abrufbar.*")
-
-    return "\n".join(lines) + _SOURCE_FOOTER
+    return TranscriptsResponse(count=len(items), offset=params.offset, results=items)
 
 
-# ─────────────────────────── HTTP-App mit CORS (SDK-004) ───────────────────────
+# ─────────────────────────── HTTP-App mit CORS + Auth ──────────────────────────
 def create_http_app():
-    """Starlette-ASGI-App für Streamable HTTP mit korrektem CORS für
-    Browser-Clients (SDK-004).
+    """Starlette-ASGI-App für Streamable HTTP mit CORS (SDK-004) und optionaler
+    Bearer-Auth/Session-Bindung (SEC-009).
 
-    Exponiert den ``Mcp-Session-Id``-Header (sonst können Browser-Clients die
-    Session nicht lesen). Erlaubte Origins via ``MCP_ALLOWED_ORIGINS`` (CSV) —
-    in Production **keine** Wildcard. Verwendung z.B.::
+    - CORS exponiert ``Mcp-Session-Id`` (sonst können Browser-Clients die Session
+      nicht lesen); Origins via ``MCP_ALLOWED_ORIGINS`` (CSV).
+    - Wenn ``MCP_BEARER_TOKENS`` gesetzt ist, wird pro Request ein gültiges
+      Bearer-Token verlangt; die User-Identität kommt aus dem validierten Token,
+      nicht aus einem Session-Header.
+
+    Verwendung::
 
         uvicorn parlament_mcp.server:create_http_app --factory --host 0.0.0.0 --port 8080
     """
@@ -933,8 +834,12 @@ def create_http_app():
 
     from starlette.middleware.cors import CORSMiddleware
 
+    from parlament_mcp.auth import build_bearer_middleware
+
     origins = [o.strip() for o in os.environ.get("MCP_ALLOWED_ORIGINS", "").split(",") if o.strip()]
     app = mcp.streamable_http_app()
+    # Auth zuerst registrieren (läuft als äusserste Schicht vor CORS-geschütztem Handler).
+    app.add_middleware(build_bearer_middleware())
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
@@ -950,10 +855,9 @@ def create_http_app():
 def _resolve_settings() -> Settings:
     """Settings laden und CLI-Aliasse (--http/--port) + Railway-PORT verrechnen."""
     import os
+    import sys
 
     settings = Settings()
-
-    # CLI-Aliasse (Backwards-Compat) haben Vorrang vor stdio-Default.
     if "--http" in sys.argv and "MCP_TRANSPORT" not in os.environ:
         settings.transport = "streamable-http"
     if settings.transport == "http":
@@ -961,7 +865,6 @@ def _resolve_settings() -> Settings:
     for i, arg in enumerate(sys.argv):
         if arg == "--port" and i + 1 < len(sys.argv):
             settings.port = int(sys.argv[i + 1])
-    # Railway/Render setzen PORT (ohne MCP_-Prefix).
     if "MCP_PORT" not in os.environ and os.environ.get("PORT"):
         settings.port = int(os.environ["PORT"])
     return settings
@@ -973,9 +876,7 @@ def main() -> None:
     if settings.otel_enabled:
         setup_tracing()
 
-    _logger.info(
-        "server_start", transport=settings.transport, protocol_version=PROTOCOL_VERSION
-    )
+    _logger.info("server_start", transport=settings.transport, protocol_version=PROTOCOL_VERSION)
 
     if settings.transport == "stdio":
         mcp.run(transport="stdio")

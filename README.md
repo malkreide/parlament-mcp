@@ -113,6 +113,19 @@ if you do so outside a detected container.
 Transport is selected via `MCP_TRANSPORT` (`stdio` default, or `sse` /
 `streamable-http`); `--http` is kept as an alias for `streamable-http`.
 
+### Authentication (optional)
+
+The HTTP transport is open by default (public read-only data). To require a
+bearer token, serve via the CORS/auth app factory and set `MCP_BEARER_TOKENS`:
+
+```bash
+MCP_BEARER_TOKENS="alice:tok_abc,bob:tok_def" MCP_ALLOWED_ORIGINS="https://claude.ai" \
+  uvicorn parlament_mcp.server:create_http_app --factory --host 0.0.0.0 --port 8080
+```
+
+Each request then needs `Authorization: Bearer <token>`; identity comes from the
+validated token, not a session header (see [`docs/security.md`](docs/security.md)).
+
 ### Docker
 
 ```bash
@@ -159,9 +172,9 @@ an HAProxy stick-table example is in [`deploy/haproxy.cfg`](deploy/haproxy.cfg).
 |---|---|---|
 | Curia Vista (ws.parlament.ch) | CC BY 4.0 | © Schweizer Parlament, CC BY 4.0 |
 
-Every tool answer carries the source/license: Markdown responses include a
-`_Quelle: … · Lizenz: CC BY 4.0_` footer, JSON responses include `source`,
-`license` and `provenance` fields. Data is passed through unmodified.
+Every tool returns a typed structured response (FastMCP exposes the output
+schema) carrying `source`, `license`, `provenance`, `match_type` and `count`
+alongside typed `results`. Data is passed through unmodified.
 
 ## 🧭 Phase
 
