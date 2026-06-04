@@ -18,6 +18,7 @@ Output-Schema.
 
 from __future__ import annotations
 
+import asyncio
 import functools
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
@@ -65,26 +66,44 @@ _logger = get_logger("parlament_mcp")
 # Ein gepoolter AsyncClient über die Server-Lebensdauer statt ein neuer Client
 # pro Tool-Call. Der Lifespan baut den Connection-Pool auf und schliesst ihn.
 _http_client: httpx.AsyncClient | None = None
+# Event-Loop, an den der gepoolte Client gebunden ist. Ein httpx-Client (bzw.
+# sein Connection-Pool) gehört dem Loop, auf dem er erzeugt wurde. Wird er auf
+# einem anderen Loop weiterverwendet (z. B. function-scoped Test-Loops),
+# schlägt das Schliessen der Pool-Verbindungen mit "Event loop is closed" fehl.
+_http_client_loop: asyncio.AbstractEventLoop | None = None
 
 
 def _get_client() -> httpx.AsyncClient:
-    """Geteilten AsyncClient zurückgeben (lazy, falls kein Lifespan aktiv ist)."""
-    global _http_client
-    if _http_client is None or _http_client.is_closed:
+    """Geteilten AsyncClient zurückgeben (lazy, falls kein Lifespan aktiv ist).
+
+    Erkennt einen Loop-Wechsel und baut den Client neu auf, damit der
+    Connection-Pool nie über die Grenze eines bereits geschlossenen Loops
+    hinweg verwendet wird.
+    """
+    global _http_client, _http_client_loop
+    running_loop = asyncio.get_running_loop()
+    if (
+        _http_client is None
+        or _http_client.is_closed
+        or _http_client_loop is not running_loop
+    ):
         _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
+        _http_client_loop = running_loop
     return _http_client
 
 
 @asynccontextmanager
 async def _lifespan(_server: FastMCP):
     """FastMCP-Lifespan: HTTP-Connection-Pool auf- und sauber wieder abbauen."""
-    global _http_client
+    global _http_client, _http_client_loop
     _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
+    _http_client_loop = asyncio.get_running_loop()
     try:
         yield
     finally:
         await _http_client.aclose()
         _http_client = None
+        _http_client_loop = None
 
 
 # ─────────────────────────── Server ────────────────────────────────────────────
