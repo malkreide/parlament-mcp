@@ -1,3 +1,5 @@
+[🇩🇪 Deutsche Version](README.de.md)
+
 # 🏛️ parlament-mcp
 
 [![CI](https://github.com/malkreide/parlament-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/malkreide/parlament-mcp/actions/workflows/ci.yml)
@@ -245,6 +247,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
+## Security
+
+See [SECURITY.md](SECURITY.md) for the security policy and posture (vulnerability
+reporting, Lethal-Trifecta assessment, accepted risks).
+
+---
+
 ## License
 
-MIT [malkreide](https://github.com/malkreide)
+MIT © [Hayal Oezkan](https://github.com/malkreide) — see [LICENSE](LICENSE)
