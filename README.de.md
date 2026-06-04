@@ -273,10 +273,18 @@ Gateway-Härtung) in [`docs/security.md`](docs/security.md).
 
 ## Mitwirken
 
-Siehe [CONTRIBUTING.md](CONTRIBUTING.md).
+Siehe [CONTRIBUTING.de.md](CONTRIBUTING.de.md).
+
+---
+
+## Sicherheit
+
+Siehe [SECURITY.de.md](SECURITY.de.md) für die Sicherheitsrichtlinie und
+Sicherheitslage (Schwachstellenmeldung, Lethal-Trifecta-Bewertung, akzeptierte
+Risiken).
 
 ---
 
 ## Lizenz
 
-MIT © [malkreide](https://github.com/malkreide)
+MIT © [Hayal Oezkan](https://github.com/malkreide) — siehe [LICENSE](LICENSE)
