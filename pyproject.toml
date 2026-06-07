@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name        = "parlament-mcp"
-version     = "0.3.2"
+version     = "0.3.3"
 description = "MCP server for the Swiss Parliament (Curia Vista OData API)"
 readme      = "README.md"
 license     = { file = "LICENSE" }
