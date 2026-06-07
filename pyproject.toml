@@ -55,6 +55,7 @@ otel-export = [
 parlament-mcp = "parlament_mcp.server:main"
 
 [project.urls]
+"mcp-name" = "io.github.malkreide/parlament-mcp"
 Homepage   = "https://github.com/malkreide/parlament-mcp"
 Repository = "https://github.com/malkreide/parlament-mcp"
 Issues     = "https://github.com/malkreide/parlament-mcp/issues"
