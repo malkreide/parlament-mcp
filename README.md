@@ -259,3 +259,22 @@ reporting, Lethal-Trifecta assessment, accepted risks).
 MIT © [Hayal Oezkan](https://github.com/malkreide) — see [LICENSE](LICENSE)
 
 <!-- mcp-name: io.github.malkreide/parlament-mcp -->
+
+<!-- BEGIN GENERATED: install -->
+## Installation
+
+Run via [`uv`](https://docs.astral.sh/uv/)'s `uvx` — no clone or manual install needed. Add to your MCP client config (`mcpServers` for Claude Desktop, Cursor and Windsurf; use a top-level `servers` key for VS Code in `.vscode/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "parlament-mcp": {
+      "command": "uvx",
+      "args": [
+        "parlament-mcp"
+      ]
+    }
+  }
+}
+```
+<!-- END GENERATED: install -->
