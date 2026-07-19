@@ -6,6 +6,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- German README (`README.de.md`) and a language switcher in `README.md`,
+  matching the portfolio's bilingual convention and the cross-links from the
+  federal `parlament-mcp` root README.
+
 ## [0.1.0] — 2026-07-18
 
 Initial release. New server in the Swiss Public Data MCP portfolio covering the

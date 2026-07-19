@@ -1,3 +1,5 @@
+[🇩🇪 Deutsche Version](README.de.md)
+
 # openparldata-mcp
 
 MCP server for Switzerland's **subnational** parliaments — 26 cantons and ~70

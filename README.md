@@ -10,6 +10,12 @@
 > **Part of the [Swiss Public Data MCP Portfolio](https://github.com/malkreide)** –
 > connecting AI models to Swiss public data sources.
 
+> **Note:** This server covers the **federal** level (Curia Vista). This repo
+> additionally hosts a self-contained subproject under
+> [`openparldata-mcp/`](openparldata-mcp/README.md) — the **subnational**
+> counterpart for the 26 cantons and ~70 municipal parliaments
+> ([OpenParlData.ch](https://openparldata.ch)). The two are independent servers.
+
 An MCP server that connects AI models to the **Swiss Federal Parliament** via the
 [Curia Vista OData API](https://ws.parlament.ch/odata.svc/) (`ws.parlament.ch`).
 Access motions, interpellations, votes, members, sessions, and debate transcripts –
@@ -146,6 +152,7 @@ an HAProxy stick-table example is in [`deploy/haproxy.cfg`](deploy/haproxy.cfg).
 
 | Partner Server | Combination |
 |---|---|
+| [`openparldata-mcp`](openparldata-mcp/README.md) | **Federal ↔ subnational** — same question across cantons & municipalities |
 | [`fedlex-mcp`](https://github.com/malkreide/fedlex-mcp) | Law text ↔ parliamentary debate that created it |
 | [`zurich-opendata-mcp`](https://github.com/malkreide/zurich-opendata-mcp) | City policy ↔ cantonal/federal motions |
 | [`swiss-statistics-mcp`](https://github.com/malkreide/swiss-statistics-mcp) | Data backing ↔ motions citing statistics |

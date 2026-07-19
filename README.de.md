@@ -10,6 +10,12 @@
 > **Teil des [Swiss Public Data MCP Portfolio](https://github.com/malkreide)** –
 > KI-Modelle mit Schweizer Öffentlichkeitsdaten verbinden.
 
+> **Hinweis:** Dieser Server deckt die **Bundesebene** ab (Curia Vista). Das
+> Repo hostet zusätzlich ein eigenständiges Subprojekt unter
+> [`openparldata-mcp/`](openparldata-mcp/README.md) — das **subnationale**
+> Pendant für die 26 Kantone und ~70 Gemeindeparlamente
+> ([OpenParlData.ch](https://openparldata.ch)). Die beiden sind unabhängige Server.
+
 Ein MCP-Server, der KI-Modelle mit dem **Schweizer Bundesrat und Bundesversammlung** verbindet –
 über die [Curia Vista OData-API](https://ws.parlament.ch/odata.svc/) (`ws.parlament.ch`).
 Zugriff auf Vorstösse, Abstimmungen, Ratsmitglieder, Sessionen und Debatten-Transkripte –
@@ -175,6 +181,7 @@ parlament_get_transcripts(speaker_name="Müller", keyword="KI")
 
 | Partner-Server | Kombination |
 |---|---|
+| [`openparldata-mcp`](openparldata-mcp/README.de.md) | **Bund ↔ subnational** — dieselbe Frage über Kantone & Gemeinden |
 | [`fedlex-mcp`](https://github.com/malkreide/fedlex-mcp) | Gesetzestext ↔ parlamentarische Debatte, die ihn geschaffen hat |
 | [`zurich-opendata-mcp`](https://github.com/malkreide/zurich-opendata-mcp) | Städtische Daten ↔ kantonale/nationale Vorstösse |
 | [`swiss-statistics-mcp`](https://github.com/malkreide/swiss-statistics-mcp) | Statistiken ↔ Vorstösse, die sich darauf beziehen |
