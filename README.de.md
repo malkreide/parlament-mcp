@@ -18,20 +18,34 @@
 
 Ein MCP-Server, der KI-Modelle mit dem **Schweizer Bundesrat und Bundesversammlung** verbindet –
 über die [Curia Vista OData-API](https://ws.parlament.ch/odata.svc/) (`ws.parlament.ch`).
-Zugriff auf Vorstösse, Abstimmungen, Ratsmitglieder, Sessionen und Debatten-Transkripte –
+Zugriff auf Vorstösse, Abstimmungen, Ratsmitglieder, Sessionen und die
+**wörtlichen Debatten-Transkripte** des Amtlichen Bulletins –
 **ohne API-Schlüssel** (Phase 1 – No-Auth-First).
 
 ---
 
-## 🎯 Anker-Demo-Abfrage
+## 🎯 Anker-Demo-Abfragen
+
+**Metadaten-Ebene:**
 
 > *«Welche Vorstösse zu KI in der Schule sind hängig?»*
 > → `parlament_search_business(keyword="KI", keyword2="Schule", status="Eingereicht")`
+
+**Wörtliche Transkripte (Amtliches Bulletin):**
+
+> *«Was hat Nationalrätin Munz in der Frühjahrssession 2024 zur Volksschule
+> gesagt? Gib mir den Wortlaut mit korrekter AB-Zitation.»*
+> → `parlament_search_transcripts(speaker_name="Munz", session_id=5202, keyword="Volksschule")`
+> → danach `parlament_get_transcript(transcript_id=…)` für den vollen Wortlaut.
+>
+> Liefert kurze, **zitierfähige** Auszüge (`AB 2024 N, 2024-03-13, Munz Martina`)
+> mit stabiler Quell-URL; der Volltext wird nur auf Anforderung geladen, nie im
+> Stapel.
 >
 > [→ Weitere Anwendungsbeispiele nach Zielgruppe →](EXAMPLES.md)
 
-Ideal für die **KI-Fachgruppe Stadtverwaltung Zürich**: Offene Vorstösse zu KI in der Bildung,
-Digitalisierungsinitiativen oder beliebigen Politikthemen – sofort abrufbar.
+Ideal für die **KI-Fachgruppe Stadtverwaltung Zürich**: Offene Vorstösse zu KI in der Bildung
+finden – oder wörtlich belegen, was im Rat tatsächlich gesagt wurde.
 
 <p align="center">
   <img src="assets/demo.svg" alt="Demo: Claude fragt hängige KI-Vorstösse via MCP Tool Call ab" width="720">
@@ -48,7 +62,8 @@ Digitalisierungsinitiativen oder beliebigen Politikthemen – sofort abrufbar.
 | `parlament_search_members` | Ratsmitglieder nach Kanton (z.B. ZH), Partei, Rat finden |
 | `parlament_get_votes` | Parlamentarische Abstimmungen mit Ja/Nein-Bedeutung |
 | `parlament_get_sessions` | Aktuelle Sessionen mit IDs für Folgeabfragen |
-| `parlament_get_transcripts` | Debatten-Auszüge nach Stichwort oder Redner (Amtliches Bulletin) |
+| `parlament_search_transcripts` | Debatten durchsuchen → **zitierfähige Auszüge** mit AB-Zitation + Quell-URL (Redner-/Session-/Geschäfts-/Datumsfilter) |
+| `parlament_get_transcript` | **Wörtlichen Volltext** eines einzelnen Votums nach ID abrufen (gedeckelt, paginiert, `is_excerpt`-Kennzeichnung) |
 
 ---
 
@@ -56,23 +71,33 @@ Digitalisierungsinitiativen oder beliebigen Politikthemen – sofort abrufbar.
 
 ```
 ┌──────────────────────────────────┐
-│     MCP-Host (Claude Desktop /   │
-│     Claude API / IDE)            │
-└─────────────┬────────────────────┘
+│     MCP-Host (Claude Desktop /    │
+│     Claude API / IDE)             │
+└─────────────┬─────────────────────┘
               │ MCP-Protokoll (JSON-RPC 2.0)
               │ Transport: stdio (lokal) / SSE (Cloud)
-┌─────────────▼────────────────────┐
-│         parlament-mcp            │
-│   FastMCP · Python · Pydantic v2 │
-└─────────────┬────────────────────┘
+┌─────────────▼─────────────────────┐
+│          parlament-mcp            │
+│   FastMCP · Python · Pydantic v2  │
+│                                   │
+│  ┌── Metadaten-Schicht (server.py)┐
+│  │  search_business · get_business │
+│  │  search_members · get_votes     │
+│  │  get_sessions                   │
+│  └─────────────────────────────────┘
+│  ┌── Transkript-Schicht ──────────┐  ← eigenes Modul (transcripts.py)
+│  │  search_transcripts (Auszüge)  │    · Language='DE' dedupliziert Editionen
+│  │  get_transcript (Wortlaut)     │    · Type=1 = nur echte Wortmeldungen
+│  └─────────────────────────────────┘    · Retry + 45s-Read-Timeout
+└─────────────┬─────────────────────┘
               │ HTTPS / OData v3
-┌─────────────▼────────────────────┐
-│  ws.parlament.ch / odata.svc     │
-│  Curia Vista – Kein Auth nötig   │
-│                                  │
-│  Business · Vote · MemberCouncil │
-│  Session · Transcript · ParlGroup│
-└──────────────────────────────────┘
+┌─────────────▼─────────────────────┐
+│  ws.parlament.ch / odata.svc      │
+│  Curia Vista – Kein Auth nötig    │
+│                                   │
+│  Business · Vote · MemberCouncil  │   Metadaten-Pfad
+│  Session ─< Meeting ─< Subject ─< Transcript   Transkript-Pfad
+└───────────────────────────────────┘
 ```
 
 ---
@@ -170,9 +195,11 @@ parlament_search_members(canton="ZH", active_only=True)
 parlament_get_votes(keyword="Digitalisierung")
 ```
 
-**Was hat Nationalrätin X zum Thema KI gesagt?**
+**Was hat Nationalrätin Munz in der Frühjahrssession 2024 zur Volksschule gesagt?**
 ```
-parlament_get_transcripts(speaker_name="Müller", keyword="KI")
+parlament_search_transcripts(speaker_name="Munz", session_id=5202, keyword="Volksschule")
+# danach für den vollen Wortlaut:
+parlament_get_transcript(transcript_id=336348)
 ```
 
 ---
@@ -199,8 +226,19 @@ parlament_get_transcripts(speaker_name="Müller", keyword="KI")
 - **API:** [ws.parlament.ch/odata.svc](https://ws.parlament.ch/odata.svc/)
 - **Authentifizierung:** Keine (Phase 1 – No-Auth-First)
 - **Protokoll:** OData v3 / JSON
-- **Abdeckung:** Alle Parlamentsgeschäfte seit 1978; Abstimmungen und Transkripte
+- **Abdeckung:** Alle Parlamentsgeschäfte seit 1978; Abstimmungen seit ~2000.
+  **Strukturierte wörtliche Transkripte (Amtliches Bulletin) ab 1999-12-06**
+  (frühere Jahrgänge 1891–1999 nur als Archiv-Scans — siehe Bekannte
+  Einschränkungen).
 - **Aktualisierung:** Echtzeit (offizieller Datendienst des Bundes)
+
+### Urheberrecht — wörtliche Zitation ist erlaubt
+
+Amtliche Verhandlungen von Schweizer Behörden sind nach **Art. 5 Abs. 1 lit. a
+URG** vom Urheberrechtsschutz **ausgenommen**. Der wörtliche Wortlaut der
+Rats­debatten im Amtlichen Bulletin darf deshalb frei wiedergegeben und zitiert
+werden — genau das liefern die Transkript-Tools: den Wortlaut selbst, nie eine
+Zusammenfassung als Ersatz dafür.
 
 ---
 
@@ -241,8 +279,9 @@ Alle Tools deklarieren explizite, verhaltenskonsistente Annotations:
 | `parlament_get_business`     | ✅ | — | ✅ | ✅ |
 | `parlament_search_members`   | ✅ | — | ✅ | ✅ |
 | `parlament_get_votes`        | ✅ | — | ✅ | ✅ |
-| `parlament_get_sessions`     | ✅ | — | ✅ | ✅ |
-| `parlament_get_transcripts`  | ✅ | — | ✅ | ✅ |
+| `parlament_get_sessions`       | ✅ | — | ✅ | ✅ |
+| `parlament_search_transcripts` | ✅ | — | ✅ | ✅ |
+| `parlament_get_transcript`     | ✅ | — | ✅ | ✅ |
 
 ## 📈 Observability
 
@@ -261,8 +300,8 @@ Gateway-Härtung) in [`docs/security.md`](docs/security.md).
 |--------|---------|
 | **Zugriff** | Nur lesend (`readOnlyHint: true`) — der Server kann keine Daten ändern oder löschen |
 | **Personendaten** | Parlamentsgeschäfte sind öffentliche Amtshandlungen (BGÖ). Es werden keine privaten Daten abgerufen oder gespeichert. |
-| **Rate Limits** | Eingebaute Obergrenzen pro Abfrage: max. 100 Treffer (Geschäfte/Mitglieder), 50 (Abstimmungen/Transkripte), 10 (Sessionen) |
-| **Timeout** | 20 Sekunden pro API-Aufruf |
+| **Rate Limits** | Eingebaute Obergrenzen pro Abfrage: max. 100 Treffer (Geschäfte/Mitglieder), 50 (Abstimmungen), 30 (Transkript-Suche), 10 (Sessionen). Transkript-Volltext ist pro Aufruf gedeckelt und paginiert — eine ganze Session wird nie versehentlich geladen. |
+| **Timeout** | 20 Sekunden pro Metadaten-Aufruf; 45 Sekunden für Transkript-Reads (Volltextsuche ist schwerer) |
 | **Authentifizierung** | Keine API-Keys nötig — Curia Vista ist öffentlich zugänglich |
 | **Datenquelle** | Offizieller Datendienst des Bundes (Schweizerische Parlamentsdienste) |
 | **Nutzungsbedingungen** | Es gelten die ToS von [ws.parlament.ch](https://ws.parlament.ch/) — Schweizerische Parlamentsdienste |
@@ -271,10 +310,55 @@ Gateway-Härtung) in [`docs/security.md`](docs/security.md).
 
 ## Bekannte Einschränkungen
 
-- OData `substringof()`-Filter unterscheidet Gross-/Kleinschreibung bei manchen Feldern
-- Transkript-Volltextsuche kann bei sehr breiten Abfragen langsam sein (`limit` verwenden)
-- Session-Namen können für sehr aktuelle Sessionen `null` sein – stattdessen Session-ID nutzen
-- Derzeit nur Sprache `DE` vollständig getestet (`FR`, `IT` verfügbar)
+**Allgemein**
+- OData `substringof()`-Filter unterscheidet bei manchen Feldern Gross-/Kleinschreibung.
+- Session-Namen können für sehr aktuelle Sessionen `null` sein – stattdessen Session-ID nutzen.
+
+**Transkripte (Amtliches Bulletin)** — live verifiziert am 2026-07-19:
+- **Zeitliche Abdeckung: erst ab 1999-12-06.** Die strukturierte `Transcript`-Entität
+  reicht bis Dezember 1999 zurück. Debatten von **1891–1999 existieren nur als
+  gescannte Archivdokumente** (Bundesarchiv / Amtsdruckschriften) und sind hier
+  **nicht angebunden** (kein OCR im Scope). Eine Abfrage, deren gesamtes
+  Datumsfenster vor der Abdeckung liegt, liefert einen erklärenden Fehler statt
+  eines leeren Resultats.
+- **Keine Seitenzahl in der Quelle.** Die API führt kein Seiten-/Spaltenfeld, darum
+  ist die klassische Form `AB <Jahr> N <Seite>` nicht konstruierbar. Wir bilden
+  eine stabile, überprüfbare Ersatzreferenz — `AB <Jahr> <N|S>, <Datum>, <Sprecher>`
+  — plus die massgebliche `source_url` (`SubjectId`) und die `transcript_id`. Ein
+  ehrlich dokumentierter Kompromiss, keine Auslassung.
+- **Sprachverhalten (wichtig).** `Language` bezeichnet die *Edition*, nicht die
+  Redesprache. Die Tools filtern `Language eq 'DE'` **einzig zur Deduplizierung**
+  der drei byte-identischen Editionen (DE/FR/IT) auf eine Kopie. Jede Wortmeldung
+  erscheint im **Original-Wortlaut**; ein französisches oder italienisches Votum
+  wird **nicht** ausgeblendet — seine tatsächliche Sprache steht im Feld `language`
+  (`de`/`fr`/`it`). Die Antwort weist dies über `language_note` aus.
+- **Kürzung ist explizit, nie still.** Die Suche liefert kurze Auszüge (`snippet`,
+  ~320 Zeichen) mit `is_excerpt`, `total_length_chars` und einem Hinweis zum
+  Volltext-Bezug. `parlament_get_transcript` deckelt bei `max_chars`; bei Kürzung
+  wird `is_excerpt=True` gesetzt und ein `next_offset` zum Weiterblättern geliefert.
+- **Nur Wortlaut, nie zusammengefasst.** Der Wortlaut *ist* das Produkt; die Tools
+  ersetzen ihn nie durch eine Zusammenfassung.
+- **Latenz:** Ein freies `keyword` kombiniert mit `speaker_name` ist der langsamste
+  Pfad (~40 s). Mit `session_id`, `business_number` oder einem Datumsfenster
+  kombiniert bleiben Reads bei ~1–2 s.
+
+---
+
+## 🧪 Tests
+
+```bash
+pip install -e ".[dev]"
+
+# Unit- + gemockte Integrationstests (kein Netz), wie in der CI:
+PYTHONPATH=src pytest tests/ -m "not live"
+
+# Inklusive Live-Tests gegen die echte ws.parlament.ch-API:
+PYTHONPATH=src pytest tests/ -m live
+```
+
+HTTP wird mit `respx` gemockt; netzabhängige Tests sind mit `@pytest.mark.live`
+markiert und via `-m "not live"` aus der CI ausgeschlossen. Tool-Definitionen sind
+in `tool-hashes.json` gepinnt (`python -m parlament_mcp.tool_hashes --check`).
 
 ---
 

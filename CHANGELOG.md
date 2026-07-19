@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Amtliches Bulletin – verbatim debate transcripts.** New separated module
+  `parlament_mcp.transcripts` with two tools:
+  - `parlament_search_transcripts` — searches the `Transcript` entity and returns
+    short, **citable excerpts** (`snippet`, ~320 chars) with an AB citation, a
+    stable `source_url` (`SubjectId`), speaker/council/date/`language`, and hard
+    caps (default 10, max 30 hits). Filters: `keyword` (full text), `speaker_name`,
+    `session_id`, `council`, `business_number`, `date_from`/`date_to`.
+  - `parlament_get_transcript` — fetches the **verbatim full text** of a single
+    speech by ID, capped at `max_chars` and paginated via `offset`/`next_offset`.
+  - Mandatory Pydantic-v2 fields on every result: `citation`, `source_url`,
+    `speaker`, `council`, `date`, `language`, `is_excerpt`, `total_length_chars`.
+- Transcript tests (`tests/test_transcripts.py`) with `respx` fixtures built from
+  real, shortened API responses, plus `@pytest.mark.live` end-to-end checks.
+- README (EN/DE): second Anchor Demo Query (verbatim transcripts), transcript
+  path in the architecture diagram, Art. 5 URG note (official proceedings are
+  copyright-exempt → verbatim quotation allowed), a Testing section, and expanded
+  Known Limitations.
+
+### Changed
+- **Transcript language handling.** Filtering `Language eq 'DE'` now serves purely
+  to deduplicate the three byte-identical editions (DE/FR/IT); the verbatim `Text`
+  is always the original wording and the real spoken language is surfaced as
+  `language` (`de`/`fr`/`it`). French/Italian speeches are no longer hidden by the
+  edition filter — verified live.
+- Transcript reads use a dedicated 45 s timeout and retry with exponential backoff
+  (metadata tools are unchanged at 20 s, no retry).
+
+### BREAKING
+- Removed the speculative `parlament_get_transcripts` tool (it searched `Text`
+  without an indexed prefilter — timing out on broad queries — returned vote-result
+  and procedural rows as "transcripts", and carried no citation). It is replaced by
+  the two tools above. `tool-hashes.json` updated accordingly (7 tools); clients
+  should re-approve the tool set.
+
+### Known findings (transcript API, live-probed 2026-07-19)
+- The `Transcript` entity carries **no page/column field**, so `AB <year> N <page>`
+  cannot be constructed — a stable substitute reference + `SubjectId` URL is used.
+- `Language` is the **edition**, not the speech language (`LanguageOfText` is the
+  latter). Structured coverage starts **1999-12-06**; 1891–1999 is scans only.
+- `$count` over a `Text` `substringof` is ~40 s; retrieving top-N is ~3 s. An
+  exact prefilter (`IdSession`/`VoteBusinessNumber`) cuts full-text reads to ~1 s.
+
 ## [0.3.0] - 2026-05-30
 
 > Version `0.2.0` was already taken by an earlier PyPI release, so this

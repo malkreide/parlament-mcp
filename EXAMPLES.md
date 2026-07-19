@@ -17,7 +17,8 @@ Warum nützlich: Erlaubt Lehrpersonen und Schulleitungen, sich über anstehende 
 
 **Debatten zur Schulpolitik analysieren**
 «Was hat Nationalrätin Wasserfallen in der letzten Session zum Thema Bildung gesagt?»
-→ `parlament_get_transcripts(speaker_name="Wasserfallen", keyword="Bildung")`
+→ `parlament_search_transcripts(speaker_name="Wasserfallen", keyword="Bildung")`
+→ danach `parlament_get_transcript(transcript_id=…)` für den vollen Wortlaut mit AB-Zitation.
 
 Warum nützlich: Eignet sich für den Staatskundeunterricht, um Schülern an konkreten Voten aufzuzeigen, wie im Parlament über aktuelle Schulthemen debattiert wird.
 
@@ -70,14 +71,14 @@ MCP-Enthusiast:innen, Forscher:innen, Prompt Engineers, öffentliche Verwaltung
 **Analyse von Redeverhalten (Text Mining)**
 «Suche alle Transkripte von Ständeräten der letzten Session zum Thema 'Künstliche Intelligenz'.»
 → `parlament_get_sessions(limit=1)`
-→ `parlament_get_transcripts(keyword="Künstliche Intelligenz", council="SR", session_id=...[von get_sessions])`
+→ `parlament_search_transcripts(keyword="Künstliche Intelligenz", council="SR", session_id=...[von get_sessions])`
 
 Warum nützlich: Ideal für Forscher oder NLP-Entwickler, die parlamentarische Debatten automatisiert auf bestimmte Themen oder Stimmungen hin auswerten möchten.
 
 **Gesetze und Debatten verknüpfen (Multi-Server-Szenario)**
 «Finde das Bundesgesetz über den Datenschutz im fedlex-mcp und zeige mir gleichzeitig die parlamentarischen Debatten aus dem Parlament, in denen vor der Verabschiedung über Datenschutz diskutiert wurde.»
 → `fedlex_search_enactment(query="Datenschutz", sort="dateDesc")`
-→ `parlament_get_transcripts(keyword="Datenschutz")`
+→ `parlament_search_transcripts(keyword="Datenschutz", date_from="2020-01-01")`
 
 Warum nützlich: Kombiniert die rechtskräftigen Gesetzestexte von [fedlex-mcp](https://github.com/malkreide/fedlex-mcp) mit der parlamentarischen Entstehungsgeschichte, um die Absicht des Gesetzgebers (historische Auslegung) umfassend zu analysieren.
 
@@ -92,4 +93,4 @@ Warum nützlich: Kombiniert die rechtskräftigen Gesetzestexte von [fedlex-mcp](
 | **Parlamentarier meines Kantons oder meiner Partei suchen** | `parlament_search_members` | Nein |
 | **die Resultate von Ratsabstimmungen einsehen** | `parlament_get_votes` | Nein |
 | **die Daten der laufenden oder kommenden Sessionen abfragen** | `parlament_get_sessions` | Nein |
-| **nachlesen, wer was im Rat gesagt hat (Wortprotokoll)** | `parlament_get_transcripts` | Nein |
+| **nachlesen, wer was im Rat gesagt hat (Wortprotokoll)** | `parlament_search_transcripts` → `parlament_get_transcript` | Nein |

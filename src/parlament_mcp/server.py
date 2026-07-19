@@ -30,6 +30,7 @@ from mcp.server.fastmcp import Context, FastMCP
 from mcp.server.fastmcp.exceptions import ToolError
 from pydantic import BaseModel, ConfigDict, Field
 
+from parlament_mcp import transcripts
 from parlament_mcp.config import (
     DATA_LICENSE,
     DATA_SOURCE,
@@ -40,6 +41,12 @@ from parlament_mcp.config import (
 from parlament_mcp.logging_setup import configure_logging, get_logger
 from parlament_mcp.observability import setup_tracing, tool_span
 from parlament_mcp.security import assert_host_allowed
+from parlament_mcp.transcripts import (
+    GetTranscriptInput,
+    SearchTranscriptsInput,
+    TranscriptDetail,
+    TranscriptSearchResponse,
+)
 
 # ─────────────────────────── Konstanten ────────────────────────────────────────
 BASE_URL = "https://ws.parlament.ch/odata.svc"
@@ -360,22 +367,6 @@ class SessionsResponse(ResponseEnvelope):
     results: list[SessionResult] = Field(default_factory=list)
 
 
-class TranscriptResult(BaseModel):
-    speaker: str | None = None
-    function: str | None = None
-    canton: str | None = None
-    group: str | None = None
-    council: str | None = None
-    date: str | None = None
-    session: int | None = None
-    business_title: str | None = None
-    text_snippet: str | None = None
-
-
-class TranscriptsResponse(ResponseEnvelope):
-    results: list[TranscriptResult] = Field(default_factory=list)
-
-
 def _none_envelope(cls, message: str):
     """Leer-Antwort mit Vorschlägen statt blankem „not found“ (ARCH-003)."""
     return cls(match_type="none", count=0, note=message, suggestions=_SEARCH_SUGGESTIONS)
@@ -489,25 +480,6 @@ class GetSessionsInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     limit: int = Field(default=10, ge=1, le=50, strict=True)
-    offset: int = Field(default=0, ge=0, strict=True)
-
-
-class GetTranscriptsInput(BaseModel):
-    """Eingabe zum Abrufen von Debatten-Transkripten."""
-
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
-
-    keyword: str | None = Field(
-        default=None, description="Stichwort im Transkripttext (z.B. 'KI', 'Schule').", min_length=1, max_length=200
-    )
-    speaker_name: str | None = Field(
-        default=None, description="Nach Nachname des Redners filtern.", min_length=1, max_length=100
-    )
-    session_id: int | None = Field(
-        default=None, description="Transkripte einer bestimmten Session filtern.", gt=0, strict=True
-    )
-    council: str | None = Field(default=None, description="Nach Rat filtern: 'NR' oder 'SR'.", max_length=20)
-    limit: int = Field(default=15, ge=1, le=50, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
 
 
@@ -771,67 +743,66 @@ async def parlament_get_sessions(params: GetSessionsInput, ctx: Context | None =
 
 
 @mcp.tool(
-    name="parlament_get_transcripts",
+    name="parlament_search_transcripts",
     annotations={
-        "title": "Debatten-Transkripte abrufen (Amtliches Bulletin)",
+        "title": "Debatten-Transkripte durchsuchen (Amtliches Bulletin)",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
         "openWorldHint": True,
     },
 )
-@_instrument("parlament_get_transcripts")
-async def parlament_get_transcripts(
-    params: GetTranscriptsInput, ctx: Context | None = None
-) -> TranscriptsResponse:
-    """Auszüge aus parlamentarischen Debatten-Transkripten (Amtliches Bulletin) abrufen.
+@_instrument("parlament_search_transcripts")
+async def parlament_search_transcripts(
+    params: SearchTranscriptsInput, ctx: Context | None = None
+) -> TranscriptSearchResponse:
+    """Wörtliche Wortmeldungen aus den Ratsdebatten durchsuchen (Amtliches Bulletin).
 
-    <use_case>Finden, was bestimmte Ratsmitglieder zu KI, Digitalisierung in der
-    Schule oder anderen Themen gesagt haben. Synergie mit fedlex-mcp: vom
-    Gesetzestext zur parlamentarischen Debatte.</use_case>
+    Liefert **kurze, zitierfähige Auszüge** (kein Volltext) mit korrekter
+    AB-Zitation und stabiler Quell-URL. Für den Wortlaut eines einzelnen Votums
+    danach `parlament_get_transcript(transcript_id=…)` verwenden.
 
-    <important_notes>Volltext-Suche kann bei breiten Abfragen langsam sein –
-    `limit` setzen und Begriff eingrenzen.</important_notes>
+    <use_case>«Was hat Nationalrätin X in der Frühjahrssession 2024 zur
+    Volksschule gesagt?» – Sprecher, Session, Rat, Geschäft oder Datumsfenster
+    kombinieren. Synergie mit fedlex-mcp: vom Gesetzestext zur Debatte.</use_case>
+
+    <important_notes>Nur echte Wortmeldungen (keine Abstimmungszeilen). Der
+    `Language`-Filter dedupliziert die Editionen und blendet keine
+    französisch-/italienischsprachigen Voten aus – die reale Sprache steht in
+    `language`. Abdeckung ab 1999-12-06. Für beste Latenz `session_id`,
+    `business_number` oder ein Datumsfenster mit einem freien `keyword`
+    kombinieren.</important_notes>
+
+    <example>speaker_name='Munz', session_id=5202, keyword='Volksschule'</example>
     """
-    filters: list[str] = []
-    if params.keyword:
-        filters.append(f"substringof('{params.keyword.replace(chr(39), chr(39) * 2)}',Text)")
-    if params.speaker_name:
-        filters.append(f"substringof('{params.speaker_name.replace(chr(39), chr(39) * 2)}',SpeakerLastName)")
-    if params.session_id:
-        filters.append(f"IdSession eq {params.session_id}")
-    if params.council:
-        council_map = {"NR": "Nationalrat", "SR": "Ständerat"}
-        filters.append(f"CouncilName eq '{council_map.get(params.council.upper(), params.council)}'")
+    return await transcripts.search_transcripts(_get_client(), params, ctx)
 
-    results = await _odata_get(
-        "Transcript", filters=filters, orderby="MeetingDate desc", top=params.limit, skip=params.offset
-    )
-    if not results:
-        return _none_envelope(TranscriptsResponse, "Keine Transkripte gefunden für die angegebenen Kriterien.")
 
-    items = []
-    total = len(results)
-    for i, t in enumerate(results):
-        if ctx is not None and i % 5 == 0:  # Fortschritt (SDK-003)
-            try:
-                await ctx.report_progress(progress=i, total=total)
-            except Exception:
-                pass
-        items.append(
-            TranscriptResult(
-                speaker=t.get("SpeakerFullName"),
-                function=t.get("SpeakerFunction"),
-                canton=t.get("CantonAbbreviation"),
-                group=t.get("ParlGroupAbbreviation"),
-                council=t.get("CouncilName"),
-                date=(t.get("MeetingDate") or "")[:10],
-                session=t.get("IdSession"),
-                business_title=t.get("VoteBusinessTitle"),
-                text_snippet=(t.get("Text") or "")[:500],
-            )
-        )
-    return TranscriptsResponse(count=len(items), offset=params.offset, results=items)
+@mcp.tool(
+    name="parlament_get_transcript",
+    annotations={
+        "title": "Volltext eines Votums abrufen (Amtliches Bulletin)",
+        "readOnlyHint": True,
+        "destructiveHint": False,
+        "idempotentHint": True,
+        "openWorldHint": True,
+    },
+)
+@_instrument("parlament_get_transcript")
+async def parlament_get_transcript(
+    params: GetTranscriptInput, ctx: Context | None = None
+) -> TranscriptDetail:
+    """Den vollen Wortlaut **eines einzelnen** Votums nach Transkript-ID abrufen.
+
+    <use_case>Nach einer Suche mit parlament_search_transcripts den kompletten
+    Wortlaut eines konkreten Votums holen – zitierfähig, mit stabiler URL.</use_case>
+
+    <important_notes>Ausgabe ist gedeckelt (`max_chars`); bei Kürzung ist
+    `is_excerpt=True` gesetzt und `note`/`next_offset` erklären, wie die
+    Fortsetzung zu laden ist. Kein stilles Kürzen. Der Wortlaut wird nie durch
+    eine Zusammenfassung ersetzt.</important_notes>
+    """
+    return await transcripts.get_transcript(_get_client(), params)
 
 
 # ─────────────────────────── HTTP-App mit CORS + Auth ──────────────────────────
