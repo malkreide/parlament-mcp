@@ -25,13 +25,14 @@ from parlament_mcp.security import (
 from parlament_mcp.server import (
     BASE_URL,
     GetBusinessInput,
-    GetTranscriptsInput,
     GetVotesInput,
     SearchBusinessInput,
+    SearchTranscriptsInput,
     parlament_get_business,
-    parlament_get_transcripts,
     parlament_get_votes,
+    parlament_search_transcripts,
 )
+from parlament_mcp.transcripts import ODATA_BASE
 
 # ─────────────────────── OPS-001: respx-Coverage der bisher untesteten Tools ────
 
@@ -50,14 +51,21 @@ MOCK_VOTE = [
 
 MOCK_TRANSCRIPT = [
     {
+        "ID": "378304",
+        "Language": "DE",
+        "Type": 1,
+        "IdSubject": "64008",
         "SpeakerFullName": "Anna Tester",
-        "SpeakerFunction": "Nationalrätin",
+        "SpeakerFunction": "Mit-F",
         "CantonAbbreviation": "ZH",
         "ParlGroupAbbreviation": "S",
-        "CouncilName": "Nationalrat",
-        "MeetingDate": "2025-03-10T09:00:00",
-        "IdSession": 5210,
-        "Text": "Wir müssen über künstliche Intelligenz in der Schule sprechen.",
+        "MeetingCouncilAbbreviation": "N",
+        "MeetingDate": "20250310",
+        "IdSession": "5210",
+        "LanguageOfText": "DE",
+        "VoteBusinessTitle": "KI in der Volksschule",
+        "VoteBusinessNumber": 20254750,
+        "Text": "<pd_text><p>Wir müssen über künstliche Intelligenz in der Schule sprechen.</p></pd_text>",
     }
 ]
 
@@ -88,13 +96,15 @@ async def test_get_votes_envelope():
 
 
 @respx.mock
-async def test_get_transcripts_structured():
-    respx.route(method="GET", url__regex=rf"{re.escape(BASE_URL)}/Transcript.*").mock(
+async def test_search_transcripts_structured():
+    respx.route(method="GET", url__regex=rf"{re.escape(ODATA_BASE)}/Transcript.*").mock(
         return_value=httpx.Response(200, json={"d": MOCK_TRANSCRIPT})
     )
-    res = await parlament_get_transcripts(GetTranscriptsInput(keyword="KI"))
+    res = await parlament_search_transcripts(SearchTranscriptsInput(keyword="KI", session_id=5210))
     assert res.results[0].speaker == "Anna Tester"
     assert res.source.startswith("Curia Vista")  # CH-004 Attribution im Envelope
+    assert res.results[0].citation.startswith("AB 2025 N")  # zitierfähig
+    assert "SubjectId=64008" in res.results[0].source_url  # stabile Quell-URL
 
 
 @respx.mock
