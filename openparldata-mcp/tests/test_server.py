@@ -5,12 +5,12 @@ from __future__ import annotations
 import httpx
 import pytest
 import respx
+from conftest import BODIES_FIXTURE
 from mcp.server.fastmcp.exceptions import ToolError
+from pydantic import ValidationError
 
 from openparldata_mcp import server as s
 from openparldata_mcp.config import BASE_URL
-
-from conftest import BODIES_FIXTURE
 
 
 def _mock_bodies(router: respx.Router) -> None:
@@ -115,10 +115,10 @@ async def test_search_interests_federal_points_to_lobbywatch():
 
 def test_voting_results_requires_voting_id_and_caps_limit():
     # voting_id ist Pflicht (Feld ohne Default).
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         s.GetVotingResultsInput(limit=10)
     # limit > 500 wird vom Schema abgewiesen (Skalierungs-Guardrail).
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         s.GetVotingResultsInput(voting_id=1, limit=999)
     ok = s.GetVotingResultsInput(voting_id=1, limit=500)
     assert ok.limit == 500

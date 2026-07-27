@@ -5,12 +5,11 @@ from __future__ import annotations
 import httpx
 import pytest
 import respx
+from conftest import BODIES_FIXTURE
 from mcp.server.fastmcp.exceptions import ToolError
 
 from openparldata_mcp import bodies as body_cache
 from openparldata_mcp.config import BASE_URL, FEDERAL_INTERESTS_REDIRECT
-
-from conftest import BODIES_FIXTURE
 
 
 def _mock_bodies(router: respx.Router) -> None:
