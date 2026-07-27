@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """openparldata-mcp – Schweizer Kantons- und Gemeindeparlamente (subnational).
 
 AI-nativer Zugang zur **subnationalen** politischen Ebene der Schweiz über die
@@ -43,8 +42,8 @@ from openparldata_mcp.config import (
     FEDERAL_INTERESTS_REDIRECT,
     MAX_LIMIT,
     PROTOCOL_VERSION,
-    Settings,
     VOTES_MAX_LIMIT,
+    Settings,
     warn_on_dangerous_binding,
 )
 from openparldata_mcp.localize import localize
@@ -61,7 +60,7 @@ async def _lifespan(_server: FastMCP):
     try:
         try:
             await body_cache.ensure_loaded()
-        except Exception as exc:  # Vorwärmen ist best-effort; lazy Load bleibt möglich
+        except Exception as exc:  # noqa: BLE001 (best-effort; lazy Load bleibt möglich)
             _logger.warning("body_cache_prewarm_failed", error=type(exc).__name__)
         yield
     finally:
@@ -89,7 +88,7 @@ def _instrument(name: str):
             except ToolError:
                 log.warning("tool_failed")
                 raise
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 log.warning("tool_error", error=type(exc).__name__)
                 raise ToolError(f"Unerwarteter Fehler ({type(exc).__name__}).") from exc
             log.info("tool_succeeded")
