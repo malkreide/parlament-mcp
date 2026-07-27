@@ -344,6 +344,12 @@ reporting, Lethal-Trifecta assessment, accepted risks).
 
 MIT © [Hayal Oezkan](https://github.com/malkreide) — see [LICENSE](LICENSE)
 
+---
+
+## Author
+
+**Hayal Oezkan** · [github.com/malkreide](https://github.com/malkreide)
+
 <!-- mcp-name: io.github.malkreide/parlament-mcp -->
 
 <!-- BEGIN GENERATED: install -->

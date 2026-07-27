@@ -379,3 +379,9 @@ Risiken).
 ## Lizenz
 
 MIT © [Hayal Oezkan](https://github.com/malkreide) — siehe [LICENSE](LICENSE)
+
+---
+
+## Autor
+
+**Hayal Oezkan** · [github.com/malkreide](https://github.com/malkreide)
