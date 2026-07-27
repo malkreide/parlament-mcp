@@ -85,7 +85,7 @@ def _translate_http_error(exc: httpx.HTTPStatusError) -> ToolError:
     code = resp.status_code
     try:
         body = resp.json()
-    except Exception:
+    except ValueError:
         body = {}
 
     if code == 404:
