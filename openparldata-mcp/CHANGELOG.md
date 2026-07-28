@@ -6,6 +6,15 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Capped `mcp` at `<2`.** `mcp` 2.0.0, published 2026-07-28, removed
+  `mcp.server.fastmcp` — the module `bodies.py` imports `ToolError` from. This
+  nested package carries its own manifest, so the parent repo's constraint does
+  not cover it: the `test-openparldata` job installs from this directory and was
+  resolving `mcp` 2.0.0 independently. Verified: `<2` resolves to 1.29.0,
+  24 passed.
+
 ### Added
 
 - German README (`README.de.md`) and a language switcher in `README.md`,
