@@ -40,7 +40,7 @@ import re
 from typing import Any, Literal
 
 import httpx
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import BaseModel, ConfigDict, Field
 
 from parlament_mcp.config import DATA_LICENSE, DATA_SOURCE

@@ -28,7 +28,7 @@ async def _collect(mcp) -> dict[str, str]:
             {
                 "name": tool.name,
                 "description": tool.description or "",
-                "input_schema": tool.inputSchema,
+                "input_schema": tool.input_schema,
             },
             sort_keys=True,
             ensure_ascii=False,

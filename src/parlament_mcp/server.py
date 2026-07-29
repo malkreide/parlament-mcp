@@ -12,7 +12,7 @@ AI-nativer Zugang zum Schweizer Bundesparlament via Curia Vista OData API:
 Kein API-Schlüssel erforderlich. Alle Daten öffentlich zugänglich.
 
 Tools liefern strukturierte Pydantic-Modelle (typisierte `results` + Envelope
-mit source/license/provenance/match_type/count). FastMCP exponiert daraus ein
+mit source/license/provenance/match_type/count). MCPServer exponiert daraus ein
 Output-Schema.
 """
 
@@ -26,8 +26,8 @@ from enum import StrEnum
 from typing import Any, Literal
 
 import httpx
-from mcp.server.fastmcp import Context, FastMCP
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver import Context, MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import BaseModel, ConfigDict, Field
 
 from parlament_mcp import transcripts
@@ -100,8 +100,8 @@ def _get_client() -> httpx.AsyncClient:
 
 
 @asynccontextmanager
-async def _lifespan(_server: FastMCP):
-    """FastMCP-Lifespan: HTTP-Connection-Pool auf- und sauber wieder abbauen."""
+async def _lifespan(_server: MCPServer):
+    """MCPServer-Lifespan: HTTP-Connection-Pool auf- und sauber wieder abbauen."""
     global _http_client, _http_client_loop
     _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
     _http_client_loop = asyncio.get_running_loop()
@@ -114,7 +114,7 @@ async def _lifespan(_server: FastMCP):
 
 
 # ─────────────────────────── Server ────────────────────────────────────────────
-mcp = FastMCP("parlament_mcp", lifespan=_lifespan)
+mcp = MCPServer("parlament_mcp", lifespan=_lifespan)
 
 # Geschäftstyp-IDs (Curia Vista)
 BUSINESS_TYPE_NAMES = {
@@ -197,7 +197,7 @@ def _handle_error(e: Exception) -> str:
 def _tool_error(e: Exception) -> ToolError:
     """Ausführungsfehler in eine maskierte ToolError übersetzen (OBS-001/OBS-002).
 
-    FastMCP liefert das dem Client als `isError`-Tool-Result (kein Protokoll-
+    MCPServer liefert das dem Client als `isError`-Tool-Result (kein Protokoll-
     Fehler) – mit einer sauberen Meldung, ohne Stacktrace.
     """
     return ToolError(_handle_error(e))
@@ -236,7 +236,7 @@ def _instrument(name: str):
     """Decorator: pro Tool-Call ein OTel-Span + strukturiertes Logging (OBS-003/006)
     und – sofern verfügbar – ein ctx.info-Lifecycle-Event (SDK-003).
 
-    Lässt die Signatur via functools.wraps intakt, damit FastMCP weiterhin das
+    Lässt die Signatur via functools.wraps intakt, damit MCPServer weiterhin das
     Pydantic-Eingabeschema baut und ``ctx`` injiziert.
     """
 
