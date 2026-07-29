@@ -12,7 +12,7 @@ import re
 import httpx
 import pytest
 import respx
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver.exceptions import ToolError
 
 from parlament_mcp import transcripts as tx
 from parlament_mcp.transcripts import (
