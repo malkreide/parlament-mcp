@@ -35,6 +35,9 @@ jobs:
   # Subnationaler Server (openparldata-mcp) – eigenständiges Subprojekt mit
   # eigener pyproject.toml. Separater Job, damit der Bundes-Server (Job "test")
   # unberührt bleibt.
+
+      - name: Versions-Sync (pyproject ↔ server.json / README / src)
+        run: python scripts/check_version_sync.py
   test-openparldata:
     runs-on: ubuntu-latest
     defaults:
