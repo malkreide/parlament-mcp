@@ -28,12 +28,16 @@ classifiers = [
 ]
 
 dependencies = [
-    # Upper bound added deliberately: `mcp` 2.0.0 removed `mcp.server.fastmcp`
-    # outright (the API moved to `mcp.server.mcpserver`), so an unbounded
-    # `>=1.0.0` breaks every fresh install — CI and `pip install` alike.
-    # Migrating to the 2.x API is real work and a decision to take on purpose,
-    # not one a resolver should make silently.
-    "mcp[cli]>=1.0.0,<2",
+    # Migrated to the 2.x API (`mcp.server.mcpserver`); the previous `<2` bound
+    # existed because 2.0.0 removed `mcp.server.fastmcp` outright. The bound
+    # stays, now anchored at the other end: 3.0 may move the API again, and a
+    # resolver should not make that decision silently either.
+    #
+    # 2.x is not merely a rename. Two things bite at runtime, both handled in
+    # `server.py`: `mcp.settings` is read-only (host/port are `run()` kwargs
+    # now), and `host` is an app-level argument the SDK derives its
+    # DNS-rebinding allow-list from — omitting it means HTTP 421.
+    "mcp[cli]>=2.0.0,<3",
     "httpx>=0.27.0",
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",

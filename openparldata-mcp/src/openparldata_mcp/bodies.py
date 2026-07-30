@@ -15,7 +15,7 @@ import difflib
 import time
 from dataclasses import dataclass, field
 
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver.exceptions import ToolError
 
 from openparldata_mcp.client import api_get, unwrap
 from openparldata_mcp.config import (

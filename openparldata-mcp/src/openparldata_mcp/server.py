@@ -22,8 +22,8 @@ import time
 from contextlib import asynccontextmanager
 from typing import Any, Literal
 
-from mcp.server.fastmcp import Context, FastMCP
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver import Context, MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import BaseModel, ConfigDict, Field
 
 from openparldata_mcp import bodies as body_cache
@@ -55,7 +55,7 @@ _logger = get_logger("openparldata_mcp")
 
 # ─────────────────────────── Lifespan ──────────────────────────────────────────
 @asynccontextmanager
-async def _lifespan(_server: FastMCP):
+async def _lifespan(_server: MCPServer):
     """Body-Cache vorwärmen und HTTP-Pool sauber abbauen."""
     try:
         try:
@@ -67,7 +67,7 @@ async def _lifespan(_server: FastMCP):
         await aclose()
 
 
-mcp = FastMCP("openparldata_mcp", lifespan=_lifespan)
+mcp = MCPServer("openparldata_mcp", lifespan=_lifespan)
 
 
 # ─────────────────────────── Instrumentierung ──────────────────────────────────
@@ -582,11 +582,15 @@ class SourceStatusInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+# Feldnamen snake_case: `mcp.types` benennt sie in 2.x so, camelCase bleibt als
+# pydantic-Alias gültig. Das Drahtformat ist in beiden Fällen identisch
+# (`readOnlyHint` …) — nur der lesende Zugriff geht ausschliesslich über die
+# snake_case-Namen, weshalb hier die kanonischen stehen.
 _ANNOTATIONS = {
-    "readOnlyHint": True,
-    "destructiveHint": False,
-    "idempotentHint": True,
-    "openWorldHint": True,
+    "read_only_hint": True,
+    "destructive_hint": False,
+    "idempotent_hint": True,
+    "open_world_hint": True,
 }
 
 
@@ -1085,18 +1089,87 @@ async def oparl_source_status(params: SourceStatusInput, ctx: Context | None = N
 
 
 # ─────────────────────────── HTTP-App (SSE / Streamable-HTTP) ───────────────────
+def build_transport_security(host: str, port: int):
+    """Host/Origin-Allow-List für den Streamable-HTTP-Transport (SEC-005).
+
+    Unter mcp 2.x ein per-App-Kwarg — und ihn wegzulassen ist nicht neutral: das
+    SDK leitet aus dem ``host``-Argument der App einen Default ab und aktiviert
+    bei loopback-artigem Wert automatisch ``127.0.0.1:*``. Da ``host`` selbst auf
+    ``127.0.0.1`` defaultet, bekäme ein ``MCP_HOST=0.0.0.0``-Deployment auf jede
+    Anfrage unter einem echten Hostnamen HTTP 421.
+
+    Rückgabe ``None``, wenn keine Allow-List ableitbar ist — Nicht-Loopback-Bind
+    ohne ``MCP_ALLOWED_HOSTS``. Eine geratene Liste erzeugt genau dieses 421, der
+    Aufrufer warnt stattdessen.
+    """
+    import os
+
+    from mcp.server.transport_security import TransportSecuritySettings
+
+    loopback = {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
+    allowed = [
+        h.strip() for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()
+    ]
+    if allowed:
+        # Loopback bleibt für Container-Health-Checks und Debugging erreichbar.
+        hosts = set(allowed) | loopback
+    elif host in ("127.0.0.1", "localhost", "::1"):
+        hosts = loopback | {f"{host}:{port}"}
+    else:
+        return None
+
+    # Konfigurierte CORS-Origins müssen auch die Transport-Prüfung passieren,
+    # sonst weist der Server genau die Browser-Clients ab, die CORS erlaubt.
+    # ``*`` ist nicht ausdrückbar (Origins werden literal verglichen).
+    origins = {
+        o.strip()
+        for o in os.environ.get("MCP_ALLOWED_ORIGINS", "").split(",")
+        if o.strip() and o.strip() != "*"
+    }
+    origins |= {f"http://{h}" for h in hosts}
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=sorted(hosts),
+        allowed_origins=sorted(origins),
+    )
+
+
 def create_http_app():
     """Starlette-ASGI-App für Streamable HTTP mit CORS.
 
     ``Mcp-Session-Id`` wird via CORS exponiert (sonst können Browser-Clients die
     Session nicht lesen). Origins via ``MCP_ALLOWED_ORIGINS`` (CSV).
+
+    Verwendung::
+
+        MCP_HOST=0.0.0.0 MCP_PORT=8080 \\
+            uvicorn openparldata_mcp.server:create_http_app --factory \\
+            --host 0.0.0.0 --port 8080
+
+    ``MCP_HOST``/``MCP_PORT`` sind hier **nicht** redundant zu den uvicorn-Flags:
+    uvicorn ruft diese Factory ohne Argumente auf, sie kann die Flags also nicht
+    sehen. Der Bind muss die App aber erreichen, weil mcp 2.x daraus seine
+    Host-Allow-List ableitet (siehe :func:`build_transport_security`).
     """
     import os
 
     from starlette.middleware.cors import CORSMiddleware
 
     origins = [o.strip() for o in os.environ.get("MCP_ALLOWED_ORIGINS", "").split(",") if o.strip()]
-    app = mcp.streamable_http_app()
+    settings = _resolve_settings()
+    security = build_transport_security(settings.host, settings.port)
+    if security is None:
+        _logger.warning(
+            "dns_rebinding_protection_off",
+            host=settings.host,
+            hint="Bind ist nicht Loopback und MCP_ALLOWED_HOSTS ist leer — setze "
+            "die Variable auf die Hostnamen, unter denen dieser Server erreichbar "
+            "ist, damit Host und Origin geprüft werden (SEC-005).",
+        )
+    # `host` ist nicht kosmetisch: mcp 2.x leitet daraus seine Host-Allow-List
+    # ab. Weglassen hiesse Default `127.0.0.1` — und damit HTTP 421 auf jede
+    # Anfrage an ein 0.0.0.0-Deployment.
+    app = mcp.streamable_http_app(transport_security=security, host=settings.host)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
@@ -1136,11 +1209,11 @@ def main() -> None:
         mcp.run(transport="stdio")
     elif settings.transport in ("sse", "streamable-http"):
         warn_on_dangerous_binding(settings.host)
-        # Host/Port MÜSSEN vor mcp.run() über die Settings gesetzt werden –
-        # FastMCP.run() akzeptiert sie nicht als kwargs.
-        mcp.settings.host = settings.host
-        mcp.settings.port = settings.port
-        mcp.run(transport=settings.transport)
+        # Unter 1.x liefen Host/Port über `mcp.settings`, weil `run()` sie nicht
+        # als kwargs annahm. In 2.x ist es genau umgekehrt: `settings` ist
+        # schreibgeschützt (die Zuweisung wirft ValueError), und `run()` nimmt
+        # den Bind entgegen — von dort erreicht er auch die Host-Allow-List.
+        mcp.run(transport=settings.transport, host=settings.host, port=settings.port)
     else:
         raise SystemExit(
             f"Unbekannter MCP_TRANSPORT: {settings.transport!r} (erlaubt: stdio, sse, streamable-http)"

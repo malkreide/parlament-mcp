@@ -6,16 +6,60 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Fixed
+### Changed
 
-- **Capped `mcp` at `<2`.** `mcp` 2.0.0, published 2026-07-28, removed
-  `mcp.server.fastmcp` — the module `bodies.py` imports `ToolError` from. This
-  nested package carries its own manifest, so the parent repo's constraint does
-  not cover it: the `test-openparldata` job installs from this directory and was
-  resolving `mcp` 2.0.0 independently. Verified: `<2` resolves to 1.29.0,
-  24 passed.
+- **Migrated to the `mcp` 2.x API.** This supersedes the interim `<2` cap from
+  earlier in this same unreleased cycle: the cap bought time by pinning 1.29.0,
+  it was never a destination. The constraint is now `>=2.0.0,<3` — the upper
+  bound stays, anchored at the other end, because 3.0 may move the API again.
+
+  This was the last server in the portfolio still on 1.x. Being nested inside
+  `parlament-mcp` with its own manifest is why it was missed: enumerations of
+  the portfolio list top-level repositories.
+
+  The mechanical part is a rename: `mcp.server.fastmcp` → `mcp.server.mcpserver`,
+  `FastMCP` → `MCPServer` (`server.py`, `bodies.py`, `client.py` and two test
+  modules import `ToolError` from there).
+
+  Two parts are **not** mechanical, and both sit in the HTTP path:
+
+  - `mcp.settings` is read-only in 2.x. Setting host and port through it before
+    `run()` — the only way to do it under 1.x, and what this server did — now
+    raises `ValueError: "Settings" object has no field "host"`. Under
+    `MCP_TRANSPORT=streamable-http` the server would not have started at all.
+    `run()` takes the bind as keyword arguments instead.
+  - `host` is an app-level argument the SDK derives its DNS-rebinding allow-list
+    from, and it defaults to `127.0.0.1`. `create_http_app()` did not pass it,
+    so 2.x would have auto-enabled a `127.0.0.1:*` allow-list and answered every
+    request under a real hostname with **HTTP 421** — on exactly the
+    `MCP_HOST=0.0.0.0` deployment the factory is documented for.
+
+  Tool annotations moved to snake_case field names (`readOnlyHint` →
+  `read_only_hint`). camelCase survives as a pydantic alias, so the **wire
+  format is unchanged** — verified by serialising both spellings. Only attribute
+  reads had to follow, which is why a test caught this and no client would have.
 
 ### Added
+
+- **Host/Origin allow-list for the HTTP transport (`MCP_ALLOWED_HOSTS`, CSV).**
+  Port-exact, with loopback always retained so container health checks keep
+  working. Configured `MCP_ALLOWED_ORIGINS` are folded into the transport's
+  origin list, otherwise the server would reject precisely the browser clients
+  CORS permits; `*` is not copied across, since origins are compared literally.
+
+  Without the variable, protection stays **off** on a non-loopback bind and the
+  caller logs a warning. A guessed allow-list is exactly the 421 described
+  above — off and visible beats wrong and silent.
+
+- `tests/test_transport_security.py` (16 tests). The load-bearing one is
+  **right hostname, wrong port**: `evil.example.com` alone proves nothing,
+  because a fallback loopback policy rejects it too.
+
+  Two tests pin what `create_http_app()` must read from the environment.
+  uvicorn calls a `--factory` with *no arguments*, so `--host` configures the
+  listener and never reaches the app; `MCP_HOST`/`MCP_PORT` look redundant next
+  to the uvicorn flags and are not.
+
 
 - German README (`README.de.md`) and a language switcher in `README.md`,
   matching the portfolio's bilingual convention and the cross-links from the

@@ -6,7 +6,7 @@ import httpx
 import pytest
 import respx
 from conftest import BODIES_FIXTURE
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import ValidationError
 
 from openparldata_mcp import server as s
@@ -39,9 +39,11 @@ async def test_all_13_tools_registered():
 async def test_tool_annotations_are_read_only():
     tools = {t.name: t for t in await s.mcp.list_tools()}
     ann = tools["oparl_search_affairs"].annotations
-    assert ann.readOnlyHint is True
-    assert ann.destructiveHint is False
-    assert ann.idempotentHint is True
+    # snake_case seit mcp 2.x; camelCase existiert nur noch als Alias fürs
+    # Drahtformat und ist als Attribut nicht mehr lesbar.
+    assert ann.read_only_hint is True
+    assert ann.destructive_hint is False
+    assert ann.idempotent_hint is True
 
 
 @respx.mock
