@@ -22,7 +22,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 import httpx
-from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.mcpserver.exceptions import ToolError
 
 from openparldata_mcp.config import BASE_URL, HTTP_TIMEOUT, MAX_OFFSET
 from openparldata_mcp.logging_setup import get_logger

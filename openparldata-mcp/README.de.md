@@ -118,6 +118,32 @@ MCP_TRANSPORT=streamable-http MCP_HOST=127.0.0.1 MCP_PORT=8080 openparldata-mcp
 `MCP_HOST` ist standardmässig `127.0.0.1`; Bindung an `0.0.0.0` ausserhalb eines
 erkannten Containers loggt eine NeighborJack-Warnung.
 
+Wer an etwas anderes als Loopback bindet, setzt **`MCP_ALLOWED_HOSTS`** (CSV) auf
+die Hostnamen, unter denen der Server tatsächlich erreichbar ist. Daraus wird die
+Host/Origin-Allow-List des HTTP-Transports, die vor DNS-Rebinding schützt:
+
+```bash
+MCP_TRANSPORT=streamable-http MCP_HOST=0.0.0.0 MCP_PORT=8080 \
+    MCP_ALLOWED_HOSTS=opd.example.ch:8080 openparldata-mcp
+```
+
+Einträge werden **samt Port** verglichen, Loopback bleibt erreichbar, damit
+Container-Health-Checks weiter funktionieren. Ohne die Variable bleibt die
+Prüfung aus und es wird gewarnt — eine geratene Liste würde genau das
+Deployment abweisen, das sie schützen soll.
+
+Hinter uvicorn läuft die ASGI-Factory:
+
+```bash
+MCP_HOST=0.0.0.0 MCP_PORT=8080 MCP_ALLOWED_HOSTS=opd.example.ch:8080 \
+    uvicorn openparldata_mcp.server:create_http_app --factory \
+    --host 0.0.0.0 --port 8080
+```
+
+Die Env-Vars sind neben den uvicorn-Flags **nicht** redundant: uvicorn ruft eine
+Factory ohne Argumente auf, `--host` konfiguriert also nur den Listener und
+erreicht die App nie — abgeleitet wird die Allow-List aber in der App.
+
 ## Datenquelle & Lizenz
 
 - Daten: [OpenParlData.ch](https://api.openparldata.ch/v1) — **CC BY 4.0**,
