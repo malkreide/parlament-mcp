@@ -806,6 +806,57 @@ async def parlament_get_transcript(
 
 
 # ─────────────────────────── HTTP-App mit CORS + Auth ──────────────────────────
+def build_transport_security(host: str, port: int):
+    """Host/Origin-Allow-List für den Streamable-HTTP-Transport (SEC-005).
+
+    Unter mcp 2.x ein per-App-Kwarg — und ihn wegzulassen ist nicht neutral: das
+    SDK leitet aus dem ``host``-Argument der App einen Default ab und aktiviert
+    bei loopback-artigem Wert automatisch ``127.0.0.1:*``. Da ``host`` selbst auf
+    ``127.0.0.1`` defaultet, bekam das dokumentierte
+    ``--host 0.0.0.0``-Deployment auf jede Anfrage unter einem echten Hostnamen
+    HTTP 421. Vor der Migration auf 2.x ging ``host`` an den
+    ``FastMCP``-Konstruktor, wo dieselbe Logik den echten Bind sah.
+
+    Rückgabe ``None``, wenn keine Allow-List ableitbar ist — Nicht-Loopback-Bind
+    ohne ``MCP_ALLOWED_HOSTS``. Eine geratene Liste reproduziert genau dieses
+    421, der Aufrufer warnt stattdessen.
+
+    Unabhängig von ``MCP_BEARER_TOKENS``: die Token-Prüfung sagt, *wer* fragt,
+    diese hier, *unter welchem Namen* der Server angesprochen wird. Ein
+    Rebinding-Angriff läuft in einem Browser, der das Token bereits hält.
+    """
+    import os
+
+    from mcp.server.transport_security import TransportSecuritySettings
+
+    loopback = {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
+    allowed = [
+        h.strip() for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()
+    ]
+    if allowed:
+        # Loopback bleibt für Container-Health-Checks und Debugging erreichbar.
+        hosts = set(allowed) | loopback
+    elif host in ("127.0.0.1", "localhost", "::1"):
+        hosts = loopback | {f"{host}:{port}"}
+    else:
+        return None
+
+    # Konfigurierte CORS-Origins müssen auch die Transport-Prüfung passieren,
+    # sonst weist der Server genau die Browser-Clients ab, die CORS erlaubt.
+    # ``*`` ist nicht ausdrückbar (Origins werden literal verglichen).
+    origins = {
+        o.strip()
+        for o in os.environ.get("MCP_ALLOWED_ORIGINS", "").split(",")
+        if o.strip() and o.strip() != "*"
+    }
+    origins |= {f"http://{h}" for h in hosts}
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=sorted(hosts),
+        allowed_origins=sorted(origins),
+    )
+
+
 def create_http_app():
     """Starlette-ASGI-App für Streamable HTTP mit CORS (SDK-004) und optionaler
     Bearer-Auth/Session-Bindung (SEC-009).
@@ -818,7 +869,16 @@ def create_http_app():
 
     Verwendung::
 
-        uvicorn parlament_mcp.server:create_http_app --factory --host 0.0.0.0 --port 8080
+        MCP_HOST=0.0.0.0 MCP_PORT=8080 \\
+            uvicorn parlament_mcp.server:create_http_app --factory \\
+            --host 0.0.0.0 --port 8080
+
+    ``MCP_HOST``/``MCP_PORT`` sind hier **nicht** redundant zu den uvicorn-Flags:
+    uvicorn ruft diese Factory ohne Argumente auf, sie kann die Flags also nicht
+    sehen. Der Bind muss die App aber erreichen, weil mcp 2.x daraus seine
+    Host-Allow-List ableitet (siehe :func:`build_transport_security`). Ohne die
+    Env-Vars nimmt die App den Loopback-Default an und weist jede Anfrage an das
+    0.0.0.0-Deployment mit HTTP 421 ab.
     """
     import os
 
@@ -827,7 +887,24 @@ def create_http_app():
     from parlament_mcp.auth import build_bearer_middleware
 
     origins = [o.strip() for o in os.environ.get("MCP_ALLOWED_ORIGINS", "").split(",") if o.strip()]
-    app = mcp.streamable_http_app()
+    settings = _resolve_settings()
+    security = build_transport_security(settings.host, settings.port)
+    if security is None:
+        _logger.warning(
+            "dns_rebinding_protection_off",
+            host=settings.host,
+            hint="Bind ist nicht Loopback und MCP_ALLOWED_HOSTS ist leer — setze "
+            "die Variable auf die Hostnamen, unter denen dieser Server erreichbar "
+            "ist, damit Host und Origin geprüft werden (SEC-005). Unabhängig von "
+            "MCP_BEARER_TOKENS: ein Rebinding-Angriff bringt ein gültiges Token "
+            "per Konstruktion mit.",
+        )
+    # `host` ist nicht kosmetisch: mcp 2.x leitet daraus seine Host-Allow-List
+    # ab. Weglassen hiess Default `127.0.0.1` — und damit HTTP 421 auf jede
+    # Anfrage an das dokumentierte `--host 0.0.0.0`-Deployment.
+    # Diese Factory bekommt von uvicorn keine Argumente, der Bind muss also aus
+    # denselben Settings kommen wie in `main()` (MCP_HOST/MCP_PORT bzw. PORT).
+    app = mcp.streamable_http_app(transport_security=security, host=settings.host)
     # Auth zuerst registrieren (läuft als äusserste Schicht vor CORS-geschütztem Handler).
     app.add_middleware(build_bearer_middleware())
     app.add_middleware(

@@ -9,6 +9,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Die HTTP-Factory wies unter jedem echten Hostnamen mit 421 ab (SEC-005).**
+  `create_http_app()` baute die App mit `mcp.streamable_http_app()` ohne `host`.
+  Unter mcp 2.x ist das kein neutraler Default: das SDK leitet daraus seine
+  Host-Allow-List ab und aktiviert bei loopback-artigem Wert automatisch
+  `127.0.0.1:*`. Da der Default `127.0.0.1` ist, traf das das dokumentierte
+  `uvicorn … --factory --host 0.0.0.0`-Deployment.
+
+  Der Kern der Sache: uvicorn ruft eine `--factory` **ohne Argumente** auf. Das
+  `--host`-Flag erreicht die App also nie — es konfiguriert nur den Listener.
+  Die Factory liest den Bind jetzt aus denselben Settings wie `main()`
+  (`MCP_HOST`/`MCP_PORT` bzw. `PORT`). Der Docstring nennt beides ausdrücklich,
+  weil die Env-Vars neben den uvicorn-Flags wie Redundanz aussehen und keine
+  sind.
+
+  Der Server hat zwei HTTP-Pfade; nur die Factory war betroffen. `main()` ruft
+  `mcp.run(transport=…, host=settings.host, …)`, dort sieht das SDK den echten
+  Bind.
+
+  Eine echte Allow-List entsteht aus dem neuen `MCP_ALLOWED_HOSTS`; ohne diese
+  Variable bleibt der Schutz auf einem Nicht-Loopback-Bind bewusst aus und der
+  Aufrufer warnt — eine geratene Liste wäre genau der 421-Fall.
+
+  **Unabhängig von `MCP_BEARER_TOKENS`.** Die Token-Prüfung sagt, *wer* fragt,
+  die Host-Prüfung, *unter welchem Namen* der Server angesprochen wird. Ein
+  Rebinding-Angriff läuft in einem Browser, der das Token bereits hält; ein Test
+  hält fest, dass ein gültiges Bearer-Token einen fremden Host **nicht** rettet.
+
+  14 neue Tests, darunter der tragende Fall „richtiger Hostname, falscher Port".
+  Mutationsgetestet: nimmt man den `host`-Kwarg wieder weg, fallen genau die
+  zwei Tests, die ihn betreffen.
+
+  Geprüft mit den wörtlichen CI-Kommandos: die 14 neuen Tests grün,
+  `ruff check src/ tests/` clean, Versions-Sync OK. Die beiden
+  `test_live_*`-Fehler in `tests/test_server.py` bestehen vor und sind
+  netzabhängig — mit gestashten Änderungen fallen sie identisch.
+
+
+### Fixed
+
 - **Capped `mcp` at `<2`.** `mcp` 2.0.0, published 2026-07-28, removed
   `mcp.server.fastmcp` — the module this server imports. With the previous
   unbounded `>=1.28.1` every fresh resolve picked 2.0.0 and failed at import
