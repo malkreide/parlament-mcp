@@ -48,6 +48,12 @@ from parlament_mcp.transcripts import (
     TranscriptSearchResponse,
 )
 
+from . import __version__
+
+# Wer fragt hier an? Ohne eigenen User-Agent geht der httpx-Default
+# hinaus und der Betreiber der Datenquelle sieht bloss eine Bibliothek.
+# Die Version stammt aus den Paket-Metadaten und kann nicht driften.
+USER_AGENT = f"parlament-mcp/{__version__} (+https://github.com/malkreide/parlament-mcp)"
 # ─────────────────────────── Konstanten ────────────────────────────────────────
 BASE_URL = "https://ws.parlament.ch/odata.svc"
 DEFAULT_LANG = "DE"
@@ -94,7 +100,7 @@ def _get_client() -> httpx.AsyncClient:
         or _http_client.is_closed
         or _http_client_loop is not running_loop
     ):
-        _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
+        _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT, headers={"User-Agent": USER_AGENT})
         _http_client_loop = running_loop
     return _http_client
 
@@ -103,7 +109,7 @@ def _get_client() -> httpx.AsyncClient:
 async def _lifespan(_server: MCPServer):
     """MCPServer-Lifespan: HTTP-Connection-Pool auf- und sauber wieder abbauen."""
     global _http_client, _http_client_loop
-    _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT)
+    _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT, headers={"User-Agent": USER_AGENT})
     _http_client_loop = asyncio.get_running_loop()
     try:
         yield
