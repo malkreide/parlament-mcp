@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-07-31
+
+### Hinzugefuegt
+
+- **Der Server nennt jetzt seinen Namen.** Bisher ging gegenueber jedem
+  Upstream der httpx-Default hinaus: der Betreiber der Datenquelle sah
+  eine Bibliothek, nicht uns, und hatte keinen Weg, uns bei Fehlverhalten
+  zu erreichen. Neu traegt jeden der 2 HTTP-Clients
+  `parlament-mcp/<version> (+github.com/malkreide/parlament-mcp)`.
+
+  Die Version stammt aus `importlib.metadata` und kann nicht getrennt vom
+  Paket driften.
+
 ### Fixed
 
 - **Die HTTP-Factory wies unter jedem echten Hostnamen mit 421 ab (SEC-005).**
