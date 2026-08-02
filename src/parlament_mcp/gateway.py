@@ -58,11 +58,15 @@ def scan_tool_definition(tool_def: dict) -> list[PoisoningRisk]:
             )
 
     if INVISIBLE_PATTERN.search(description) or INVISIBLE_PATTERN.search(name):
-        risks.append(PoisoningRisk("high", "Zero-Width-/unsichtbare Zeichen in der Tool-Definition"))
+        risks.append(
+            PoisoningRisk("high", "Zero-Width-/unsichtbare Zeichen in der Tool-Definition")
+        )
 
     if len(description) > _MAX_DESCRIPTION_LEN:
         risks.append(
-            PoisoningRisk("medium", f"Description ist {len(description)} Zeichen lang (Limit ~4000)")
+            PoisoningRisk(
+                "medium", f"Description ist {len(description)} Zeichen lang (Limit ~4000)"
+            )
         )
 
     for host in re.findall(r"https?://([^\s/]+)", description):
@@ -72,7 +76,9 @@ def scan_tool_definition(tool_def: dict) -> list[PoisoningRisk]:
     normalized = unicodedata.normalize("NFKC", name)
     if normalized != name:
         risks.append(
-            PoisoningRisk("medium", f"Tool-Name mit non-kanonischem Unicode: {name!r} → {normalized!r}")
+            PoisoningRisk(
+                "medium", f"Tool-Name mit non-kanonischem Unicode: {name!r} → {normalized!r}"
+            )
         )
     # Cross-Script-Homoglyphs (z.B. kyrillisches «а») werden von NFKC nicht
     # gefaltet — legitime Tool-Namen sind ASCII/snake_case.

@@ -95,11 +95,7 @@ def _get_client() -> httpx.AsyncClient:
     """
     global _http_client, _http_client_loop
     running_loop = asyncio.get_running_loop()
-    if (
-        _http_client is None
-        or _http_client.is_closed
-        or _http_client_loop is not running_loop
-    ):
+    if _http_client is None or _http_client.is_closed or _http_client_loop is not running_loop:
         _http_client = httpx.AsyncClient(timeout=HTTP_TIMEOUT, headers={"User-Agent": USER_AGENT})
         _http_client_loop = running_loop
     return _http_client
@@ -141,6 +137,7 @@ _CURIA_URL = "https://www.parlament.ch/de/ratsbetrieb/suche-curia-vista/geschaef
 # ─────────────────────────── Enums ─────────────────────────────────────────────
 class Language(StrEnum):
     """Verfügbare Sprachen der Curia Vista API."""
+
     DE = "DE"
     FR = "FR"
     IT = "IT"
@@ -427,7 +424,11 @@ class SearchBusinessInput(BaseModel):
         max_length=20,
     )
     limit: int = Field(
-        default=20, description="Maximale Anzahl Ergebnisse (1–100).", ge=1, le=MAX_LIMIT, strict=True
+        default=20,
+        description="Maximale Anzahl Ergebnisse (1–100).",
+        ge=1,
+        le=MAX_LIMIT,
+        strict=True,
     )
     offset: int = Field(default=0, description="Offset für Paginierung.", ge=0, strict=True)
 
@@ -449,16 +450,26 @@ class SearchMembersInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
     canton: str | None = Field(
-        default=None, description="Nach Kanton filtern, z.B. 'ZH', 'BE', 'GE', 'AG'.", min_length=2, max_length=2
+        default=None,
+        description="Nach Kanton filtern, z.B. 'ZH', 'BE', 'GE', 'AG'.",
+        min_length=2,
+        max_length=2,
     )
     last_name: str | None = Field(
-        default=None, description="Nach Nachname filtern (Teilübereinstimmung).", min_length=1, max_length=100
+        default=None,
+        description="Nach Nachname filtern (Teilübereinstimmung).",
+        min_length=1,
+        max_length=100,
     )
     council: str | None = Field(
-        default=None, description="Nach Rat filtern: 'NR' (Nationalrat) oder 'SR' (Ständerat).", max_length=20
+        default=None,
+        description="Nach Rat filtern: 'NR' (Nationalrat) oder 'SR' (Ständerat).",
+        max_length=20,
     )
     party: str | None = Field(
-        default=None, description="Nach Partei filtern, z.B. 'SP', 'SVP', 'FDP', 'Mitte', 'Grüne'.", max_length=20
+        default=None,
+        description="Nach Partei filtern, z.B. 'SP', 'SVP', 'FDP', 'Mitte', 'Grüne'.",
+        max_length=20,
     )
     active_only: bool = Field(default=True, description="Nur aktive Ratsmitglieder zurückgeben.")
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT, strict=True)
@@ -471,10 +482,16 @@ class GetVotesInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
     keyword: str | None = Field(
-        default=None, description="Stichwort im Geschäftstitel der Abstimmung (z.B. 'Bildung', 'KI').", min_length=1, max_length=200
+        default=None,
+        description="Stichwort im Geschäftstitel der Abstimmung (z.B. 'Bildung', 'KI').",
+        min_length=1,
+        max_length=200,
     )
     session_id: int | None = Field(
-        default=None, description="Abstimmungen einer bestimmten Session filtern.", gt=0, strict=True
+        default=None,
+        description="Abstimmungen einer bestimmten Session filtern.",
+        gt=0,
+        strict=True,
     )
     limit: int = Field(default=20, ge=1, le=50, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
@@ -525,7 +542,9 @@ async def parlament_search_business(
     if params.keyword2:
         filters.append(f"substringof('{params.keyword2.replace(chr(39), chr(39) * 2)}',Title)")
     if params.business_type:
-        filters.append(f"BusinessTypeName eq '{params.business_type.replace(chr(39), chr(39) * 2)}'")
+        filters.append(
+            f"BusinessTypeName eq '{params.business_type.replace(chr(39), chr(39) * 2)}'"
+        )
     if params.status:
         filters.append(f"BusinessStatusText eq '{params.status.replace(chr(39), chr(39) * 2)}'")
     if params.council:
@@ -536,10 +555,16 @@ async def parlament_search_business(
         filters.append(f"SubmissionDate gt datetime'{params.submitted_after}T00:00:00'")
 
     results = await _odata_get(
-        "Business", filters=filters, orderby="SubmissionDate desc", top=params.limit, skip=params.offset
+        "Business",
+        filters=filters,
+        orderby="SubmissionDate desc",
+        top=params.limit,
+        skip=params.offset,
     )
     if not results:
-        return _none_envelope(BusinessSearchResponse, "Keine Vorstösse gefunden für die angegebenen Suchkriterien.")
+        return _none_envelope(
+            BusinessSearchResponse, "Keine Vorstösse gefunden für die angegebenen Suchkriterien."
+        )
 
     items = []
     for b in results:
@@ -637,12 +662,18 @@ async def parlament_search_members(
         filters.append(f"substringof('{params.last_name.replace(chr(39), chr(39) * 2)}',LastName)")
     if params.council:
         council_map = {"NR": "Nationalrat", "SR": "Ständerat"}
-        filters.append(f"CouncilName eq '{council_map.get(params.council.upper(), params.council)}'")
+        filters.append(
+            f"CouncilName eq '{council_map.get(params.council.upper(), params.council)}'"
+        )
     if params.party:
         filters.append(f"PartyAbbreviation eq '{params.party.replace(chr(39), chr(39) * 2)}'")
 
     results = await _odata_get(
-        "MemberCouncil", filters=filters, orderby="LastName asc", top=params.limit, skip=params.offset
+        "MemberCouncil",
+        filters=filters,
+        orderby="LastName asc",
+        top=params.limit,
+        skip=params.offset,
     )
     if not results:
         return _none_envelope(MemberSearchResponse, "Keine Ratsmitglieder gefunden.")
@@ -685,7 +716,9 @@ async def parlament_get_votes(params: GetVotesInput, ctx: Context | None = None)
     """
     filters: list[str] = []
     if params.keyword:
-        filters.append(f"substringof('{params.keyword.replace(chr(39), chr(39) * 2)}',BusinessTitle)")
+        filters.append(
+            f"substringof('{params.keyword.replace(chr(39), chr(39) * 2)}',BusinessTitle)"
+        )
     if params.session_id:
         filters.append(f"IdSession eq {params.session_id}")
 
@@ -721,7 +754,9 @@ async def parlament_get_votes(params: GetVotesInput, ctx: Context | None = None)
     },
 )
 @_instrument("parlament_get_sessions")
-async def parlament_get_sessions(params: GetSessionsInput, ctx: Context | None = None) -> SessionsResponse:
+async def parlament_get_sessions(
+    params: GetSessionsInput, ctx: Context | None = None
+) -> SessionsResponse:
     """Aktuelle parlamentarische Sessionen mit Daten auflisten.
 
     <use_case>Session-IDs aus dieser Liste zum Filtern von Abstimmungen oder
@@ -836,9 +871,7 @@ def build_transport_security(host: str, port: int):
     from mcp.server.transport_security import TransportSecuritySettings
 
     loopback = {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
-    allowed = [
-        h.strip() for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()
-    ]
+    allowed = [h.strip() for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()]
     if allowed:
         # Loopback bleibt für Container-Health-Checks und Debugging erreichbar.
         hosts = set(allowed) | loopback
