@@ -137,10 +137,16 @@ def retry_delay(attempt: int, last_error: Exception | None) -> float:
     """
     hinted = parse_retry_after(getattr(last_error, "response", None))
     if hinted is not None:
-        capped = min(hinted, MAX_DELAY_S)
-        return capped * (1.0 + random.random() * RETRY_AFTER_JITTER)
-    capped = min(_BACKOFF_BASE**attempt, MAX_DELAY_S)
-    return capped * (1.0 - JITTER_SPREAD + random.random() * 2 * JITTER_SPREAD)
+        jittered = hinted * (1.0 + random.random() * RETRY_AFTER_JITTER)
+    else:
+        jittered = _BACKOFF_BASE**attempt * (
+            1.0 - JITTER_SPREAD + random.random() * 2 * JITTER_SPREAD
+        )
+    # Deckeln NACH dem Jittern. Umgekehrt war MAX_DELAY_S keine Grenze: Ein auf
+    # 20 s gedeckelter Wert wurde anschliessend mit bis zu 1.5 multipliziert und
+    # landete bei 30 s — die Konstante behauptete eine Schranke, die sie nicht
+    # einhielt.
+    return min(jittered, MAX_DELAY_S)
 
 #: Edition, die zur Deduplizierung gefiltert wird. Verbirgt keine Redesprache.
 EDITION = "DE"
@@ -450,13 +456,21 @@ async def _fetch(
         if remaining <= 0:
             break
         try:
-            # Das Budget schlägt das Per-Request-Timeout, sobald es enger ist —
-            # sonst überdauert ein einzelner langsamer Read die ganze Zuteilung.
-            resp = await client.get(
-                url, params=params, timeout=min(TRANSCRIPT_TIMEOUT, remaining)
-            )
-            resp.raise_for_status()
-            return resp.json()
+            # httpx wendet sein Timeout pro Operation an (connect/read/write/
+            # pool), und das Read-Timeout beginnt mit jedem Chunk von vorn — das
+            # begrenzt jeden Schritt, nicht den Aufruf. Eine langsam tröpfelnde
+            # Antwort könnte das Budget also überdauern. `asyncio.timeout` ist
+            # die Wanduhr-Deadline, die das Budget tatsächlich verspricht; das
+            # httpx-Timeout bleibt als feinere Grenze pro Operation daneben.
+            async with asyncio.timeout(remaining):
+                resp = await client.get(
+                    url, params=params, timeout=min(TRANSCRIPT_TIMEOUT, remaining)
+                )
+                resp.raise_for_status()
+                return resp.json()
+        except TimeoutError as exc:  # Budget aufgebraucht, nicht bloss dieser Versuch
+            last_error = exc
+            break
         except httpx.HTTPStatusError as exc:
             last_error = exc
             code = exc.response.status_code

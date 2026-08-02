@@ -69,15 +69,30 @@ class TestRetryDelay:
             assert tx.retry_delay(1, exc) >= 5.0
 
     def test_absurd_retry_after_is_capped(self):
-        # Beide Grenzen zählen: die obere zeigt, dass der Deckel greift, die
-        # untere, dass der Header überhaupt gelesen wurde — ohne sie bestünde
-        # der Test auch mit den 2 s der nackten Kurve.
+        # Exakt der Deckel, nicht "der Deckel mal Jitter": Gedeckelt wird nach
+        # dem Jittern, sonst wäre MAX_DELAY_S keine Grenze (Codex-Review zu
+        # PR #35). Die Gleichheit diskriminiert weiterhin — die nackte Kurve
+        # ergäbe hier 2 s.
         exc = httpx.HTTPStatusError("503", request=None, response=_resp(503, "86400"))
-        delay = tx.retry_delay(1, exc)
-        assert tx.MAX_DELAY_S <= delay <= tx.MAX_DELAY_S * (1 + tx.RETRY_AFTER_JITTER)
+        assert tx.retry_delay(1, exc) == tx.MAX_DELAY_S
 
     def test_exponential_ladder_is_capped(self):
-        assert tx.retry_delay(10, None) <= tx.MAX_DELAY_S * (1 + tx.JITTER_SPREAD)
+        # 2**10 = 1024 s ohne Deckel; gejittert bis 1536 s, wenn erst gedeckelt
+        # und dann gestreut würde.
+        for _ in range(30):
+            assert tx.retry_delay(10, None) <= tx.MAX_DELAY_S
+
+    def test_the_cap_is_a_real_bound_not_a_midpoint(self):
+        """MAX_DELAY_S muss halten, auch wenn der Jitter nach oben ausschlägt.
+
+        Zuvor wurde erst gedeckelt und dann multipliziert: Ein 20-s-Deckel liess
+        exponentielle Wartezeiten bis 30 s und ``Retry-After``-Wartezeiten bis
+        25 s zu. Die Konstante behauptete eine Schranke, die sie nicht einhielt.
+        """
+        exc = httpx.HTTPStatusError("429", request=None, response=_resp(429, "86400"))
+        for attempt in range(1, 12):
+            assert tx.retry_delay(attempt, None) <= tx.MAX_DELAY_S
+            assert tx.retry_delay(attempt, exc) <= tx.MAX_DELAY_S
 
     def test_delay_is_spread(self):
         """Ohne Jitter wiederholen alle Clients im Gleichtakt. Ziehungen müssen streuen."""
@@ -176,3 +191,34 @@ def test_budget_deliberately_exceeds_the_mcp_client_default():
 
     assert tx.TOTAL_BUDGET_S > MCP_DEFAULT_TIMEOUT
     assert tx.TOTAL_BUDGET_S == tx.TRANSCRIPT_TIMEOUT
+
+
+@respx.mock
+async def test_a_slow_response_is_cut_by_the_wall_clock_deadline():
+    """Das Budget muss auch greifen, wenn httpx' Timeout nicht anschlägt.
+
+    Codex-Review zu PR #35: httpx wendet sein Timeout pro Operation an, und das
+    Read-Timeout beginnt mit jedem Chunk von vorn — eine langsam tröpfelnde
+    Antwort kann das Gesamtbudget also überdauern, obwohl kein einzelner Read
+    ablief. Deshalb liegt eine echte ``asyncio.timeout``-Deadline um den Request.
+
+    Bewusst ohne ``fake_clock``: Diese Zusicherung hängt an echter Zeit, und eine
+    Uhr, die nur beim Schlafen vorrückt, könnte sie nicht widerlegen.
+    """
+    import asyncio as real_asyncio
+    import time
+
+    async def _slow(request):
+        await real_asyncio.sleep(1.0)
+        return httpx.Response(200, json={"value": []})
+
+    respx.get(URL).mock(side_effect=_slow)
+    started = time.monotonic()
+    async with httpx.AsyncClient() as http:
+        with pytest.raises(TimeoutError):
+            await tx._fetch(http, URL, {}, total_budget=0.05)
+    elapsed = time.monotonic() - started
+    # Die Zusicherung ist die Zeit, nicht der Zähler: respx verbucht den Aufruf
+    # gar nicht mehr, weil die Deadline ihn mitten im Flug abbricht — genau das
+    # ist der Beleg. Ohne die Deadline liefe die Antwort ihre volle Sekunde.
+    assert elapsed < 0.5, f"Deadline hat nicht geschnitten: {elapsed:.2f}s"
