@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.malkreide/parlament-mcp",
   "description": "Swiss Federal Parliament Curia Vista OData API",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "repository": {
     "url": "https://github.com/malkreide/parlament-mcp",
     "source": "github"
@@ -12,7 +12,7 @@
     {
       "registryType": "pypi",
       "identifier": "parlament-mcp",
-      "version": "0.3.4",
+      "version": "0.3.5",
       "transport": {
         "type": "stdio"
       },
