@@ -332,9 +332,7 @@ class GetTranscriptInput(BaseModel):
 
 
 # ─────────────────────────── HTTP mit Retry ────────────────────────────────────
-async def _fetch(
-    client: httpx.AsyncClient, url: str, params: dict[str, str]
-) -> Any:
+async def _fetch(client: httpx.AsyncClient, url: str, params: dict[str, str]) -> Any:
     """OData-GET mit exponentiellem Backoff (Portfolio-Resilienz-Default).
 
     Retry bei 5xx/429 und Netzwerkfehlern (3 Wiederholungen, 2s/4s/8s);
@@ -344,7 +342,7 @@ async def _fetch(
     last_error: Exception | None = None
     for attempt in range(_MAX_ATTEMPTS):
         if attempt:
-            await asyncio.sleep(_BACKOFF_BASE ** attempt)
+            await asyncio.sleep(_BACKOFF_BASE**attempt)
         try:
             resp = await client.get(url, params=params, timeout=TRANSCRIPT_TIMEOUT)
             resp.raise_for_status()
@@ -468,9 +466,7 @@ async def search_transcripts(
     )
 
 
-async def get_transcript(
-    client: httpx.AsyncClient, params: GetTranscriptInput
-) -> TranscriptDetail:
+async def get_transcript(client: httpx.AsyncClient, params: GetTranscriptInput) -> TranscriptDetail:
     """Volltext eines einzelnen Votums abrufen (gedeckelt, mit Kürzungs-Flag)."""
     url = f"{ODATA_BASE}/Transcript(ID={params.transcript_id}L,Language='{EDITION}')"
     query = {"$format": "json"}

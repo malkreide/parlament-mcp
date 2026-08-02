@@ -146,13 +146,13 @@ async def test_upstream_503_becomes_tool_error():
 @pytest.mark.parametrize(
     "kwargs",
     [
-        {"limit": 200},          # über le=100
-        {"limit": 0},            # unter ge=1
-        {"limit": "20"},         # strict int: kein String
-        {"offset": -1},          # negativ
+        {"limit": 200},  # über le=100
+        {"limit": 0},  # unter ge=1
+        {"limit": "20"},  # strict int: kein String
+        {"offset": -1},  # negativ
         {"submitted_after": "nope"},  # Pattern verletzt
-        {"evil_field": "x"},     # extra=forbid
-        {"keyword": ""},         # min_length=1
+        {"evil_field": "x"},  # extra=forbid
+        {"keyword": ""},  # min_length=1
     ],
 )
 def test_search_business_rejects_invalid(kwargs):
@@ -306,4 +306,3 @@ def test_bearer_middleware_noop_without_tokens(monkeypatch):
     client = TestClient(app)
     # Ohne konfigurierte Tokens: offen (Public-Open-Data-Default).
     assert client.get("/").status_code == 200
-
