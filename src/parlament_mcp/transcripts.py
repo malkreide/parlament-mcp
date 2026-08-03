@@ -36,7 +36,11 @@ erwünscht.
 from __future__ import annotations
 
 import asyncio
+import random
 import re
+import time
+from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
 from typing import Any, Literal
 
 import httpx
@@ -57,6 +61,93 @@ TRANSCRIPT_TIMEOUT = 45.0
 #: Basis für den exponentiellen Backoff (Sekunden). In Tests auf 0 setzbar.
 _BACKOFF_BASE = 2.0
 _MAX_ATTEMPTS = 4
+
+# ─────────────────────── Retry-Politik (ARCH-014) ─────────────────────────────
+# *Was* wiederholt wird, ist in `_fetch` geregelt (4xx ausser 429 bricht sofort
+# ab). Diese Konstanten regeln *wie schnell* und *wie lange*.
+
+#: Deckel auf eine einzelne Wartezeit — gegen die unbegrenzt wachsende Leiter
+#: und gegen ein ``Retry-After``, das die Quelle senden darf, das man aber nicht
+#: absitzen muss.
+MAX_DELAY_S = 20.0
+
+#: Streuung. Ohne sie wiederholen alle Clients, die denselben Ausfall getroffen
+#: haben, im Gleichtakt — die Last kommt als Welle zurück, genau wenn die Quelle
+#: sich erholt, und der Retry-Sturm verlängert den Ausfall, den er überbrücken
+#: soll.
+JITTER_SPREAD = 0.5  # exponentielle Wartezeiten landen in [0.5x, 1.5x]
+
+#: Auf einem ``Retry-After`` ist die Streuung einseitig: Die Quelle hat gesagt,
+#: wann wir wiederkommen sollen — später ist höflich, früher missachtet genau
+#: den Wert, den man gerade gelesen hat.
+RETRY_AFTER_JITTER = 0.25  # landet in [1.0x, 1.25x]
+
+#: Statuscodes, die ein sinnvolles ``Retry-After`` tragen (RFC 9110 §10.2.3).
+RETRY_AFTER_STATUSES = frozenset({429, 503})
+
+#: Deckel auf den *ganzen* Aufruf — alle Versuche und Wartezeiten zusammen.
+#:
+#: Eine Anzahl Versuche ist keine Grenze: Vier Versuche à 45 s plus Backoff sind
+#: über drei Minuten, und ``_MAX_ATTEMPTS = 4`` sagt das nirgends.
+#:
+#: **Der Wert liegt bewusst über dem MCP-Client-Default.** Das Python-SDK setzt
+#: ``MCP_DEFAULT_TIMEOUT = 30.0``; Schwester-Server mit festen Dumps
+#: (``swiss-efv-mcp``, ``termdat-mcp``) bleiben mit 25 s darunter. Hier gilt die
+#: Ausnahme aus demselben Grund wie bei ``lindas-mcp``: Unvorgefilterte
+#: Volltextsuchen dauern laut ``TRANSCRIPT_TIMEOUT`` bis ~40 s. Ein Budget unter
+#: 30 s würde legitime Suchen abwürgen, die heute durchkommen.
+#:
+#: Die Folge ist angenommen, nicht übersehen: Ein Aufrufer mit SDK-Default kann
+#: aufgeben, bevor eine langsame Suche zurückkommt.
+TOTAL_BUDGET_S = 45.0
+
+
+def parse_retry_after(resp: httpx.Response | None) -> float | None:
+    """Sekunden laut ``Retry-After`` der Antwort, oder None.
+
+    RFC 9110 §10.2.3 erlaubt zwei Formen: Sekundenzahl (``120``) und HTTP-Datum
+    (``Wed, 21 Oct 2026 07:28:00 GMT``). Beide kommen vor, beide werden gelesen.
+    Unbrauchbares ergibt None, und der Aufrufer fällt auf seine eigene Kurve
+    zurück — eine kaputte Kopfzeile darf auf dem Fehlerpfad nicht zum Absturz
+    werden.
+    """
+    if resp is None or resp.status_code not in RETRY_AFTER_STATUSES:
+        return None
+    raw = (resp.headers.get("Retry-After") or "").strip()
+    if not raw:
+        return None
+    if raw.isdigit():
+        return float(raw)
+    try:
+        when = parsedate_to_datetime(raw)
+    except (TypeError, ValueError):
+        return None
+    if when is None:
+        return None
+    if when.tzinfo is None:  # RFC-9110-Daten sind GMT; naiv heisst UTC
+        when = when.replace(tzinfo=UTC)
+    return max(0.0, (when - datetime.now(UTC)).total_seconds())
+
+
+def retry_delay(attempt: int, last_error: Exception | None) -> float:
+    """Sekunden Wartezeit vor ``attempt``.
+
+    Die Antwort der Quelle schlägt unsere Vermutung: Ein ``Retry-After`` bei 429
+    oder 503 gewinnt gegen die Exponentialkurve, die dieselbe Frage nur rät.
+    """
+    hinted = parse_retry_after(getattr(last_error, "response", None))
+    if hinted is not None:
+        jittered = hinted * (1.0 + random.random() * RETRY_AFTER_JITTER)
+    else:
+        jittered = _BACKOFF_BASE**attempt * (
+            1.0 - JITTER_SPREAD + random.random() * 2 * JITTER_SPREAD
+        )
+    # Deckeln NACH dem Jittern. Umgekehrt war MAX_DELAY_S keine Grenze: Ein auf
+    # 20 s gedeckelter Wert wurde anschliessend mit bis zu 1.5 multipliziert und
+    # landete bei 30 s — die Konstante behauptete eine Schranke, die sie nicht
+    # einhielt.
+    return min(jittered, MAX_DELAY_S)
+
 
 #: Edition, die zur Deduplizierung gefiltert wird. Verbirgt keine Redesprache.
 EDITION = "DE"
@@ -332,21 +423,55 @@ class GetTranscriptInput(BaseModel):
 
 
 # ─────────────────────────── HTTP mit Retry ────────────────────────────────────
-async def _fetch(client: httpx.AsyncClient, url: str, params: dict[str, str]) -> Any:
+async def _fetch(
+    client: httpx.AsyncClient,
+    url: str,
+    params: dict[str, str],
+    *,
+    total_budget: float = TOTAL_BUDGET_S,
+) -> Any:
     """OData-GET mit exponentiellem Backoff (Portfolio-Resilienz-Default).
 
-    Retry bei 5xx/429 und Netzwerkfehlern (3 Wiederholungen, 2s/4s/8s);
-    4xx (ausser 429) werden nicht wiederholt.
+    Retry bei 5xx/429 und Netzwerkfehlern (3 Wiederholungen, gestreute 2s/4s/8s,
+    gedeckelt bei ``MAX_DELAY_S``); ein ``Retry-After`` der Quelle bei 429/503
+    schlägt diese Kurve. 4xx (ausser 429) werden nicht wiederholt.
+
+    ``total_budget`` begrenzt den ganzen Aufruf — Versuche und Wartezeiten
+    zusammen; siehe die Notiz bei :data:`TOTAL_BUDGET_S`, warum er hier über dem
+    MCP-Client-Default liegt.
     """
     assert_host_allowed(url)
+    # ARCH-014: Das Budget begrenzt den ganzen Aufruf, nicht nur eine Wartezeit.
+    # Monotone Uhr, damit ein NTP-Sprung kein Budget verteilt oder einzieht.
+    deadline = time.monotonic() + total_budget
     last_error: Exception | None = None
     for attempt in range(_MAX_ATTEMPTS):
         if attempt:
-            await asyncio.sleep(_BACKOFF_BASE**attempt)
+            delay = retry_delay(attempt, last_error)
+            # Eine Wartezeit, die das Budget überdauert, ist eine Wartezeit für
+            # niemanden: Der Aufrufer hat aufgegeben, bevor sie endet.
+            if delay >= deadline - time.monotonic():
+                break
+            await asyncio.sleep(delay)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
         try:
-            resp = await client.get(url, params=params, timeout=TRANSCRIPT_TIMEOUT)
-            resp.raise_for_status()
-            return resp.json()
+            # httpx wendet sein Timeout pro Operation an (connect/read/write/
+            # pool), und das Read-Timeout beginnt mit jedem Chunk von vorn — das
+            # begrenzt jeden Schritt, nicht den Aufruf. Eine langsam tröpfelnde
+            # Antwort könnte das Budget also überdauern. `asyncio.timeout` ist
+            # die Wanduhr-Deadline, die das Budget tatsächlich verspricht; das
+            # httpx-Timeout bleibt als feinere Grenze pro Operation daneben.
+            async with asyncio.timeout(remaining):
+                resp = await client.get(
+                    url, params=params, timeout=min(TRANSCRIPT_TIMEOUT, remaining)
+                )
+                resp.raise_for_status()
+                return resp.json()
+        except TimeoutError as exc:  # Budget aufgebraucht, nicht bloss dieser Versuch
+            last_error = exc
+            break
         except httpx.HTTPStatusError as exc:
             last_error = exc
             code = exc.response.status_code

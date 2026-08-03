@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Retry-Politik gegenueber Curia Vista** (ARCH-014): `Retry-After` wird
+  gelesen und schlaegt die eigene Backoff-Kurve, der Backoff ist gestreut, und
+  ein Gesamtbudget begrenzt den ganzen Aufruf.
+
+  `Retry-After` bei 429 und 503 in beiden Formen (Sekundenzahl und HTTP-Datum,
+  RFC 9110 §10.2.3). Wer stattdessen weiter seine Kurve faehrt, ignoriert eine
+  ausdrueckliche Angabe der Quelle. Ein unbrauchbarer Header fuehrt zurueck auf
+  die Kurve statt zum Absturz.
+
+  Jitter: `_BACKOFF_BASE ** attempt` war deterministisch. Faellt die API aus,
+  waehrend mehrere Clients sie abfragen, retryen alle im Gleichtakt, und die
+  Last kommt als Welle zurueck — genau wenn die API sich erholt. Neu landen
+  exponentielle Wartezeiten in [0.5x, 1.5x]; auf einem `Retry-After` ist die
+  Streuung einseitig ([1.0x, 1.25x]), weil frueher als angesagt die Missachtung
+  derselben Angabe waere. Dazu ein Deckel von 20 s auf jede Einzelwartezeit.
+
+  Gesamtbudget von 45 s: Vier Versuche a 45 s plus Backoff sind ueber drei
+  Minuten, und `_MAX_ATTEMPTS = 4` sagt das nirgends. Der Wert liegt **bewusst
+  ueber** dem MCP-Client-Default (`MCP_DEFAULT_TIMEOUT = 30.0`), aus demselben
+  Grund, aus dem `TRANSCRIPT_TIMEOUT` bei 45 s steht: Unvorgefilterte
+  Volltextsuchen dauern bis ~40 s, und ein Budget unter 30 s wuerde legitime
+  Suchen abwuergen. Ein Test haelt diese Abweichung fest, damit sie eine
+  dokumentierte Entscheidung bleibt.
+
+
 ## [0.3.5] - 2026-08-02
 
 ### Fixed
