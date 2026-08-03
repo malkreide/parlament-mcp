@@ -24,6 +24,5 @@ def assert_host_allowed(url: str) -> None:
     host = (urlparse(url).hostname or "").lower()
     if host not in ALLOWED_HOSTS:
         raise EgressNotAllowed(
-            f"Host nicht in Egress-Allow-List: {host!r} "
-            f"(erlaubt: {sorted(ALLOWED_HOSTS)})"
+            f"Host nicht in Egress-Allow-List: {host!r} (erlaubt: {sorted(ALLOWED_HOSTS)})"
         )

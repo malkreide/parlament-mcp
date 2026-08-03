@@ -105,7 +105,9 @@ async def test_search_returns_hits_with_citation():
         return_value=httpx.Response(200, json={"d": [REC_DE]})
     )
     async with _client() as c:
-        res = await search_transcripts(c, SearchTranscriptsInput(keyword="Volksschule", session_id=5202))
+        res = await search_transcripts(
+            c, SearchTranscriptsInput(keyword="Volksschule", session_id=5202)
+        )
     assert res.count == 1
     hit = res.results[0]
     assert hit.citation == "AB 2024 N, 2024-03-13, Arslan Sibel"
@@ -167,7 +169,10 @@ async def test_pre_digital_range_raises_explanatory_error():
     async with _client() as c:
         with pytest.raises(ToolError) as exc:
             await search_transcripts(
-                c, SearchTranscriptsInput(keyword="Bildung", date_from="1950-01-01", date_to="1970-01-01")
+                c,
+                SearchTranscriptsInput(
+                    keyword="Bildung", date_from="1950-01-01", date_to="1970-01-01"
+                ),
             )
     assert "1999" in str(exc.value)  # erklärender Fehler, nicht leeres Resultat
 
@@ -195,7 +200,9 @@ async def test_empty_search_returns_suggestions():
         return_value=httpx.Response(200, json={"d": []})
     )
     async with _client() as c:
-        res = await search_transcripts(c, SearchTranscriptsInput(keyword="xyz_none", session_id=5202))
+        res = await search_transcripts(
+            c, SearchTranscriptsInput(keyword="xyz_none", session_id=5202)
+        )
     assert res.match_type == "none" and res.count == 0
     assert res.suggestions  # ARCH-003
 
@@ -254,9 +261,7 @@ async def test_live_anchor_query():
 async def test_live_french_votum_present():
     """Live: Ein FR-gesprochenes Votum erscheint unter der DE-Edition."""
     async with _client() as c:
-        res = await search_transcripts(
-            c, SearchTranscriptsInput(session_id=5202, limit=30)
-        )
+        res = await search_transcripts(c, SearchTranscriptsInput(session_id=5202, limit=30))
     langs = {h.language for h in res.results}
     assert res.count > 0
     assert langs.issubset({"de", "fr", "it", None})

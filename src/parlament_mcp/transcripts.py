@@ -148,6 +148,7 @@ def retry_delay(attempt: int, last_error: Exception | None) -> float:
     # einhielt.
     return min(jittered, MAX_DELAY_S)
 
+
 #: Edition, die zur Deduplizierung gefiltert wird. Verbirgt keine Redesprache.
 EDITION = "DE"
 
@@ -590,9 +591,7 @@ async def search_transcripts(
     )
 
 
-async def get_transcript(
-    client: httpx.AsyncClient, params: GetTranscriptInput
-) -> TranscriptDetail:
+async def get_transcript(client: httpx.AsyncClient, params: GetTranscriptInput) -> TranscriptDetail:
     """Volltext eines einzelnen Votums abrufen (gedeckelt, mit Kürzungs-Flag)."""
     url = f"{ODATA_BASE}/Transcript(ID={params.transcript_id}L,Language='{EDITION}')"
     query = {"$format": "json"}
