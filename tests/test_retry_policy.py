@@ -7,6 +7,7 @@ um Wartezeit loszuwerden.
 
 from __future__ import annotations
 
+import inspect
 from datetime import UTC, datetime, timedelta
 from email.utils import format_datetime
 
@@ -120,7 +121,7 @@ def fake_clock(monkeypatch):
         now["t"] += seconds
 
     monkeypatch.setattr(tx.time, "monotonic", lambda: now["t"])
-    monkeypatch.setattr(tx.asyncio, "sleep", _sleep)
+    monkeypatch.setattr(tx, "_sleep", _sleep)
     return slept
 
 
@@ -222,3 +223,19 @@ async def test_a_slow_response_is_cut_by_the_wall_clock_deadline():
     # gar nicht mehr, weil die Deadline ihn mitten im Flug abbricht — genau das
     # ist der Beleg. Ohne die Deadline liefe die Antwort ihre volle Sekunde.
     assert elapsed < 0.5, f"Deadline hat nicht geschnitten: {elapsed:.2f}s"
+
+
+# --- Die Naht, und warum sie nicht `asyncio.sleep` ist -----------------------
+
+
+def test_der_retry_geht_ueber_den_alias():
+    """Sonst patchen die Tests eine Naht, die der Code gar nicht benutzt.
+
+    Umgeht das Modul den Alias, bleibt der Patch wirkungslos und die Suite
+    wartet die echte Backoff-Leiter ab. Kein Test faellt dabei — sie wird nur
+    um ein Vielfaches langsamer, und eine laengere Laufzeit ist kein Signal,
+    das jemand liest. Diese Zusicherung macht daraus einen Fehlschlag.
+    """
+    quelle = inspect.getsource(tx)
+    assert "await _sleep(" in quelle, "der Retry ruft den Modul-Alias nicht mehr auf"
+    assert "await asyncio.sleep(" not in quelle, "der Retry umgeht den Alias"
