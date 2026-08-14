@@ -50,6 +50,12 @@ from pydantic import BaseModel, ConfigDict, Field
 from parlament_mcp.config import DATA_LICENSE, DATA_SOURCE
 from parlament_mcp.security import assert_host_allowed
 
+# Eigener Alias, damit Tests die Wartezeit nullen koennen, ohne `asyncio.sleep`
+# prozessweit zu entschaerfen. `monkeypatch.setattr(<modul>.asyncio, "sleep", ...)`
+# sieht lokal aus, ersetzt `sleep` aber auf dem geteilten Modulobjekt — fuer
+# httpx, respx, pytest-asyncio und jeden anderen Importeur im Prozess.
+_sleep = asyncio.sleep
+
 # ─────────────────────────── Konstanten ────────────────────────────────────────
 ODATA_BASE = "https://ws.parlament.ch/odata.svc"
 
@@ -452,7 +458,7 @@ async def _fetch(
             # niemanden: Der Aufrufer hat aufgegeben, bevor sie endet.
             if delay >= deadline - time.monotonic():
                 break
-            await asyncio.sleep(delay)
+            await _sleep(delay)
         remaining = deadline - time.monotonic()
         if remaining <= 0:
             break
