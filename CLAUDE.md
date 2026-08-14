@@ -48,12 +48,12 @@ Ein Codex-Review auf einem PR wird beantwortet oder behoben, nie ignoriert.
 Zwei Projekte, zwei Gate-Sätze: Bundes-Server (Root, `src/parlament_mcp`) und
 `openparldata-mcp/` (eigene `pyproject.toml`, eigener CI-Job).
 
-**ruff:** gepinnt ist nur der Root-Job — `ruff==0.16.1` (`.github/workflows/ci.yml`).
+**ruff:** `ruff==0.16.1`, in beiden CI-Jobs gepinnt (`.github/workflows/ci.yml`).
 Eine `.pre-commit-config.yaml` gibt es nicht, es existiert also kein lokales Gate
-zum Abgleichen. Offener Befund: der Job `test-openparldata` installiert kein
-gepinntes ruff und läuft gegen `ruff>=0.4.0` aus dem dev-Extra, also gegen die
-jeweils neueste Version — dort kann CI ohne Codeänderung rot werden. Lokal
-trotzdem mit `0.16.1` arbeiten.
+zum Abgleichen — die Version von Hand setzen. Achtung: ein per `uv tool`
+installiertes ruff unter `~/.local/bin` beschattet ein frisch per pip
+installiertes. `ruff --version` vor jedem Lauf prüfen, sonst meldet ein
+`python -m ruff` einen anderen Befund als die CI.
 
 **Gates, wörtlich aus der CI (Root, Python 3.11/3.12/3.13):**
 
@@ -68,14 +68,21 @@ python -m parlament_mcp.tool_hashes --check   # security.yml, SEC-022
 **Gates für `openparldata-mcp/` (aus dem Unterordner):**
 
 ```bash
-PYTHONPATH=src pytest tests/
+PYTHONPATH=src pytest tests/ -m "not live"
 ruff check src/ tests/
+ruff format --check src/ tests/
 ```
 
-Kein `ruff format --check` — Formatierung ist dort ungeprüft.
+**Live-Tests:** `.github/workflows/live-test.yml` läuft per Cron (`0 4 * * *`)
+plus `workflow_dispatch`, mit einem Job je Server. DRIFT-005 ist für beide
+erfüllt.
 
-**Live-Tests:** `.github/workflows/live-test.yml` hat einen Cron-Trigger
-(`0 4 * * *`) plus `workflow_dispatch` und fährt `pytest tests/ -m live`.
-DRIFT-005 ist für den Bundes-Server damit erfüllt. Nicht für
-`openparldata-mcp`: dort gibt es weder `live`-Marker noch geplanten Lauf, die
-externe API wird also nie geplant angefragt — offener Befund.
+**Datentreue der Quellen.** Beide APIs antworten auf falsch verstandene
+Parameter nicht mit einem Fehler, sondern mit plausiblen Daten. Belegt:
+`/persons/` verwirft bei `sort_by=lastname` still den `body_key`-Filter, während
+`meta.total_records` weiter den korrekt gefilterten Wert meldet — die Antwort
+sieht richtig aus und ist es nicht. Andere Sortierschlüssel (`fullname`,
+`firstname`) werden kommentarlos ignoriert. Ein neuer Query-Parameter gilt
+deshalb erst als verstanden, wenn er gegen die echte Quelle geprüft wurde, mit
+einer Gegenprobe ohne ihn. Mocks können diese Klasse Fehler nicht sehen: sie
+geben zurück, was man ihnen vorlegt.

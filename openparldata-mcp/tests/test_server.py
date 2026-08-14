@@ -27,10 +27,18 @@ async def test_all_13_tools_registered():
     names = {t.name for t in tools}
     assert len(names) == 13
     assert names == {
-        "oparl_list_bodies", "oparl_search_affairs", "oparl_get_affair",
-        "oparl_get_affair_documents", "oparl_compare_bodies", "oparl_search_persons",
-        "oparl_get_person", "oparl_get_person_interests", "oparl_search_interests",
-        "oparl_get_votings", "oparl_get_voting_results", "oparl_search_meetings",
+        "oparl_list_bodies",
+        "oparl_search_affairs",
+        "oparl_get_affair",
+        "oparl_get_affair_documents",
+        "oparl_compare_bodies",
+        "oparl_search_persons",
+        "oparl_get_person",
+        "oparl_get_person_interests",
+        "oparl_search_interests",
+        "oparl_get_votings",
+        "oparl_get_voting_results",
+        "oparl_search_meetings",
         "oparl_source_status",
     }
 
@@ -50,10 +58,22 @@ async def test_tool_annotations_are_read_only():
 async def test_search_affairs_localizes_and_counts():
     _mock_bodies(respx.mock)
     respx.mock.get(f"{BASE_URL}/affairs/").mock(
-        return_value=httpx.Response(200, json=_envelope(
-            [{"id": 1, "body_key": "261", "title": {"de": "Tagesschule Rütihof"},
-              "type_name": {"de": "Weisung"}, "state_name": {"de": "InBearbeitung"},
-              "begin_date": "2024-05-01T00:00:00"}], 68))
+        return_value=httpx.Response(
+            200,
+            json=_envelope(
+                [
+                    {
+                        "id": 1,
+                        "body_key": "261",
+                        "title": {"de": "Tagesschule Rütihof"},
+                        "type_name": {"de": "Weisung"},
+                        "state_name": {"de": "InBearbeitung"},
+                        "begin_date": "2024-05-01T00:00:00",
+                    }
+                ],
+                68,
+            ),
+        )
     )
     r = await s.oparl_search_affairs(s.SearchAffairsInput(body_key="261", search="Tagesschule"))
     assert r.total_available == 68
@@ -73,9 +93,21 @@ async def test_documents_truncate_explicitly():
     _mock_bodies(respx.mock)
     long_text = "x" * 5000
     respx.mock.get(f"{BASE_URL}/affairs/42/docs").mock(
-        return_value=httpx.Response(200, json=_envelope(
-            [{"id": 7, "name": {"de": "Weisung"}, "category": {"de": "Dokument"},
-              "format": "application/pdf", "text": long_text}], 1))
+        return_value=httpx.Response(
+            200,
+            json=_envelope(
+                [
+                    {
+                        "id": 7,
+                        "name": {"de": "Weisung"},
+                        "category": {"de": "Dokument"},
+                        "format": "application/pdf",
+                        "text": long_text,
+                    }
+                ],
+                1,
+            ),
+        )
     )
     r = await s.oparl_get_affair_documents(s.GetAffairDocumentsInput(affair_id=42, max_chars=1000))
     doc = r.results[0]
@@ -89,8 +121,9 @@ async def test_documents_truncate_explicitly():
 async def test_documents_no_truncation_when_short():
     _mock_bodies(respx.mock)
     respx.mock.get(f"{BASE_URL}/affairs/42/docs").mock(
-        return_value=httpx.Response(200, json=_envelope(
-            [{"id": 7, "name": "Bericht", "text": "kurz"}], 1))
+        return_value=httpx.Response(
+            200, json=_envelope([{"id": 7, "name": "Bericht", "text": "kurz"}], 1)
+        )
     )
     r = await s.oparl_get_affair_documents(s.GetAffairDocumentsInput(affair_id=42, max_chars=1000))
     assert r.results[0].text_truncated is False
@@ -101,8 +134,12 @@ async def test_documents_no_truncation_when_short():
 async def test_interests_carry_data_quality_flag():
     _mock_bodies(respx.mock)
     respx.mock.get(f"{BASE_URL}/interests/").mock(
-        return_value=httpx.Response(200, json=_envelope(
-            [{"id": 1, "name": {"de": "2007"}, "role_name": None, "group": None}], 1))
+        return_value=httpx.Response(
+            200,
+            json=_envelope(
+                [{"id": 1, "name": {"de": "2007"}, "role_name": None, "group": None}], 1
+            ),
+        )
     )
     r = await s.oparl_search_interests(s.SearchInterestsInput(body_key="ZH"))
     assert r.data_quality == "unverified_source_data"
@@ -137,13 +174,36 @@ async def test_offset_cap_error_is_translated():
     _mock_bodies(respx.mock)
     problem = {
         "type": "https://api.openparldata.ch/problems/offset-cap-exceeded",
-        "title": "Pagination depth too high", "status": 400,
-        "detail": "too deep", "max_offset": 100000,
+        "title": "Pagination depth too high",
+        "status": 400,
+        "detail": "too deep",
+        "max_offset": 100000,
         "alternatives": {"bulk_export": "https://files.openparldata.ch/exports/affairs.ndjson.gz"},
     }
     respx.mock.get(f"{BASE_URL}/affairs/").mock(return_value=httpx.Response(400, json=problem))
     with pytest.raises(ToolError, match="Bulk-Export"):
         await s.oparl_search_affairs(s.SearchAffairsInput(body_key="261", offset=100))
+
+
+@respx.mock
+async def test_search_persons_never_sorts_by_lastname():
+    """Regressionsschutz: sort_by='lastname' verwirft auf /persons/ den body_key-Filter.
+
+    Die API meldet dabei weiterhin die korrekt gefilterte total_records, liefert
+    die Zeilen aber aus der ungefilterten Gesamtmenge — ein Mock kann das nicht
+    nachstellen, weil er zurückgibt, was man ihm vorlegt. Geprüft wird deshalb
+    die abgesetzte Query, nicht die Antwort. Quelle verifiziert am 2026-08-14.
+    """
+    _mock_bodies(respx.mock)
+    route = respx.mock.get(f"{BASE_URL}/persons/").mock(
+        return_value=httpx.Response(200, json=_envelope([], 0))
+    )
+    await s.oparl_search_persons(s.SearchPersonsInput(body_key="261"))
+    sort_by = route.calls.last.request.url.params.get("sort_by")
+    assert sort_by not in ("lastname", "-lastname"), (
+        f"sort_by={sort_by!r} verwirft serverseitig den body_key-Filter."
+    )
+    assert route.calls.last.request.url.params.get("body_key") == "261"
 
 
 @respx.mock

@@ -41,11 +41,12 @@ jobs:
         run: ruff format --check src/ tests/ scripts/
 
   # Subnationaler Server (openparldata-mcp) – eigenständiges Subprojekt mit
-  # eigener pyproject.toml. Separater Job, damit der Bundes-Server (Job "test")
-  # unberührt bleibt.
-
       - name: Versions-Sync (pyproject ↔ server.json / README / src)
         run: python scripts/check_version_sync.py
+
+  # Subnationaler Server (openparldata-mcp) – eigenständiges Subprojekt mit
+  # eigener pyproject.toml. Separater Job, damit der Bundes-Server (Job "test")
+  # unberührt bleibt.
   test-openparldata:
     runs-on: ubuntu-latest
     defaults:
@@ -67,7 +68,17 @@ jobs:
         run: pip install -e ".[dev]"
 
       - name: Run tests
-        run: PYTHONPATH=src pytest tests/
+        run: PYTHONPATH=src pytest tests/ -m "not live"
+
+      # Dieselbe Pinnung wie im Job "test". Ohne sie käme ruff aus dem dev-Extra
+      # (`ruff>=0.4.0`), also in der jeweils neuesten Version — dieser Job wurde
+      # damit ohne jede Codeänderung rot, sobald upstream eine Regel oder der
+      # Formatter sich änderte.
+      - name: Install pinned ruff
+        run: pip install ruff==0.16.1
 
       - name: Lint
         run: ruff check src/ tests/
+
+      - name: Format check
+        run: ruff format --check src/ tests/

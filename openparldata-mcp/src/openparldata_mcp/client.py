@@ -64,7 +64,9 @@ def get_client() -> httpx.AsyncClient:
     if _client is None or _client.is_closed or _client_loop is not running_loop:
         _client = httpx.AsyncClient(
             timeout=HTTP_TIMEOUT,
-            headers={"User-Agent": "openparldata-mcp/0.1 (+https://github.com/malkreide/openparldata-mcp)"},
+            headers={
+                "User-Agent": "openparldata-mcp/0.1 (+https://github.com/malkreide/openparldata-mcp)"
+            },
         )
         _client_loop = running_loop
     return _client
@@ -90,8 +92,10 @@ def _translate_http_error(exc: httpx.HTTPStatusError) -> ToolError:
 
     if code == 404:
         detail = body.get("detail") if isinstance(body, dict) else None
-        return ToolError(f"Nicht gefunden: {detail or 'Ressource existiert nicht.'} "
-                         "Bitte ID bzw. Parameter prüfen.")
+        return ToolError(
+            f"Nicht gefunden: {detail or 'Ressource existiert nicht.'} "
+            "Bitte ID bzw. Parameter prüfen."
+        )
 
     if code == 400 and isinstance(body, dict) and body.get("max_offset") is not None:
         max_off = body.get("max_offset", MAX_OFFSET)
@@ -135,11 +139,14 @@ async def api_get(path: str, params: dict[str, Any] | None = None) -> Any:
         raise _translate_http_error(exc) from exc
     except httpx.TimeoutException as exc:
         _logger.warning("api_timeout", path=path)
-        raise ToolError("Zeitüberschreitung: Die OpenParlData-API antwortet nicht. "
-                        "Bitte erneut versuchen.") from exc
+        raise ToolError(
+            "Zeitüberschreitung: Die OpenParlData-API antwortet nicht. Bitte erneut versuchen."
+        ) from exc
     except httpx.HTTPError as exc:
         _logger.warning("api_transport_error", path=path, error=type(exc).__name__)
-        raise ToolError(f"Netzwerkfehler beim Zugriff auf die OpenParlData-API ({type(exc).__name__}).") from exc
+        raise ToolError(
+            f"Netzwerkfehler beim Zugriff auf die OpenParlData-API ({type(exc).__name__})."
+        ) from exc
 
     _last_success_epoch = time.time()
     return resp.json()
