@@ -186,6 +186,27 @@ async def test_offset_cap_error_is_translated():
 
 
 @respx.mock
+async def test_search_persons_never_sorts_by_lastname():
+    """Regressionsschutz: sort_by='lastname' verwirft auf /persons/ den body_key-Filter.
+
+    Die API meldet dabei weiterhin die korrekt gefilterte total_records, liefert
+    die Zeilen aber aus der ungefilterten Gesamtmenge — ein Mock kann das nicht
+    nachstellen, weil er zurückgibt, was man ihm vorlegt. Geprüft wird deshalb
+    die abgesetzte Query, nicht die Antwort. Quelle verifiziert am 2026-08-14.
+    """
+    _mock_bodies(respx.mock)
+    route = respx.mock.get(f"{BASE_URL}/persons/").mock(
+        return_value=httpx.Response(200, json=_envelope([], 0))
+    )
+    await s.oparl_search_persons(s.SearchPersonsInput(body_key="261"))
+    sort_by = route.calls.last.request.url.params.get("sort_by")
+    assert sort_by not in ("lastname", "-lastname"), (
+        f"sort_by={sort_by!r} verwirft serverseitig den body_key-Filter."
+    )
+    assert route.calls.last.request.url.params.get("body_key") == "261"
+
+
+@respx.mock
 async def test_list_bodies_resolves_zurich_keys():
     _mock_bodies(respx.mock)
     r = await s.oparl_list_bodies(s.ListBodiesInput(search="Zürich"))

@@ -876,13 +876,21 @@ async def oparl_search_persons(
     Gemeinderat der Stadt Zürich.</example>
     """
     body = await body_cache.resolve_body(params.body_key)
+    # sort_by="lastname" NICHT verwenden: auf /persons/ verwirft dieser Sortier-
+    # schlüssel den body_key-Filter. meta.total_records bleibt dabei der korrekt
+    # gefilterte Wert (Zürich: 807), die zurückgegebenen Zeilen stammen aber aus
+    # der ungefilterten Gesamtmenge — die Antwort sieht also richtig aus und ist
+    # es nicht. Verifiziert gegen die Quelle am 2026-08-14; betrifft nur
+    # /persons/ und nur "lastname"/"-lastname". "fullname"/"firstname" werden
+    # still ignoriert (filtern korrekt, sortieren aber nicht), "id" tut beides.
+    # Deshalb id: stabile, filter-treue Reihenfolge für die Offset-Paginierung.
     query: dict[str, Any] = {
         "body_key": body.body_key,
         "party": params.party,
         "search": params.search,
         "limit": params.limit,
         "offset": params.offset,
-        "sort_by": "lastname",
+        "sort_by": "id",
     }
     if params.active is not None:
         query["active"] = "true" if params.active else "false"
