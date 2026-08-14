@@ -67,8 +67,7 @@ def _get_lock() -> asyncio.Lock:
 
 def _is_fresh() -> bool:
     return (
-        _cache.loaded_at is not None
-        and (time.time() - _cache.loaded_at) < BODY_CACHE_TTL_SECONDS
+        _cache.loaded_at is not None and (time.time() - _cache.loaded_at) < BODY_CACHE_TTL_SECONDS
     )
 
 

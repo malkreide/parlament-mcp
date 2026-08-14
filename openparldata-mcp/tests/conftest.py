@@ -12,9 +12,21 @@ BODIES_FIXTURE = {
     "meta": {"total_records": 4},
     "data": [
         {"id": 1, "body_key": "261", "name": {"de": "Zürich"}, "type": "city", "canton_key": "ZH"},
-        {"id": 2, "body_key": "230", "name": {"de": "Winterthur"}, "type": "city", "canton_key": "ZH"},
+        {
+            "id": 2,
+            "body_key": "230",
+            "name": {"de": "Winterthur"},
+            "type": "city",
+            "canton_key": "ZH",
+        },
         {"id": 3, "body_key": "ZH", "name": {"de": "Zürich"}, "type": "canton", "canton_key": "ZH"},
-        {"id": 4, "body_key": "LIE", "name": {"de": "Liechtenstein"}, "type": "country", "canton_key": None},
+        {
+            "id": 4,
+            "body_key": "LIE",
+            "name": {"de": "Liechtenstein"},
+            "type": "country",
+            "canton_key": None,
+        },
     ],
 }
 

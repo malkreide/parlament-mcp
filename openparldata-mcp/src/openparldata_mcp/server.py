@@ -440,7 +440,9 @@ class SearchAffairsInput(BaseModel):
         max_length=60,
     )
     date_from: str | None = Field(
-        default=None, description="Von-Datum (JJJJ-MM-TT), z.B. '2024-01-01'.", pattern=_DATE_PATTERN
+        default=None,
+        description="Von-Datum (JJJJ-MM-TT), z.B. '2024-01-01'.",
+        pattern=_DATE_PATTERN,
     )
     date_to: str | None = Field(
         default=None, description="Bis-Datum (JJJJ-MM-TT).", pattern=_DATE_PATTERN
@@ -456,7 +458,9 @@ class SearchAffairsInput(BaseModel):
 
 class GetAffairInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
-    affair_id: int = Field(..., description="Numerische Affair-ID (aus oparl_search_affairs).", gt=0, strict=True)
+    affair_id: int = Field(
+        ..., description="Numerische Affair-ID (aus oparl_search_affairs).", gt=0, strict=True
+    )
     expand: str | None = Field(
         default=None,
         description="Relationen expandieren (Komma-getrennt), z.B. 'votings', 'persons', 'docs'.",
@@ -466,7 +470,9 @@ class GetAffairInput(BaseModel):
 
 class GetAffairDocumentsInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    affair_id: int = Field(..., description="Numerische Affair-ID (aus oparl_search_affairs).", gt=0, strict=True)
+    affair_id: int = Field(
+        ..., description="Numerische Affair-ID (aus oparl_search_affairs).", gt=0, strict=True
+    )
     include_text: bool = Field(
         default=True,
         description="PDF-Volltext (Feld 'text') mitliefern – das wertvollste Feld dieses Servers.",
@@ -483,36 +489,55 @@ class GetAffairDocumentsInput(BaseModel):
 class CompareBodiesInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     search: str = Field(
-        ..., description="Thema, das über Körperschaften hinweg verglichen wird, z.B. 'Tagesschule'.",
-        min_length=1, max_length=300,
+        ...,
+        description="Thema, das über Körperschaften hinweg verglichen wird, z.B. 'Tagesschule'.",
+        min_length=1,
+        max_length=300,
     )
     body_type: BodyType | None = Field(
         default="municipality",
         description="Vergleichsgruppe: 'municipality' (Gemeinden, Default) oder 'canton'.",
     )
     date_from: str | None = Field(
-        default=None, description="Nur Vorstösse ab diesem Datum zählen (JJJJ-MM-TT).", pattern=_DATE_PATTERN
+        default=None,
+        description="Nur Vorstösse ab diesem Datum zählen (JJJJ-MM-TT).",
+        pattern=_DATE_PATTERN,
     )
     top: int = Field(
-        default=15, description="Wie viele Körperschaften (nach Trefferzahl) zurückgeben.", ge=1, le=97, strict=True
+        default=15,
+        description="Wie viele Körperschaften (nach Trefferzahl) zurückgeben.",
+        ge=1,
+        le=97,
+        strict=True,
     )
 
 
 class SearchPersonsInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     body_key: str = Field(
-        ..., description="Körperschaft (Pflicht), z.B. '261' (Stadt Zürich).", min_length=1, max_length=10
+        ...,
+        description="Körperschaft (Pflicht), z.B. '261' (Stadt Zürich).",
+        min_length=1,
+        max_length=10,
     )
-    party: str | None = Field(default=None, description="Partei-Filter (Teilstring), z.B. 'SP', 'GLP'.", max_length=60)
-    active: bool | None = Field(default=None, description="Nur aktive Mandatsträger·innen (True) bzw. ehemalige (False).")
-    search: str | None = Field(default=None, description="Namenssuche (Teilstring), z.B. 'Müller'.", max_length=100)
+    party: str | None = Field(
+        default=None, description="Partei-Filter (Teilstring), z.B. 'SP', 'GLP'.", max_length=60
+    )
+    active: bool | None = Field(
+        default=None, description="Nur aktive Mandatsträger·innen (True) bzw. ehemalige (False)."
+    )
+    search: str | None = Field(
+        default=None, description="Namenssuche (Teilstring), z.B. 'Müller'.", max_length=100
+    )
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
 
 
 class GetPersonInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
-    person_id: int = Field(..., description="Numerische Personen-ID (aus oparl_search_persons).", gt=0, strict=True)
+    person_id: int = Field(
+        ..., description="Numerische Personen-ID (aus oparl_search_persons).", gt=0, strict=True
+    )
     expand: str | None = Field(
         default=None,
         description="Relationen expandieren (Komma-getrennt), z.B. 'interests', 'memberships', 'affairs'.",
@@ -522,16 +547,23 @@ class GetPersonInput(BaseModel):
 
 class GetPersonInterestsInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    person_id: int = Field(..., description="Numerische Personen-ID (aus oparl_search_persons).", gt=0, strict=True)
+    person_id: int = Field(
+        ..., description="Numerische Personen-ID (aus oparl_search_persons).", gt=0, strict=True
+    )
 
 
 class SearchInterestsInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     body_key: str = Field(
-        ..., description="Körperschaft (Pflicht), z.B. 'ZH' (Kanton Zürich).", min_length=1, max_length=10
+        ...,
+        description="Körperschaft (Pflicht), z.B. 'ZH' (Kanton Zürich).",
+        min_length=1,
+        max_length=10,
     )
     search: str | None = Field(
-        default=None, description="Organisation/Stichwort, z.B. 'Krankenkasse', 'Verband'.", max_length=200
+        default=None,
+        description="Organisation/Stichwort, z.B. 'Krankenkasse', 'Verband'.",
+        max_length=200,
     )
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
@@ -543,7 +575,9 @@ class GetVotingsInput(BaseModel):
         default=None, description="Abstimmungen zu einem Geschäft (bevorzugt).", gt=0, strict=True
     )
     body_key: str | None = Field(
-        default=None, description="Alternativ: alle Abstimmungen einer Körperschaft, z.B. '261'.", max_length=10
+        default=None,
+        description="Alternativ: alle Abstimmungen einer Körperschaft, z.B. '261'.",
+        max_length=10,
     )
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
@@ -570,10 +604,17 @@ class GetVotingResultsInput(BaseModel):
 class SearchMeetingsInput(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     body_key: str = Field(
-        ..., description="Körperschaft (Pflicht), z.B. '261' (Stadt Zürich).", min_length=1, max_length=10
+        ...,
+        description="Körperschaft (Pflicht), z.B. '261' (Stadt Zürich).",
+        min_length=1,
+        max_length=10,
     )
-    date_from: str | None = Field(default=None, description="Von-Datum (JJJJ-MM-TT).", pattern=_DATE_PATTERN)
-    date_to: str | None = Field(default=None, description="Bis-Datum (JJJJ-MM-TT).", pattern=_DATE_PATTERN)
+    date_from: str | None = Field(
+        default=None, description="Von-Datum (JJJJ-MM-TT).", pattern=_DATE_PATTERN
+    )
+    date_to: str | None = Field(
+        default=None, description="Bis-Datum (JJJJ-MM-TT).", pattern=_DATE_PATTERN
+    )
     limit: int = Field(default=20, ge=1, le=MAX_LIMIT, strict=True)
     offset: int = Field(default=0, ge=0, strict=True)
 
@@ -617,9 +658,18 @@ async def oparl_list_bodies(params: ListBodiesInput, ctx: Context | None = None)
     (Kanton Zürich, canton) und '230' (Winterthur, city).</example>
     """
     items = await body_cache.list_bodies(search=params.search, body_type=params.body_type)
-    results = [BodyItem(body_key=b.body_key, name=b.name, type=b.type, canton_key=b.canton_key) for b in items]
-    note = None if results else "Keine Körperschaft passt zum Filter. Ohne 'search' werden alle gelistet."
-    return BodiesResponse(count=len(results), total_available=len(results), results=results, note=note)
+    results = [
+        BodyItem(body_key=b.body_key, name=b.name, type=b.type, canton_key=b.canton_key)
+        for b in items
+    ]
+    note = (
+        None
+        if results
+        else "Keine Körperschaft passt zum Filter. Ohne 'search' werden alle gelistet."
+    )
+    return BodiesResponse(
+        count=len(results), total_available=len(results), results=results, note=note
+    )
 
 
 @mcp.tool(
@@ -627,7 +677,9 @@ async def oparl_list_bodies(params: ListBodiesInput, ctx: Context | None = None)
     annotations={"title": "Vorstösse/Geschäfte suchen", **_ANNOTATIONS},
 )
 @_instrument("oparl_search_affairs")
-async def oparl_search_affairs(params: SearchAffairsInput, ctx: Context | None = None) -> AffairsResponse:
+async def oparl_search_affairs(
+    params: SearchAffairsInput, ctx: Context | None = None
+) -> AffairsResponse:
     """Parlamentarische Geschäfte/Vorstösse einer Körperschaft durchsuchen.
 
     <use_case>Politische Recherche auf Kantons-/Gemeindeebene: hängige oder
@@ -763,7 +815,9 @@ async def oparl_get_affair_documents(
     annotations={"title": "Themenpräsenz über Körperschaften vergleichen", **_ANNOTATIONS},
 )
 @_instrument("oparl_compare_bodies")
-async def oparl_compare_bodies(params: CompareBodiesInput, ctx: Context | None = None) -> CompareResponse:
+async def oparl_compare_bodies(
+    params: CompareBodiesInput, ctx: Context | None = None
+) -> CompareResponse:
     """Ein Thema über viele Körperschaften hinweg vergleichen (Themenpräsenz).
 
     Zählt pro Körperschaft, wie viele Geschäfte zum Suchbegriff existieren, und
@@ -780,7 +834,12 @@ async def oparl_compare_bodies(params: CompareBodiesInput, ctx: Context | None =
         async with semaphore:
             payload = await api_get(
                 "/affairs/",
-                {"body_key": b.body_key, "search": params.search, "date_from": params.date_from, "limit": 1},
+                {
+                    "body_key": b.body_key,
+                    "search": params.search,
+                    "date_from": params.date_from,
+                    "limit": 1,
+                },
             )
             _rows, meta = unwrap(payload)
             return BodyTopic(
@@ -808,7 +867,9 @@ async def oparl_compare_bodies(params: CompareBodiesInput, ctx: Context | None =
     annotations={"title": "Personen/Mandatsträger suchen", **_ANNOTATIONS},
 )
 @_instrument("oparl_search_persons")
-async def oparl_search_persons(params: SearchPersonsInput, ctx: Context | None = None) -> PersonsResponse:
+async def oparl_search_persons(
+    params: SearchPersonsInput, ctx: Context | None = None
+) -> PersonsResponse:
     """Mandatsträger·innen einer Körperschaft suchen.
 
     <example>body_key="261", party="GLP", active=true → aktive GLP-Mitglieder im
@@ -891,7 +952,11 @@ async def oparl_get_person_interests(
     payload = await api_get(f"/persons/{params.person_id}/interests", {"limit": 100})
     rows, meta = unwrap(payload)
     results = [_fmt_interest(i) for i in rows]
-    note = None if results else "Für diese Person sind keine Interessenbindungen deklariert (oder erfasst)."
+    note = (
+        None
+        if results
+        else "Für diese Person sind keine Interessenbindungen deklariert (oder erfasst)."
+    )
     return InterestsResponse(
         count=len(results),
         total_available=meta.get("total_records"),
@@ -902,10 +967,15 @@ async def oparl_get_person_interests(
 
 @mcp.tool(
     name="oparl_search_interests",
-    annotations={"title": "Interessenbindungen durchsuchen (Organisation → Personen)", **_ANNOTATIONS},
+    annotations={
+        "title": "Interessenbindungen durchsuchen (Organisation → Personen)",
+        **_ANNOTATIONS,
+    },
 )
 @_instrument("oparl_search_interests")
-async def oparl_search_interests(params: SearchInterestsInput, ctx: Context | None = None) -> InterestsResponse:
+async def oparl_search_interests(
+    params: SearchInterestsInput, ctx: Context | None = None
+) -> InterestsResponse:
     """Interessenbindungen einer Körperschaft durchsuchen (Organisation → Personen).
 
     Für die Bundesebene (``body_key='CHE'``) ist stattdessen ``lobbywatch-mcp``
@@ -921,11 +991,18 @@ async def oparl_search_interests(params: SearchInterestsInput, ctx: Context | No
     body = await body_cache.resolve_body(params.body_key, federal_hint=FEDERAL_INTERESTS_REDIRECT)
     payload = await api_get(
         "/interests/",
-        {"body_key": body.body_key, "search": params.search, "limit": params.limit, "offset": params.offset},
+        {
+            "body_key": body.body_key,
+            "search": params.search,
+            "limit": params.limit,
+            "offset": params.offset,
+        },
     )
     rows, meta = unwrap(payload)
     results = [_fmt_interest(i) for i in rows]
-    note = None if results else f"Keine Interessenbindungen in '{body.name}' für die Suche gefunden."
+    note = (
+        None if results else f"Keine Interessenbindungen in '{body.name}' für die Suche gefunden."
+    )
     return InterestsResponse(
         count=len(results),
         total_available=meta.get("total_records"),
@@ -1019,7 +1096,9 @@ async def oparl_get_voting_results(
     annotations={"title": "Sitzungen suchen", **_ANNOTATIONS},
 )
 @_instrument("oparl_search_meetings")
-async def oparl_search_meetings(params: SearchMeetingsInput, ctx: Context | None = None) -> MeetingsResponse:
+async def oparl_search_meetings(
+    params: SearchMeetingsInput, ctx: Context | None = None
+) -> MeetingsResponse:
     """Sitzungen einer Körperschaft in einem Zeitraum finden.
 
     <example>body_key="261", date_from="2024-01-01", date_to="2024-12-31" →
@@ -1054,7 +1133,9 @@ async def oparl_search_meetings(params: SearchMeetingsInput, ctx: Context | None
     annotations={"title": "Quellen-Status prüfen", **_ANNOTATIONS},
 )
 @_instrument("oparl_source_status")
-async def oparl_source_status(params: SourceStatusInput, ctx: Context | None = None) -> SourceStatus:
+async def oparl_source_status(
+    params: SourceStatusInput, ctx: Context | None = None
+) -> SourceStatus:
     """Erreichbarkeit der OpenParlData-API und Zustand des Body-Cache prüfen.
 
     Liefert Latenz, Zeitpunkt des letzten erfolgreichen Abrufs sowie Alter und
@@ -1107,9 +1188,7 @@ def build_transport_security(host: str, port: int):
     from mcp.server.transport_security import TransportSecuritySettings
 
     loopback = {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
-    allowed = [
-        h.strip() for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()
-    ]
+    allowed = [h.strip() for h in os.environ.get("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()]
     if allowed:
         # Loopback bleibt für Container-Health-Checks und Debugging erreichbar.
         hosts = set(allowed) | loopback
