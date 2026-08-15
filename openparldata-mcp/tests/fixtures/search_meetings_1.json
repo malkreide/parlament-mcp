@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 3,
+    "total_records": 1180,
+    "total_pages": 394,
+    "current_page": 1,
+    "has_more": true,
+    "next_page": "https://api.openparldata.ch/v1/meetings/?body_key=261&sort_by=-begin_date&offset=3&limit=3",
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/meetings/?body_key=261&sort_by=-begin_date&offset=0&limit=3",
+    "last_page": "https://api.openparldata.ch/v1/meetings/?body_key=261&sort_by=-begin_date&offset=1179&limit=3",
+    "self": "https://api.openparldata.ch/v1/meetings/?body_key=261&sort_by=-begin_date&limit=3&offset=0"
+  },
+  "data": [
+    {
+      "id": 33594,
+      "url_api": "https://api.openparldata.ch/v1/meetings/33594",
+      "body_key": "261",
+      "external_id": "82781340f4574e388115ee97903522f9",
+      "number": "13",
+      "name": {
+        "de": "13. Sitzung"
+      },
+      "body_id": 322,
+      "type": "meeting",
+      "parent_type": null,
+      "parent_external_id": null,
+      "parent_oparl_id": null,
+      "abbreviation": null,
+      "group_id": 465,
+      "begin_date": "2026-09-02T00:00:00",
+      "end_date": "2026-09-03T00:00:00",
+      "state": null,
+      "location": null,
+      "updated_at": "2026-08-14T03:15:20",
+      "updated_external_at": null,
+      "created_at": "2026-08-14T03:12:50",
+      "url_external": {
+        "de": "https://www.gemeinderat-zuerich.ch/sitzungen/sitzung/index.php?gid=82781340f4574e388115ee97903522f9"
+      },
+      "description": {},
+      "type_external": {},
+      "links": {
+        "agendas": "https://api.openparldata.ch/v1/meetings/33594/agendas",
+        "docs": "https://api.openparldata.ch/v1/meetings/33594/docs",
+        "parent_meeting": "https://api.openparldata.ch/v1/meetings/33594/parent_meeting",
+        "child_meetings": "https://api.openparldata.ch/v1/meetings/33594/child_meetings",
+        "group": "https://api.openparldata.ch/v1/meetings/33594/group",
+        "bodies": "https://api.openparldata.ch/v1/meetings/33594/bodies",
+        "speeches": "https://api.openparldata.ch/v1/meetings/33594/speeches"
+      }
+    },
+    {
+      "id": 33455,
+      "url_api": "https://api.openparldata.ch/v1/meetings/33455",
+      "body_key": "261",
+      "external_id": "409c95a301f448f38e8be6097f38b197",
+      "number": "12",
+      "name": {
+        "de": "12. Sitzung"
+      },
+      "body_id": 322,
+      "type": "meeting",
+      "parent_type": null,
+      "parent_external_id": null,
+      "parent_oparl_id": null,
+      "abbreviation": null,
+      "group_id": 465,
+      "begin_date": "2026-08-26T00:00:00",
+      "end_date": "2026-08-27T00:00:00",
+      "state": null,
+      "location": null,
+      "updated_at": "2026-08-15T02:39:57",
+      "updated_external_at": null,
+      "created_at": "2026-07-12T21:21:10",
+      "url_external": {
+        "de": "https://www.gemeinderat-zuerich.ch/sitzungen/sitzung/index.php?gid=409c95a301f448f38e8be6097f38b197"
+      },
+      "description": {},
+      "type_external": {},
+      "links": {
+        "agendas": "https://api.openparldata.ch/v1/meetings/33455/agendas",
+        "docs": "https://api.openparldata.ch/v1/meetings/33455/docs",
+        "parent_meeting": "https://api.openparldata.ch/v1/meetings/33455/parent_meeting",
+        "child_meetings": "https://api.openparldata.ch/v1/meetings/33455/child_meetings",
+        "group": "https://api.openparldata.ch/v1/meetings/33455/group",
+        "bodies": "https://api.openparldata.ch/v1/meetings/33455/bodies",
+        "speeches": "https://api.openparldata.ch/v1/meetings/33455/speeches"
+      }
+    },
+    {
+      "id": 33456,
+      "url_api": "https://api.openparldata.ch/v1/meetings/33456",
+      "body_key": "261",
+      "external_id": "bd4bc89a7dd84843b81ff80bab71ff54",
+      "number": "11",
+      "name": {
+        "de": "11. Sitzung"
+      },
+      "body_id": 322,
+      "type": "meeting",
+      "parent_type": null,
+      "parent_external_id": null,
+      "parent_oparl_id": null,
+      "abbreviation": null,
+      "group_id": 465,
+      "begin_date": "2026-08-19T00:00:00",
+      "end_date": "2026-08-20T00:00:00",
+      "state": null,
+      "location": null,
+      "updated_at": "2026-08-15T02:54:56",
+      "updated_external_at": null,
+      "created_at": "2026-07-12T21:21:10",
+      "url_external": {
+        "de": "https://www.gemeinderat-zuerich.ch/sitzungen/sitzung/index.php?gid=bd4bc89a7dd84843b81ff80bab71ff54"
+      },
+      "description": {},
+      "type_external": {},
+      "links": {
+        "agendas": "https://api.openparldata.ch/v1/meetings/33456/agendas",
+        "docs": "https://api.openparldata.ch/v1/meetings/33456/docs",
+        "parent_meeting": "https://api.openparldata.ch/v1/meetings/33456/parent_meeting",
+        "child_meetings": "https://api.openparldata.ch/v1/meetings/33456/child_meetings",
+        "group": "https://api.openparldata.ch/v1/meetings/33456/group",
+        "bodies": "https://api.openparldata.ch/v1/meetings/33456/bodies",
+        "speeches": "https://api.openparldata.ch/v1/meetings/33456/speeches"
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 1,
+    "total_records": 97,
+    "total_pages": 97,
+    "current_page": 1,
+    "has_more": true,
+    "next_page": "https://api.openparldata.ch/v1/bodies/?indexed=true&offset=1&limit=1",
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/bodies/?indexed=true&offset=0&limit=1",
+    "last_page": "https://api.openparldata.ch/v1/bodies/?indexed=true&offset=96&limit=1",
+    "self": "https://api.openparldata.ch/v1/bodies/?indexed=true&limit=1"
+  },
+  "data": [
+    {
+      "id": 363,
+      "url_api": "https://api.openparldata.ch/v1/bodies/363",
+      "body_key": "4001",
+      "name": {
+        "de": "Aarau",
+        "en": "Aarau",
+        "fr": "Aarau",
+        "it": "Aarau"
+      },
+      "wikidata_id": "Q14274",
+      "flag_image_url": "http://commons.wikimedia.org/wiki/Special:FilePath/CHE%20Aarau%20COA.svg",
+      "flag_image_oparl_url": "https://files.openparldata.ch/images/flags/original/363.svg",
+      "lang": "DE",
+      "indexed": true,
+      "type": "city",
+      "canton_key": "AG",
+      "canton_id_bfs": 19,
+      "canton_table_id": "10",
+      "country_key": "CHE",
+      "position": 3,
+      "legislative_name": {
+        "de": "Einwohnerrat",
+        "fr": "Conseil des résidents",
+        "it": "Consiglio dei residenti",
+        "en": "Residents' Council"
+      },
+      "legislative_wikidata_id": null,
+      "legislative_seats": 50,
+      "executive_name": {
+        "de": "Stadtrat",
+        "fr": "Municipalité",
+        "it": "Municipio",
+        "en": "Municipality"
+      },
+      "executive_wikidata_id": null,
+      "executive_seats": 7,
+      "consultations_url": null,
+      "elections_and_votings_url": null,
+      "has_parliament": true,
+      "population": 21503,
+      "languages": null,
+      "type_name": {
+        "de": "Stadt",
+        "fr": "ville",
+        "it": "città",
+        "rm": "citad",
+        "en": "city"
+      },
+      "links": {
+        "groups": "https://api.openparldata.ch/v1/bodies/363/groups",
+        "meetings": "https://api.openparldata.ch/v1/bodies/363/meetings",
+        "persons": "https://api.openparldata.ch/v1/bodies/363/persons",
+        "affairs": "https://api.openparldata.ch/v1/bodies/363/affairs",
+        "speeches": "https://api.openparldata.ch/v1/bodies/363/speeches",
+        "agendas": "https://api.openparldata.ch/v1/bodies/363/agendas",
+        "interests": "https://api.openparldata.ch/v1/bodies/363/interests",
+        "memberships": "https://api.openparldata.ch/v1/bodies/363/memberships",
+        "contributors": "https://api.openparldata.ch/v1/bodies/363/contributors",
+        "votings": "https://api.openparldata.ch/v1/bodies/363/votings",
+        "docs": "https://api.openparldata.ch/v1/bodies/363/docs"
+      }
+    }
+  ]
+}

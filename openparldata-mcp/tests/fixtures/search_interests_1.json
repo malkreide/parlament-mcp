@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 3,
+    "total_records": 502,
+    "total_pages": 168,
+    "current_page": 1,
+    "has_more": true,
+    "next_page": "https://api.openparldata.ch/v1/interests/?body_key=261&offset=3&limit=3",
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/interests/?body_key=261&offset=0&limit=3",
+    "last_page": "https://api.openparldata.ch/v1/interests/?body_key=261&offset=501&limit=3",
+    "self": "https://api.openparldata.ch/v1/interests/?body_key=261&limit=3&offset=0"
+  },
+  "data": [
+    {
+      "id": 2077,
+      "url_api": "https://api.openparldata.ch/v1/interests/2077",
+      "body_key": "261",
+      "external_id": "80b4568606004e63a0f3aeadd95ad5ac_1",
+      "name": {
+        "de": "1.-Mai-Komitee, Zürich, Vorstandsmitglied"
+      },
+      "body_id": 322,
+      "person_id": 2623,
+      "type_external_id": null,
+      "url": null,
+      "role_external_id": null,
+      "begin_date": null,
+      "end_date": null,
+      "declaration_doc_url": null,
+      "declaration_doc_title": null,
+      "place": null,
+      "ex_officio": null,
+      "type_payment_harmonized": null,
+      "updated_external_at": null,
+      "updated_at": "2026-08-14T23:22:43",
+      "created_at": "2025-08-14T07:44:35",
+      "type": {},
+      "name_short": {},
+      "name_abbreviation": {},
+      "role_name": {},
+      "group": {},
+      "type_payment": {},
+      "links": {
+        "person": "https://api.openparldata.ch/v1/interests/2077/person",
+        "bodies": "https://api.openparldata.ch/v1/interests/2077/bodies"
+      }
+    },
+    {
+      "id": 34559,
+      "url_api": "https://api.openparldata.ch/v1/interests/34559",
+      "body_key": "261",
+      "external_id": "1993554139",
+      "name": {
+        "de": "<a href=\"/web/de/politik-und-verwaltung/behoerden-und-organe/stadtrat/bausektion.html\" class=\"icon intern\">Bausektion</a>"
+      },
+      "body_id": 322,
+      "person_id": 2620,
+      "type_external_id": null,
+      "url": null,
+      "role_external_id": null,
+      "begin_date": null,
+      "end_date": null,
+      "declaration_doc_url": null,
+      "declaration_doc_title": null,
+      "place": null,
+      "ex_officio": null,
+      "type_payment_harmonized": null,
+      "updated_external_at": null,
+      "updated_at": "2026-08-14T00:00:00",
+      "created_at": "2026-06-03T23:44:26",
+      "type": {
+        "de": "Städtische Interessenvertretungen"
+      },
+      "name_short": {},
+      "name_abbreviation": {},
+      "role_name": {
+        "de": "Mitglied"
+      },
+      "group": {},
+      "type_payment": {},
+      "links": {
+        "person": "https://api.openparldata.ch/v1/interests/34559/person",
+        "bodies": "https://api.openparldata.ch/v1/interests/34559/bodies"
+      }
+    },
+    {
+      "id": 34560,
+      "url_api": "https://api.openparldata.ch/v1/interests/34560",
+      "body_key": "261",
+      "external_id": "393731610",
+      "name": {
+        "de": "<a href=\"/web/de/politik-und-verwaltung/behoerden-und-organe/stadtrat/bausektion.html\" class=\"icon intern\">Bausektion</a>"
+      },
+      "body_id": 322,
+      "person_id": 2850,
+      "type_external_id": null,
+      "url": null,
+      "role_external_id": null,
+      "begin_date": null,
+      "end_date": null,
+      "declaration_doc_url": null,
+      "declaration_doc_title": null,
+      "place": null,
+      "ex_officio": null,
+      "type_payment_harmonized": null,
+      "updated_external_at": null,
+      "updated_at": "2026-08-14T00:00:00",
+      "created_at": "2026-06-03T23:44:26",
+      "type": {
+        "de": "Städtische Interessenvertretungen"
+      },
+      "name_short": {},
+      "name_abbreviation": {},
+      "role_name": {
+        "de": "Mitglied"
+      },
+      "group": {},
+      "type_payment": {},
+      "links": {
+        "person": "https://api.openparldata.ch/v1/interests/34560/person",
+        "bodies": "https://api.openparldata.ch/v1/interests/34560/bodies"
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": 105130,
+  "url_api": "https://api.openparldata.ch/v1/votings/105130",
+  "body_key": "261",
+  "external_id": "1f6abc9df01049829806021b39b3c169",
+  "external_alternative_id": "1",
+  "title": {
+    "de": "2026_0305 Schlussabstimmung"
+  },
+  "date": "2026-07-08T00:30:01",
+  "affair_id": 334864,
+  "affair_title": {
+    "de": "Rettung des «Imbiss Riviera» und des «Bistro & Grill am See» am Bellevue sowie unverzügliche Einleitung der Ausschreibung für die künftige Nutzung des Standorts"
+  },
+  "results_yes": 46,
+  "results_no": 20,
+  "results_abstention": 48,
+  "results_absent": 11,
+  "results_string": null,
+  "decision": "Ja",
+  "updated_at": "2026-07-14T04:51:53",
+  "updated_external_at": "2026-08-15T02:58:23",
+  "created_at": "2026-07-14T16:24:38",
+  "url_external": {
+    "de": "https://www.gemeinderat-zuerich.ch/abstimmungen/detail.php?aid=1f6abc9df01049829806021b39b3c169"
+  },
+  "type": {
+    "de": "Normal"
+  },
+  "meaning_of_yes": {},
+  "meaning_of_no": {},
+  "body_id": 322,
+  "meeting_id": null,
+  "group_id": 465,
+  "group_external_id": "264d2fee665f45bbb51b79f8247f8139",
+  "links": {
+    "votes": "https://api.openparldata.ch/v1/votings/105130/votes",
+    "affairs": "https://api.openparldata.ch/v1/votings/105130/affairs",
+    "meeting": "https://api.openparldata.ch/v1/votings/105130/meeting",
+    "bodies": "https://api.openparldata.ch/v1/votings/105130/bodies"
+  }
+}

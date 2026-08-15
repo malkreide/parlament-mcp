@@ -1,0 +1,3515 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 200,
+    "total_records": 125,
+    "total_pages": 1,
+    "current_page": 1,
+    "has_more": false,
+    "next_page": null,
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/votes/?voting_id=105130&offset=0&limit=200",
+    "last_page": "https://api.openparldata.ch/v1/votes/?voting_id=105130&offset=0&limit=200",
+    "self": "https://api.openparldata.ch/v1/votes/?voting_id=105130&limit=200&offset=0"
+  },
+  "data": [
+    {
+      "id": 47138741,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138741",
+      "body_key": "261",
+      "external_id": "c60999701aa4412d949822e28821fac3",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2263,
+      "person_fullname": "Ivo Bieri",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138741/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138741/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138741/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138741/bodies"
+      }
+    },
+    {
+      "id": 47138742,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138742",
+      "body_key": "261",
+      "external_id": "780a42f62a7b4b80800531687557991d",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2901,
+      "person_fullname": "Christian Traber",
+      "person_party": {
+        "de": "Christlichdemokratische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte/EVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138742/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138742/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138742/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138742/bodies"
+      }
+    },
+    {
+      "id": 47138743,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138743",
+      "body_key": "261",
+      "external_id": "e74cf17a34fc4007b6237b56e13d6266",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2272,
+      "person_fullname": "Sebastian Zopfi",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138743/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138743/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138743/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138743/bodies"
+      }
+    },
+    {
+      "id": 47138744,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138744",
+      "body_key": "261",
+      "external_id": "91ee2246b4ec4d29bdb9dd8213b22959",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2373,
+      "person_fullname": "Markus Merki",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138744/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138744/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138744/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138744/bodies"
+      }
+    },
+    {
+      "id": 47138745,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138745",
+      "body_key": "261",
+      "external_id": "ff3495124cc8470db73af1ca786fd038",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2745,
+      "person_fullname": "Beat Oberholzer",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138745/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138745/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138745/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138745/bodies"
+      }
+    },
+    {
+      "id": 47138746,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138746",
+      "body_key": "261",
+      "external_id": "6c1deacac53f41bf840913eab7dab2fa",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25432,
+      "person_fullname": "Marisa Kappeler-Schudel",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138746/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138746/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138746/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138746/bodies"
+      }
+    },
+    {
+      "id": 47138747,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138747",
+      "body_key": "261",
+      "external_id": "e3d3b7025ec449019258c57966cb2bd9",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2387,
+      "person_fullname": "Nicolas Cavalli",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138747/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138747/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138747/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138747/bodies"
+      }
+    },
+    {
+      "id": 47138748,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138748",
+      "body_key": "261",
+      "external_id": "bc67f10bdf3341aa99b1204556340fbf",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2377,
+      "person_fullname": "Roland Hohmann",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138748/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138748/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138748/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138748/bodies"
+      }
+    },
+    {
+      "id": 47138749,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138749",
+      "body_key": "261",
+      "external_id": "ff2f1108fddc409f95f184167d2e7935",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25416,
+      "person_fullname": "Fabian Stieger",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138749/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138749/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138749/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138749/bodies"
+      }
+    },
+    {
+      "id": 47138750,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138750",
+      "body_key": "261",
+      "external_id": "a3bf64c206fa40299d207264905d371c",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2475,
+      "person_fullname": "Brigitte Fürer",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138750/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138750/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138750/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138750/bodies"
+      }
+    },
+    {
+      "id": 47138751,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138751",
+      "body_key": "261",
+      "external_id": "db7e758d59ab4302a739891b4b879e3f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2357,
+      "person_fullname": "Patrik Brunner",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138751/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138751/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138751/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138751/bodies"
+      }
+    },
+    {
+      "id": 47138752,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138752",
+      "body_key": "261",
+      "external_id": "ae0a223ada24454fb2b16f49cb9b7f03",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2876,
+      "person_fullname": "Marita Verbali",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138752/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138752/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138752/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138752/bodies"
+      }
+    },
+    {
+      "id": 47138753,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138753",
+      "body_key": "261",
+      "external_id": "93ddcacc7b4a4c61aee43aa7dabbcd1f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25421,
+      "person_fullname": "Ariane Buchli",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138753/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138753/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138753/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138753/bodies"
+      }
+    },
+    {
+      "id": 47138754,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138754",
+      "body_key": "261",
+      "external_id": "de08fd36e68743d8a805767689b582f3",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2349,
+      "person_fullname": "Florine Angele",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138754/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138754/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138754/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138754/bodies"
+      }
+    },
+    {
+      "id": 47138755,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138755",
+      "body_key": "261",
+      "external_id": "76d51c11517f4e0096dddb4329f6d061",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2442,
+      "person_fullname": "Serap Kahriman",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138755/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138755/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138755/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138755/bodies"
+      }
+    },
+    {
+      "id": 47138756,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138756",
+      "body_key": "261",
+      "external_id": "8eb56dedd94b4112a0d95b76631746c3",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2580,
+      "person_fullname": "Sven Sobernheim",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138756/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138756/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138756/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138756/bodies"
+      }
+    },
+    {
+      "id": 47138757,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138757",
+      "body_key": "261",
+      "external_id": "408029fdb585446e833c52d2ded93c87",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22336,
+      "person_fullname": "Frank-Elmar Linxweiler",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138757/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138757/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138757/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138757/bodies"
+      }
+    },
+    {
+      "id": 47138758,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138758",
+      "body_key": "261",
+      "external_id": "0ddc529ded954860811674292ab029c9",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25422,
+      "person_fullname": "Janina Flückiger",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138758/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138758/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138758/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138758/bodies"
+      }
+    },
+    {
+      "id": 47138759,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138759",
+      "body_key": "261",
+      "external_id": "55a9ac1692a74d3aa7d743c1a1176661",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2384,
+      "person_fullname": "Yves Henz",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138759/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138759/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138759/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138759/bodies"
+      }
+    },
+    {
+      "id": 47138760,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138760",
+      "body_key": "261",
+      "external_id": "1375cea9ce0c49059fb1086b22e806ec",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2648,
+      "person_fullname": "Julia Hofstetter",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138760/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138760/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138760/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138760/bodies"
+      }
+    },
+    {
+      "id": 47138761,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138761",
+      "body_key": "261",
+      "external_id": "3c85e3601a9d4da68f537d732d1502b5",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2662,
+      "person_fullname": "Sibylle Kauer",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138761/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138761/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138761/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138761/bodies"
+      }
+    },
+    {
+      "id": 47138762,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138762",
+      "body_key": "261",
+      "external_id": "4802f156738b46369e4154f25ef95f6b",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2778,
+      "person_fullname": "Tanja Maag",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138762/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138762/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138762/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138762/bodies"
+      }
+    },
+    {
+      "id": 47138763,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138763",
+      "body_key": "261",
+      "external_id": "3704142503ac42e7aae04ef42072936e",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22345,
+      "person_fullname": "Susan Wiget",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138763/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138763/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138763/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138763/bodies"
+      }
+    },
+    {
+      "id": 47138764,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138764",
+      "body_key": "261",
+      "external_id": "14a437c3afdf48519754c5532df822c2",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2747,
+      "person_fullname": "Christian Häberli",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138764/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138764/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138764/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138764/bodies"
+      }
+    },
+    {
+      "id": 47138765,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138765",
+      "body_key": "261",
+      "external_id": "4b389c908cfd4d4988935cda603bed08",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2538,
+      "person_fullname": "Mischa Schiwow",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {},
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138765/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138765/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138765/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138765/bodies"
+      }
+    },
+    {
+      "id": 47138766,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138766",
+      "body_key": "261",
+      "external_id": "ddbedcca38344c3298de9f9459cf7177",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2820,
+      "person_fullname": "Rahel Habegger",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138766/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138766/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138766/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138766/bodies"
+      }
+    },
+    {
+      "id": 47138767,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138767",
+      "body_key": "261",
+      "external_id": "0d7b96484dff4b8b98c6924248401437",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2601,
+      "person_fullname": "Liv Mahrer",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138767/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138767/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138767/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138767/bodies"
+      }
+    },
+    {
+      "id": 47138768,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138768",
+      "body_key": "261",
+      "external_id": "c74231e2457945be96527093fb61198f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2355,
+      "person_fullname": "Nadina Diday",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138768/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138768/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138768/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138768/bodies"
+      }
+    },
+    {
+      "id": 47138769,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138769",
+      "body_key": "261",
+      "external_id": "4b2cab7a665f46baaee54e081bcf2cb0",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2781,
+      "person_fullname": "Sabine Koch",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138769/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138769/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138769/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138769/bodies"
+      }
+    },
+    {
+      "id": 47138770,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138770",
+      "body_key": "261",
+      "external_id": "864bb937700a4f36b2a05bce6253d8dd",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2577,
+      "person_fullname": "Roger Suter",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138770/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138770/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138770/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138770/bodies"
+      }
+    },
+    {
+      "id": 47138771,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138771",
+      "body_key": "261",
+      "external_id": "096699860b4445c088cf6edef9d2b407",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22347,
+      "person_fullname": "Stéphane Braune",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138771/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138771/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138771/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138771/bodies"
+      }
+    },
+    {
+      "id": 47138772,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138772",
+      "body_key": "261",
+      "external_id": "d258fa5f53c04a229902d4916bf4971c",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25403,
+      "person_fullname": "Alana Gerdes",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138772/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138772/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138772/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138772/bodies"
+      }
+    },
+    {
+      "id": 47138773,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138773",
+      "body_key": "261",
+      "external_id": "25eb9911e76e43d4bd99a72058aaa0ff",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25417,
+      "person_fullname": "Rahel Hofstetter",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138773/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138773/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138773/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138773/bodies"
+      }
+    },
+    {
+      "id": 47138774,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138774",
+      "body_key": "261",
+      "external_id": "6ea2be6b489d43eb85c7f0d7a33ba840",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22498,
+      "person_fullname": "Xenia Voellmy",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138774/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138774/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138774/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138774/bodies"
+      }
+    },
+    {
+      "id": 47138775,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138775",
+      "body_key": "261",
+      "external_id": "283202907fc54c69bf999ff21b6511ad",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2729,
+      "person_fullname": "Christine Huber",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138775/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138775/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138775/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138775/bodies"
+      }
+    },
+    {
+      "id": 47138776,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138776",
+      "body_key": "261",
+      "external_id": "8c9e8146d3054a818b6343c6e80afc01",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2363,
+      "person_fullname": "Guy Krayenbühl",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138776/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138776/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138776/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138776/bodies"
+      }
+    },
+    {
+      "id": 47138777,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138777",
+      "body_key": "261",
+      "external_id": "d83f8a9a2d10474da6533472731e3afc",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25412,
+      "person_fullname": "Christoph Riedweg",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138777/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138777/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138777/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138777/bodies"
+      }
+    },
+    {
+      "id": 47138778,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138778",
+      "body_key": "261",
+      "external_id": "7314893ccb864b1490aeb4dc9dd1b90d",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2902,
+      "person_fullname": "Selina Frey",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138778/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138778/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138778/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138778/bodies"
+      }
+    },
+    {
+      "id": 47138779,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138779",
+      "body_key": "261",
+      "external_id": "ae7692bbcd3049e298b137cbc924ed34",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22348,
+      "person_fullname": "Patrick Stählin",
+      "person_party": {
+        "de": "Grünliberale Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "GLP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138779/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138779/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138779/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138779/bodies"
+      }
+    },
+    {
+      "id": 47138780,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138780",
+      "body_key": "261",
+      "external_id": "a7ee465e19314b9392ee8a171b3df9ab",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25410,
+      "person_fullname": "Catalina Gajardo Hofmann",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138780/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138780/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138780/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138780/bodies"
+      }
+    },
+    {
+      "id": 47138781,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138781",
+      "body_key": "261",
+      "external_id": "2a49dd60e0fb431caff5d8e28146d743",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25423,
+      "person_fullname": "Simone Widmer",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138781/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138781/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138781/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138781/bodies"
+      }
+    },
+    {
+      "id": 47138782,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138782",
+      "body_key": "261",
+      "external_id": "277a936f4ef94bf7a7fb219100b5da6a",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2326,
+      "person_fullname": "Selina Walgis",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138782/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138782/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138782/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138782/bodies"
+      }
+    },
+    {
+      "id": 47138783,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138783",
+      "body_key": "261",
+      "external_id": "be00704f41d4449189e7898a45e37998",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2579,
+      "person_fullname": "Urs Riklin",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138783/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138783/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138783/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138783/bodies"
+      }
+    },
+    {
+      "id": 47138784,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138784",
+      "body_key": "261",
+      "external_id": "c6810402bd694775840af4bbec07ce44",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2606,
+      "person_fullname": "Sophie Blaser",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138784/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138784/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138784/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138784/bodies"
+      }
+    },
+    {
+      "id": 47138785,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138785",
+      "body_key": "261",
+      "external_id": "651b3cb98d2a4acd8ad1be35afa0847c",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2400,
+      "person_fullname": "Moritz Bögli",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138785/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138785/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138785/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138785/bodies"
+      }
+    },
+    {
+      "id": 47138786,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138786",
+      "body_key": "261",
+      "external_id": "05b7d74b25de4413a9f84a21194c109f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2420,
+      "person_fullname": "David Garcia Nuñez",
+      "person_party": {
+        "de": "Alternative Liste"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138786/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138786/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138786/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138786/bodies"
+      }
+    },
+    {
+      "id": 47138787,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138787",
+      "body_key": "261",
+      "external_id": "a576703b71694fd890ddc2e0e24ae42d",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 27259,
+      "person_fullname": "Michael Schmid",
+      "person_party": {
+        "de": "Alternative Linke (vormals Alternative Liste)"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "AL"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138787/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138787/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138787/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138787/bodies"
+      }
+    },
+    {
+      "id": 47138788,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138788",
+      "body_key": "261",
+      "external_id": "4277ae76debb4d78ad61541e771f56cb",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25431,
+      "person_fullname": "Mariem Fiadjigbe Kekić",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138788/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138788/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138788/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138788/bodies"
+      }
+    },
+    {
+      "id": 47138789,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138789",
+      "body_key": "261",
+      "external_id": "539ddc4d26d24c2baeeb997dc0212f5e",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2633,
+      "person_fullname": "Jonas Keller",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138789/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138789/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138789/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138789/bodies"
+      }
+    },
+    {
+      "id": 47138790,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138790",
+      "body_key": "261",
+      "external_id": "f457fc61e6084e52beb8a040df408354",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2796,
+      "person_fullname": "Martin Bürki",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138790/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138790/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138790/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138790/bodies"
+      }
+    },
+    {
+      "id": 47138791,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138791",
+      "body_key": "261",
+      "external_id": "493b32f728454c018808e8f2affa605f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2746,
+      "person_fullname": "Përparim Avdili",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138791/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138791/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138791/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138791/bodies"
+      }
+    },
+    {
+      "id": 47138792,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138792",
+      "body_key": "261",
+      "external_id": "b5ae043c43ff4c579c9ab0bfcb4da3e4",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2374,
+      "person_fullname": "Deborah Wettstein",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138792/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138792/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138792/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138792/bodies"
+      }
+    },
+    {
+      "id": 47138793,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138793",
+      "body_key": "261",
+      "external_id": "f8ed34527e894fc59e25d52da1a96ebc",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2243,
+      "person_fullname": "Roger Meier",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138793/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138793/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138793/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138793/bodies"
+      }
+    },
+    {
+      "id": 47138794,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138794",
+      "body_key": "261",
+      "external_id": "40d1e602089e439aae1ec2477f6fb437",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2502,
+      "person_fullname": "Christian Huser",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138794/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138794/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138794/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138794/bodies"
+      }
+    },
+    {
+      "id": 47138795,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138795",
+      "body_key": "261",
+      "external_id": "d18a5eb78e104228af0dc1b13e4c1444",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2717,
+      "person_fullname": "Markus Haselbach",
+      "person_party": {
+        "de": "Die Mitte"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte/EVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138795/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138795/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138795/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138795/bodies"
+      }
+    },
+    {
+      "id": 47138796,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138796",
+      "body_key": "261",
+      "external_id": "8404a559617e4b5c99e4e07b52ad8355",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2260,
+      "person_fullname": "Karin Stepinski",
+      "person_party": {
+        "de": "Die Mitte"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte/EVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138796/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138796/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138796/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138796/bodies"
+      }
+    },
+    {
+      "id": 47138797,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138797",
+      "body_key": "261",
+      "external_id": "ad6885dc4bfe4022b92aea3385379bad",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 27180,
+      "person_fullname": "Wolfgang Kweitel",
+      "person_party": {
+        "de": "Die Mitte"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138797/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138797/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138797/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138797/bodies"
+      }
+    },
+    {
+      "id": 47138798,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138798",
+      "body_key": "261",
+      "external_id": "947efc8a534340a593c9935f17f56ba5",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25413,
+      "person_fullname": "Sarah Dähler",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138798/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138798/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138798/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138798/bodies"
+      }
+    },
+    {
+      "id": 47138799,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138799",
+      "body_key": "261",
+      "external_id": "f059366f888644709942b0ecd2cfa028",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2898,
+      "person_fullname": "Martin Busekros",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138799/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138799/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138799/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138799/bodies"
+      }
+    },
+    {
+      "id": 47138800,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138800",
+      "body_key": "261",
+      "external_id": "5d358e88767b4380a45e26aec50355de",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25415,
+      "person_fullname": "Leonora Seiler",
+      "person_party": {
+        "de": "Grüne Partei"
+      },
+      "vote": "no",
+      "vote_display": {
+        "de": "Nein"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Grüne"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138800/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138800/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138800/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138800/bodies"
+      }
+    },
+    {
+      "id": 47138801,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138801",
+      "body_key": "261",
+      "external_id": "37ee1ec84e7548c6832e2d79685650e2",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25418,
+      "person_fullname": "Karin Saxer",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138801/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138801/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138801/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138801/bodies"
+      }
+    },
+    {
+      "id": 47138802,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138802",
+      "body_key": "261",
+      "external_id": "74d56fbd96b443c58801b356855900e0",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25406,
+      "person_fullname": "Stefania Koller",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138802/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138802/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138802/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138802/bodies"
+      }
+    },
+    {
+      "id": 47138803,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138803",
+      "body_key": "261",
+      "external_id": "2432c32745d0437d97410100826e8140",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25424,
+      "person_fullname": "Vera Çelik",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138803/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138803/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138803/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138803/bodies"
+      }
+    },
+    {
+      "id": 47138804,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138804",
+      "body_key": "261",
+      "external_id": "d71d7f07a4ba4599a83062aabd26317d",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25404,
+      "person_fullname": "Nina Eggenschwiler",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138804/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138804/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138804/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138804/bodies"
+      }
+    },
+    {
+      "id": 47138805,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138805",
+      "body_key": "261",
+      "external_id": "3ddd40d61b1e444e96258f5a22b40b5a",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25407,
+      "person_fullname": "Camille Roseau",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138805/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138805/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138805/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138805/bodies"
+      }
+    },
+    {
+      "id": 47138806,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138806",
+      "body_key": "261",
+      "external_id": "7b21ffe76a034afa8e3645b86656097f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2487,
+      "person_fullname": "Marco Denoth",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138806/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138806/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138806/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138806/bodies"
+      }
+    },
+    {
+      "id": 47138807,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138807",
+      "body_key": "261",
+      "external_id": "a161ab2250d8446aadd083f2b5c859d0",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25425,
+      "person_fullname": "Simon Hatt",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138807/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138807/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138807/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138807/bodies"
+      }
+    },
+    {
+      "id": 47138808,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138808",
+      "body_key": "261",
+      "external_id": "8344634c7d2f43aba137c7da9e1ed661",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2419,
+      "person_fullname": "Emanuel Tschannen",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138808/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138808/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138808/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138808/bodies"
+      }
+    },
+    {
+      "id": 47138809,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138809",
+      "body_key": "261",
+      "external_id": "38d3abc2f2814b0183f231a1461e8014",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2626,
+      "person_fullname": "Martina Zürcher",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138809/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138809/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138809/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138809/bodies"
+      }
+    },
+    {
+      "id": 47138810,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138810",
+      "body_key": "261",
+      "external_id": "22a61b07aa29404ebccf9ab9deae8c78",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25408,
+      "person_fullname": "Valentina Fazlija",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138810/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138810/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138810/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138810/bodies"
+      }
+    },
+    {
+      "id": 47138811,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138811",
+      "body_key": "261",
+      "external_id": "65bad93c0be14bbcb0a16f67ca0f94f1",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25419,
+      "person_fullname": "Markus Weidmann",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138811/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138811/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138811/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138811/bodies"
+      }
+    },
+    {
+      "id": 47138812,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138812",
+      "body_key": "261",
+      "external_id": "08687579eb074a39b5fb18851751cafd",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2372,
+      "person_fullname": "Yves Peier",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138812/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138812/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138812/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138812/bodies"
+      }
+    },
+    {
+      "id": 47138813,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138813",
+      "body_key": "261",
+      "external_id": "205a0166e0364c9593286dbfd1f146b9",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25409,
+      "person_fullname": "Sascha Rüegg",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138813/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138813/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138813/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138813/bodies"
+      }
+    },
+    {
+      "id": 47138814,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138814",
+      "body_key": "261",
+      "external_id": "0ae4dd938af442b98f66ed2e06c7f70b",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2361,
+      "person_fullname": "Jean-Marc Jung",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138814/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138814/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138814/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138814/bodies"
+      }
+    },
+    {
+      "id": 47138815,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138815",
+      "body_key": "261",
+      "external_id": "fa97b3a5b55e4a749045fced92f0493b",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2867,
+      "person_fullname": "Benedikt Gerth",
+      "person_party": {
+        "de": "Die Mitte"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte/EVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138815/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138815/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138815/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138815/bodies"
+      }
+    },
+    {
+      "id": 47138816,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138816",
+      "body_key": "261",
+      "external_id": "af077f957ec843459602f2f07afd1d47",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2827,
+      "person_fullname": "Karin Weyermann",
+      "person_party": {
+        "de": "Christlichdemokratische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte/EVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138816/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138816/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138816/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138816/bodies"
+      }
+    },
+    {
+      "id": 47138817,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138817",
+      "body_key": "261",
+      "external_id": "fdd37f515bb54f89b9d1194572846a7d",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25414,
+      "person_fullname": "Thomas Bühler",
+      "person_party": {
+        "de": "Die Mitte"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "Die Mitte"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138817/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138817/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138817/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138817/bodies"
+      }
+    },
+    {
+      "id": 47138818,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138818",
+      "body_key": "261",
+      "external_id": "0827115dffdf4732813772157d538884",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2763,
+      "person_fullname": "Anna Graff",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138818/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138818/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138818/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138818/bodies"
+      }
+    },
+    {
+      "id": 47138819,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138819",
+      "body_key": "261",
+      "external_id": "22b1f209ea604736b7539c4bb64eb4ca",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2723,
+      "person_fullname": "Patricia Petermann Loewe",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138819/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138819/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138819/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138819/bodies"
+      }
+    },
+    {
+      "id": 47138820,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138820",
+      "body_key": "261",
+      "external_id": "54874591e49146a390c6c82299f0c017",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2623,
+      "person_fullname": "Lara Can",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138820/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138820/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138820/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138820/bodies"
+      }
+    },
+    {
+      "id": 47138821,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138821",
+      "body_key": "261",
+      "external_id": "e31b26da09fd4cc38350697637d28f77",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22492,
+      "person_fullname": "Cordelia Forde",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138821/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138821/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138821/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138821/bodies"
+      }
+    },
+    {
+      "id": 47138822,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138822",
+      "body_key": "261",
+      "external_id": "21b5734036264eae83913acf05c71d33",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25430,
+      "person_fullname": "Adina Rom",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138822/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138822/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138822/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138822/bodies"
+      }
+    },
+    {
+      "id": 47138823,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138823",
+      "body_key": "261",
+      "external_id": "53fe15bb1df64d3eaddab97aba5d09ed",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25411,
+      "person_fullname": "Daria Perez Sanchez-Di Concilio",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138823/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138823/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138823/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138823/bodies"
+      }
+    },
+    {
+      "id": 47138824,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138824",
+      "body_key": "261",
+      "external_id": "96540079daaa40a3bad40fc38e56103c",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25426,
+      "person_fullname": "Dominik Haupt",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138824/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138824/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138824/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138824/bodies"
+      }
+    },
+    {
+      "id": 47138825,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138825",
+      "body_key": "261",
+      "external_id": "f3e52b0ce5164d9289df9ca3527279ac",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25428,
+      "person_fullname": "Alice Kohli",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138825/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138825/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138825/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138825/bodies"
+      }
+    },
+    {
+      "id": 47138826,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138826",
+      "body_key": "261",
+      "external_id": "449ccdd81ebc4e509b811d073606d151",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2569,
+      "person_fullname": "Florian Blättler",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138826/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138826/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138826/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138826/bodies"
+      }
+    },
+    {
+      "id": 47138827,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138827",
+      "body_key": "261",
+      "external_id": "dbe830aac9aa4c128dd0f8af03cbd7e7",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2912,
+      "person_fullname": "Mathias Egloff",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138827/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138827/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138827/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138827/bodies"
+      }
+    },
+    {
+      "id": 47138828,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138828",
+      "body_key": "261",
+      "external_id": "951bfb05e8bd4b7f9c54ff2d619a4729",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2667,
+      "person_fullname": "Andreas Egli",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138828/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138828/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138828/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138828/bodies"
+      }
+    },
+    {
+      "id": 47138829,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138829",
+      "body_key": "261",
+      "external_id": "fd2251eb5abe4068bcbe194a41a56b98",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2267,
+      "person_fullname": "Jehuda Spielman",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138829/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138829/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138829/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138829/bodies"
+      }
+    },
+    {
+      "id": 47138830,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138830",
+      "body_key": "261",
+      "external_id": "8f91fefb27ef4ad5ad9dcecae549e412",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2558,
+      "person_fullname": "Sebastian Vogel",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138830/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138830/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138830/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138830/bodies"
+      }
+    },
+    {
+      "id": 47138831,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138831",
+      "body_key": "261",
+      "external_id": "eac16758d091477091005beb10360338",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25405,
+      "person_fullname": "Alex Guggenheim",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138831/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138831/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138831/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138831/bodies"
+      }
+    },
+    {
+      "id": 47138832,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138832",
+      "body_key": "261",
+      "external_id": "0beff9f7a6c74c959e5d6246da566cbd",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2647,
+      "person_fullname": "Michele Romagnolo",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138832/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138832/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138832/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138832/bodies"
+      }
+    },
+    {
+      "id": 47138833,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138833",
+      "body_key": "261",
+      "external_id": "697a645f06c24cdfa04d95a92e5d59d4",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25427,
+      "person_fullname": "Jane Bailey",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138833/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138833/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138833/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138833/bodies"
+      }
+    },
+    {
+      "id": 47138834,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138834",
+      "body_key": "261",
+      "external_id": "0d22ca64636a468e99002c03b6a5f514",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2696,
+      "person_fullname": "Stephan Iten",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138834/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138834/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138834/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138834/bodies"
+      }
+    },
+    {
+      "id": 47138835,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138835",
+      "body_key": "261",
+      "external_id": "0e6a5d61f414457f960775cca60695cc",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2911,
+      "person_fullname": "Roger Bartholdi",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138835/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138835/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138835/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138835/bodies"
+      }
+    },
+    {
+      "id": 47138836,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138836",
+      "body_key": "261",
+      "external_id": "67d1adc846f94722a562d5c000984d45",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2497,
+      "person_fullname": "Reto Brüesch",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138836/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138836/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138836/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138836/bodies"
+      }
+    },
+    {
+      "id": 47138837,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138837",
+      "body_key": "261",
+      "external_id": "9db5a21b335e4916a57fd0f74aa8b107",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2628,
+      "person_fullname": "Lisa Diggelmann",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138837/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138837/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138837/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138837/bodies"
+      }
+    },
+    {
+      "id": 47138838,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138838",
+      "body_key": "261",
+      "external_id": "5945f5f393f947b8b9e43ba66f3296ee",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2429,
+      "person_fullname": "Hannah Locher",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138838/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138838/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138838/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138838/bodies"
+      }
+    },
+    {
+      "id": 47138839,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138839",
+      "body_key": "261",
+      "external_id": "16abadc81fd24ae38a849f0806b369d6",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2719,
+      "person_fullname": "Patrick Tscherrig",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138839/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138839/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138839/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138839/bodies"
+      }
+    },
+    {
+      "id": 47138840,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138840",
+      "body_key": "261",
+      "external_id": "985350f218574d05af26e98e0e7e780c",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22342,
+      "person_fullname": "Tom Cassee",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138840/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138840/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138840/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138840/bodies"
+      }
+    },
+    {
+      "id": 47138841,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138841",
+      "body_key": "261",
+      "external_id": "d0a03502402f42f6860be5e8b37757dd",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22349,
+      "person_fullname": "Oliver Heimgartner",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138841/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138841/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138841/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138841/bodies"
+      }
+    },
+    {
+      "id": 47138842,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138842",
+      "body_key": "261",
+      "external_id": "2c98aad01b6c42c6a419c199d6e03ef7",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2484,
+      "person_fullname": "Dominique Späth",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138842/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138842/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138842/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138842/bodies"
+      }
+    },
+    {
+      "id": 47138843,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138843",
+      "body_key": "261",
+      "external_id": "9f6f5585d8e4438c8fbd4671950da58c",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2346,
+      "person_fullname": "Ruedi Schneider",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138843/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138843/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138843/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138843/bodies"
+      }
+    },
+    {
+      "id": 47138844,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138844",
+      "body_key": "261",
+      "external_id": "921cdf853179493ca4615464f71c0923",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2364,
+      "person_fullname": "Leah Heuri",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138844/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138844/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138844/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138844/bodies"
+      }
+    },
+    {
+      "id": 47138845,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138845",
+      "body_key": "261",
+      "external_id": "cc29733cb7ea4263b1c078ee8c9ac992",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2644,
+      "person_fullname": "Dafi Muharemi",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138845/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138845/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138845/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138845/bodies"
+      }
+    },
+    {
+      "id": 47138846,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138846",
+      "body_key": "261",
+      "external_id": "949e642f27044aafa474d5eee0e42926",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2432,
+      "person_fullname": "Thomas Hofstetter",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138846/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138846/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138846/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138846/bodies"
+      }
+    },
+    {
+      "id": 47138847,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138847",
+      "body_key": "261",
+      "external_id": "95bd17ec2d684f08a349e61d9b143e4f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25429,
+      "person_fullname": "Brenda Mäder",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138847/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138847/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138847/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138847/bodies"
+      }
+    },
+    {
+      "id": 47138848,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138848",
+      "body_key": "261",
+      "external_id": "29e9468a7bba422d9cdc9b01d9d313c8",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2327,
+      "person_fullname": "Anthony Goldstein",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138848/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138848/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138848/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138848/bodies"
+      }
+    },
+    {
+      "id": 47138849,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138849",
+      "body_key": "261",
+      "external_id": "58264076e90b4210bffaf9a6eb9ba788",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2320,
+      "person_fullname": "Derek Richter",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138849/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138849/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138849/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138849/bodies"
+      }
+    },
+    {
+      "id": 47138850,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138850",
+      "body_key": "261",
+      "external_id": "04bd678f97b542e7b64b37542612be1e",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2721,
+      "person_fullname": "Johann Widmer",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138850/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138850/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138850/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138850/bodies"
+      }
+    },
+    {
+      "id": 47138851,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138851",
+      "body_key": "261",
+      "external_id": "999d7e41b3c249179cfc6b639319979f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 25420,
+      "person_fullname": "Roman Mörgeli",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138851/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138851/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138851/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138851/bodies"
+      }
+    },
+    {
+      "id": 47138852,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138852",
+      "body_key": "261",
+      "external_id": "ab2d8d58b7f147b8bbcf5f1aaf39b1d6",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2703,
+      "person_fullname": "Samuel Balsiger",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138852/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138852/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138852/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138852/bodies"
+      }
+    },
+    {
+      "id": 47138853,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138853",
+      "body_key": "261",
+      "external_id": "06f64f3287d940bbb803674361ecc848",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2566,
+      "person_fullname": "Stefan Urech",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138853/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138853/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138853/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138853/bodies"
+      }
+    },
+    {
+      "id": 47138854,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138854",
+      "body_key": "261",
+      "external_id": "f380cdc0eace4e198a4a25ad1d30ac5d",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2259,
+      "person_fullname": "Florian Utz",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138854/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138854/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138854/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138854/bodies"
+      }
+    },
+    {
+      "id": 47138855,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138855",
+      "body_key": "261",
+      "external_id": "db8e73cc609a434ea75d6e98f0ccdc40",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2690,
+      "person_fullname": "Anjushka Früh",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138855/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138855/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138855/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138855/bodies"
+      }
+    },
+    {
+      "id": 47138856,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138856",
+      "body_key": "261",
+      "external_id": "4dcf364771ab4cf8922ec8589bc61857",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2305,
+      "person_fullname": "Fanny de Weck",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138856/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138856/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138856/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138856/bodies"
+      }
+    },
+    {
+      "id": 47138857,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138857",
+      "body_key": "261",
+      "external_id": "a6a88fe919554d05998551661c57e4c1",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2840,
+      "person_fullname": "Reis Luzhnica",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138857/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138857/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138857/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138857/bodies"
+      }
+    },
+    {
+      "id": 47138858,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138858",
+      "body_key": "261",
+      "external_id": "8724853aa3964f3f986263071f6add22",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2607,
+      "person_fullname": "Severin Meier",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138858/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138858/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138858/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138858/bodies"
+      }
+    },
+    {
+      "id": 47138859,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138859",
+      "body_key": "261",
+      "external_id": "057c6c34e29243bca29eed39e098b37e",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2308,
+      "person_fullname": "Angelica Eichenberger",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "absent",
+      "vote_display": {
+        "de": "Abwesend"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138859/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138859/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138859/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138859/bodies"
+      }
+    },
+    {
+      "id": 47138860,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138860",
+      "body_key": "261",
+      "external_id": "75aac62c1a4e4ef79e1551b103783c2f",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2560,
+      "person_fullname": "Maya Kägi Götz",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138860/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138860/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138860/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138860/bodies"
+      }
+    },
+    {
+      "id": 47138861,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138861",
+      "body_key": "261",
+      "external_id": "d48a41bcf2104d6cbdc5355cd4015a20",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22488,
+      "person_fullname": "Micha Amstad",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138861/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138861/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138861/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138861/bodies"
+      }
+    },
+    {
+      "id": 47138862,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138862",
+      "body_key": "261",
+      "external_id": "fe9e391ba1e84da7af57239d895a633a",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2655,
+      "person_fullname": "Pascal Lamprecht",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138862/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138862/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138862/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138862/bodies"
+      }
+    },
+    {
+      "id": 47138863,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138863",
+      "body_key": "261",
+      "external_id": "515f431b9b944eb1ac5c9377aeb8fa95",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2710,
+      "person_fullname": "Sofia Karakostas",
+      "person_party": {
+        "de": "Sozialdemokratische Partei"
+      },
+      "vote": "abstention",
+      "vote_display": {
+        "de": "Enthaltung"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138863/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138863/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138863/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138863/bodies"
+      }
+    },
+    {
+      "id": 47138864,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138864",
+      "body_key": "261",
+      "external_id": "fccaca877a46472faa618955053058a4",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 22343,
+      "person_fullname": "Murat Gediz",
+      "person_party": {
+        "de": "FDP.Die Liberalen"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "FDP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138864/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138864/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138864/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138864/bodies"
+      }
+    },
+    {
+      "id": 47138865,
+      "url_api": "https://api.openparldata.ch/v1/votes/47138865",
+      "body_key": "261",
+      "external_id": "bc7160ff7d024639936e4568c0dc3a22",
+      "voting_id": 105130,
+      "voting_external_id": "1f6abc9df01049829806021b39b3c169",
+      "person_id": 2548,
+      "person_fullname": "Attila Kipfer",
+      "person_party": {
+        "de": "Schweizerische Volkspartei"
+      },
+      "vote": "yes",
+      "vote_display": {
+        "de": "Ja"
+      },
+      "created_at": "2026-07-14T04:51:53",
+      "body_id": 322,
+      "person_parliamentary_group_name": {
+        "de": "SVP"
+      },
+      "links": {
+        "voting": "https://api.openparldata.ch/v1/votes/47138865/voting",
+        "person": "https://api.openparldata.ch/v1/votes/47138865/person",
+        "person_image": "https://api.openparldata.ch/v1/votes/47138865/person_image",
+        "bodies": "https://api.openparldata.ch/v1/votes/47138865/bodies"
+      }
+    }
+  ]
+}
