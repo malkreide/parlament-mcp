@@ -26,6 +26,7 @@ Herkunft, Datum, Auswahlregel und SHA-256 je Datei stehen in
 from __future__ import annotations
 
 import datetime as dt
+import inspect
 import re
 from typing import Any
 
@@ -202,6 +203,24 @@ def test_der_recorder_faehrt_dieselben_aufrufe():
     im_plan = {a.name for a in recorder().PLAN}
     assert im_plan == set(WERKZEUGE) | set(DETAIL), (
         "Recorder und Testtabelle nennen verschiedene Aufrufe"
+    )
+
+
+def test_der_recorder_leert_den_body_cache_vor_jedem_aufruf():
+    """Sonst fehlt ausgerechnet die Aufzeichnung von `oparl_list_bodies`.
+
+    Der Body-Cache haelt 24 h. Hat ihn ein frueherer Aufruf im selben Lauf
+    gefuellt, schickt `oparl_list_bodies` gar keine Anfrage mehr — der Recorder
+    bricht dann mit «hat keine Anfrage abgeschickt» ab, und wer den Aufruf
+    daraufhin aus dem Plan nimmt, hat eine Luecke ohne Grund.
+
+    Diese Zusicherung liest den Quelltext des Recorders, weil sich der Reset
+    nicht anders belegen laesst, ohne den Recorder wirklich laufen zu lassen.
+    """
+    quelltext = inspect.getsource(recorder()._fahre)
+    assert "loaded_at = None" in quelltext, (
+        "der Recorder leert den Body-Cache nicht mehr — `oparl_list_bodies` "
+        "wuerde beim zweiten Aufruf keine Anfrage mehr schicken"
     )
 
 
