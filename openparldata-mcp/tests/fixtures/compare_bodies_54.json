@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 1,
+    "total_records": 18,
+    "total_pages": 18,
+    "current_page": 1,
+    "has_more": true,
+    "next_page": "https://api.openparldata.ch/v1/affairs/?body_key=230&search=Klima&offset=1&limit=1",
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/affairs/?body_key=230&search=Klima&offset=0&limit=1",
+    "last_page": "https://api.openparldata.ch/v1/affairs/?body_key=230&search=Klima&offset=17&limit=1",
+    "self": "https://api.openparldata.ch/v1/affairs/?body_key=230&search=Klima&limit=1"
+  },
+  "data": [
+    {
+      "id": 285415,
+      "url_api": "https://api.openparldata.ch/v1/affairs/285415",
+      "body_key": "230",
+      "external_id": "2655371",
+      "external_alternative_id": null,
+      "number": "2025.124",
+      "title": {
+        "de": "Vierjahresbericht 2021-2024 zum Energie- und Klimakonzept (EKK)"
+      },
+      "body_id": 315,
+      "type_external_id": null,
+      "type_harmonized_id": 16,
+      "type_harmonized_wikidata_id": null,
+      "state_external_id": null,
+      "state_name_harmonized_id": null,
+      "begin_date": "2025-11-28T00:00:00",
+      "end_date": null,
+      "active": null,
+      "updated_external_at": null,
+      "updated_at": "2026-08-07T06:12:44",
+      "created_at": "2025-11-30T21:56:31",
+      "title_long": {
+        "de": "Vierjahresbericht 2021-2024 zum Energie- und Klimakonzept (EKK)"
+      },
+      "type_name": {
+        "de": "Bericht"
+      },
+      "type_harmonized": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "state_name": {
+        "de": "Erledigt"
+      },
+      "state_name_harmonized": {},
+      "url_external": {
+        "de": "https://parlament.winterthur.ch/politbusiness/2655371"
+      },
+      "links": {
+        "contributors": "https://api.openparldata.ch/v1/affairs/285415/contributors",
+        "docs": "https://api.openparldata.ch/v1/affairs/285415/docs",
+        "events": "https://api.openparldata.ch/v1/affairs/285415/events",
+        "texts": "https://api.openparldata.ch/v1/affairs/285415/texts",
+        "speeches": "https://api.openparldata.ch/v1/affairs/285415/speeches",
+        "votings": "https://api.openparldata.ch/v1/affairs/285415/votings",
+        "agendas": "https://api.openparldata.ch/v1/affairs/285415/agendas",
+        "meetings": "https://api.openparldata.ch/v1/affairs/285415/meetings",
+        "bodies": "https://api.openparldata.ch/v1/affairs/285415/bodies",
+        "external_links": "https://api.openparldata.ch/v1/affairs/285415/external_links"
+      }
+    }
+  ]
+}

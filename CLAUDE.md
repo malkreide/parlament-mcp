@@ -77,6 +77,38 @@ ruff format --check src/ tests/
 plus `workflow_dispatch`, mit einem Job je Server. DRIFT-005 ist für beide
 erfüllt.
 
+**Fixtures: aufgezeichnet.** `tests/fixtures/` hält eine echte Antwort je
+Werkzeug (Bundes-Server); Herkunft, Schlüssel, Auswahlregel und SHA-256 stehen
+je Datei in `tests/fixtures/PROVENANCE.md` — Portfolio-Konvention, gleich wie in
+`swisstopo-mcp` und `swiss-environment-mcp`. Neu aufzeichnen mit
+`PYTHONPATH=src python scripts/record_fixtures.py`, geladen wird über
+`tests/fixture_data.py`. Fehlerpfade bleiben handgeschrieben.
+
+Eine Aufzeichnung je **Abfrage**, nicht je Endpunkt: alles läuft über denselben
+OData-Endpunkt und unterscheidet sich allein im `$filter`. Der Query-String
+gehört deshalb in den Schlüssel.
+
+Die IDs der beiden Detail-Abrufe (`parlament_get_business`,
+`parlament_get_transcript`) stehen nirgends als Zahl — der Recorder holt sie aus
+der jeweiligen Suche, die Tests lesen sie aus dem Schlüssel im Nachweis zurück.
+Eine eingetragene ID wäre in ein paar Wochen ein toter Verweis.
+
+Zur Form: OData legt seine Treffer **direkt unter `d`** ab, als Liste. Ein Stub
+mit `{"d": {"results": [...]}}` sieht ähnlich aus und ist eine andere Form; der
+Server liest `data.get("d", [])` und iterierte darüber die Schlüssel des
+Objekts.
+
+`openparldata-mcp/` hat einen eigenen Ordner mit 82 Aufzeichnungen und
+denselben Aufbau (`scripts/record_fixtures.py`, `tests/fixture_data.py`,
+`tests/fixtures/PROVENANCE.md`). 69 davon gehören zu `oparl_compare_bodies`:
+das Werkzeug zählt Treffer je Gemeinde und fragt dafür jede einzeln, mit
+`asyncio.gather`. Zugeordnet wird deshalb nach der Anfrage und nie nach der
+Reihenfolge. Zwei Fallen dort: der Body-Cache hält 24 h, also muss der Recorder
+ihn vor jedem Aufruf leeren — sonst schickt `oparl_list_bodies` beim zweiten Mal
+keine Anfrage mehr und fehlt im Ordner. Und `meta.total_records` bleibt beim
+Kürzen unangetastet: gerade dieses Feld macht einen stillschweigend verworfenen
+Filter sichtbar.
+
 **Datentreue der Quellen.** Beide APIs antworten auf falsch verstandene
 Parameter nicht mit einem Fehler, sondern mit plausiblen Daten. Belegt:
 `/persons/` verwirft bei `sort_by=lastname` still den `body_key`-Filter, während

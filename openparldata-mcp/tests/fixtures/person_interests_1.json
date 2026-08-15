@@ -1,0 +1,16 @@
+{
+  "data": [],
+  "meta": {
+    "offset": 0,
+    "limit": 100,
+    "total_records": 0,
+    "total_pages": 0,
+    "current_page": 1,
+    "has_more": false,
+    "next_page": null,
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/persons/572/interests?offset=0&limit=100",
+    "last_page": "https://api.openparldata.ch/v1/persons/572/interests?offset=-100&limit=100",
+    "self": "https://api.openparldata.ch/v1/persons/572/interests?offset=0&limit=100"
+  }
+}

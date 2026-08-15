@@ -6,6 +6,34 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Aufgezeichnete Fixtures statt handgeschriebener Erfolgs-Antworten.**
+  `tests/fixtures/` hält jetzt 82 echte Antworten, aufgezeichnet mit
+  `scripts/record_fixtures.py` an demselben Ort, an dem der Server sie
+  entgegennimmt (httpx-Response-Hook auf dem geteilten Client aus
+  `client.get_client()`), also mit demselben User-Agent und Timeout wie im
+  Betrieb. Herkunft, Schlüssel, Auswahlregel, Grösse und SHA-256 stehen je Datei
+  in `tests/fixtures/PROVENANCE.md`; geladen wird über `tests/fixture_data.py`,
+  gefahren in `tests/test_recorded_fixtures.py` (113 neue Tests, 155 statt 42).
+
+  Das ist bei dieser Quelle keine Formsache. `bodies.py` sagt es im eigenen
+  Kopf: «Die API sagt nie Nein, sie sagt Nichts» — ein ungültiger `body_key`
+  liefert HTTP 200 mit leerem Array. Ein Mock kann diese Klasse Fehler nicht
+  sehen; er gibt zurück, was man ihm vorlegt.
+
+  69 der 82 Dateien gehören zu `oparl_compare_bodies`: das Werkzeug zählt
+  Treffer je Gemeinde und fragt dafür jede einzeln, mit `asyncio.gather`.
+  Zugeordnet wird beim Abspielen deshalb nach der Anfrage und nie nach der
+  Reihenfolge — `test_der_vergleich_zaehlt_je_koerperschaft_verschieden` fällt,
+  sobald alle Körperschaften dieselbe Zahl melden.
+
+  Die IDs der Detail-Abrufe stehen nirgends als Zahl: der Recorder holt sie aus
+  der Suche daneben, die Tests lesen sie aus dem Schlüssel im Nachweis zurück.
+
+- **`ruff check` / `ruff format --check` decken jetzt auch `scripts/` ab**
+  (CI-Job `test-openparldata`). Das Verzeichnis gab es vor dem Recorder nicht.
+
 ### Changed
 
 - **Migrated to the `mcp` 2.x API.** This supersedes the interim `<2` cap from

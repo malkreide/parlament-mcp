@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Aufgezeichnete Fixtures statt handgeschriebener Erfolgs-Antworten.**
+  `tests/fixtures/` hält jetzt sieben echte Antworten — eine je Werkzeug —,
+  aufgezeichnet mit `scripts/record_fixtures.py` an demselben Ort, an dem der
+  Server sie entgegennimmt (httpx-Response-Hook auf dem geteilten Client aus
+  `server._get_client()`), also mit demselben User-Agent und Timeout wie im
+  Betrieb. Herkunft, Schlüssel, Auswahlregel, Grösse und SHA-256 stehen je Datei
+  in `tests/fixtures/PROVENANCE.md`; geladen wird über `tests/fixture_data.py`,
+  gefahren in `tests/test_recorded_fixtures.py` (30 neue Tests, 128 statt 98).
+
+  Das ist bei dieser Quelle keine Formsache: sie antwortet auf falsch
+  verstandene Parameter nicht mit einem Fehler, sondern mit plausiblen Daten —
+  `/persons/` verwirft bei `sort_by=lastname` still den `body_key`-Filter und
+  meldet in `meta.total_records` weiter den gefilterten Wert. Ein Mock kann
+  diese Klasse Fehler nicht sehen; er gibt zurück, was man ihm vorlegt.
+
+  Eine Aufzeichnung je **Abfrage**, nicht je Endpunkt: alles läuft über
+  denselben OData-Endpunkt und unterscheidet sich allein im `$filter`. Zugeordnet
+  wird beim Abspielen nach der Anfrage, nicht nach der Reihenfolge.
+
+  Die IDs der beiden Detail-Abrufe stehen nirgends als Zahl: der Recorder holt
+  sie aus der jeweiligen Suche, die Tests lesen sie aus dem Schlüssel im
+  Nachweis zurück. Eine eingetragene ID wäre in ein paar Wochen ein toter
+  Verweis — und die Aufzeichnung schwiege darüber.
+
+  Die handgeschriebenen Stubs bleiben für die Fehlerpfade — Timeout, 5xx, leere
+  Trefferliste —, die sich nicht auf Zuruf aufzeichnen lassen.
+
 ### Changed
 
 - **Der Backoff-Schlaf wird ueber einen Modul-Alias gepatcht, nicht ueber

@@ -1,0 +1,337 @@
+{
+  "d": [
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.MemberCouncil"
+      },
+      "MembersParty": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MembersParty"
+        }
+      },
+      "Persons": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/Persons"
+        }
+      },
+      "MembersParlGroup": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MembersParlGroup"
+        }
+      },
+      "MembersCommittee": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MembersCommittee"
+        }
+      },
+      "BusinessRoles": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/BusinessRoles"
+        }
+      },
+      "Citizenships": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/Citizenships"
+        }
+      },
+      "MembersCommitteeHistory": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MembersCommitteeHistory"
+        }
+      },
+      "MemberCouncilHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MemberCouncilHistories"
+        }
+      },
+      "Votings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/Votings"
+        }
+      },
+      "Transcripts": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/Transcripts"
+        }
+      },
+      "MemberPartyHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MemberPartyHistories"
+        }
+      },
+      "MemberParlGroupHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4246,Language='DE')/MemberParlGroupHistories"
+        }
+      },
+      "ID": 4246,
+      "Language": "DE",
+      "IdPredecessor": null,
+      "PersonNumber": 4246,
+      "PersonIdCode": 3138,
+      "Active": true,
+      "FirstName": "Christine",
+      "LastName": "Badertscher",
+      "GenderAsString": "f",
+      "Canton": 2,
+      "CantonName": "Bern",
+      "CantonAbbreviation": "BE",
+      "Council": 1,
+      "CouncilName": "Nationalrat",
+      "CouncilAbbreviation": "NR",
+      "ParlGroupNumber": 6,
+      "ParlGroupName": "Grüne Fraktion",
+      "ParlGroupAbbreviation": "G",
+      "ParlGroupFunction": 1,
+      "ParlGroupFunctionText": "Mitglied",
+      "Party": 20,
+      "PartyName": "GRÜNE Schweiz",
+      "PartyAbbreviation": "GRÜNE",
+      "MilitaryRank": null,
+      "MilitaryRankText": null,
+      "MaritalStatus": null,
+      "MaritalStatusText": null,
+      "Nationality": "Schweiz",
+      "BirthPlace_City": "Sumiswald",
+      "BirthPlace_Canton": "BE",
+      "Mandates": "",
+      "AdditionalMandate": null,
+      "AdditionalActivity": "",
+      "OfficialName": "Badertscher",
+      "DateJoining": "/Date(1701648000000)/",
+      "DateLeaving": null,
+      "DateElection": "/Date(1697932800000)/",
+      "DateOath": "/Date(1701648000000)/",
+      "DateResignation": null,
+      "Modified": "/Date(1785937206870)/",
+      "NumberOfChildren": null,
+      "Citizenship": "Lauperswil (BE)",
+      "DateOfBirth": "/Date(379555200000)/",
+      "DateOfDeath": null
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.MemberCouncil"
+      },
+      "MembersParty": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MembersParty"
+        }
+      },
+      "Persons": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/Persons"
+        }
+      },
+      "MembersParlGroup": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MembersParlGroup"
+        }
+      },
+      "MembersCommittee": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MembersCommittee"
+        }
+      },
+      "BusinessRoles": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/BusinessRoles"
+        }
+      },
+      "Citizenships": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/Citizenships"
+        }
+      },
+      "MembersCommitteeHistory": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MembersCommitteeHistory"
+        }
+      },
+      "MemberCouncilHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MemberCouncilHistories"
+        }
+      },
+      "Votings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/Votings"
+        }
+      },
+      "Transcripts": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/Transcripts"
+        }
+      },
+      "MemberPartyHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MemberPartyHistories"
+        }
+      },
+      "MemberParlGroupHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4247,Language='DE')/MemberParlGroupHistories"
+        }
+      },
+      "ID": 4247,
+      "Language": "DE",
+      "IdPredecessor": null,
+      "PersonNumber": 4247,
+      "PersonIdCode": 3139,
+      "Active": true,
+      "FirstName": "Kilian",
+      "LastName": "Baumann",
+      "GenderAsString": "m",
+      "Canton": 2,
+      "CantonName": "Bern",
+      "CantonAbbreviation": "BE",
+      "Council": 1,
+      "CouncilName": "Nationalrat",
+      "CouncilAbbreviation": "NR",
+      "ParlGroupNumber": 6,
+      "ParlGroupName": "Grüne Fraktion",
+      "ParlGroupAbbreviation": "G",
+      "ParlGroupFunction": 1,
+      "ParlGroupFunctionText": "Mitglied",
+      "Party": 20,
+      "PartyName": "GRÜNE Schweiz",
+      "PartyAbbreviation": "GRÜNE",
+      "MilitaryRank": null,
+      "MilitaryRankText": null,
+      "MaritalStatus": null,
+      "MaritalStatusText": null,
+      "Nationality": "Schweiz",
+      "BirthPlace_City": "Bern",
+      "BirthPlace_Canton": "--",
+      "Mandates": "Legislative des Kantons Bern: von 01.06.2014 bis 24.11.2019; Mitglied des Vorstandes Grüne Seeland",
+      "AdditionalMandate": null,
+      "AdditionalActivity": null,
+      "OfficialName": "Baumann",
+      "DateJoining": "/Date(1701648000000)/",
+      "DateLeaving": null,
+      "DateElection": "/Date(1697932800000)/",
+      "DateOath": "/Date(1701648000000)/",
+      "DateResignation": null,
+      "Modified": "/Date(1785937285047)/",
+      "NumberOfChildren": 3,
+      "Citizenship": "Wileroltigen (BE)",
+      "DateOfBirth": "/Date(345600000000)/",
+      "DateOfDeath": null
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.MemberCouncil"
+      },
+      "MembersParty": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MembersParty"
+        }
+      },
+      "Persons": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/Persons"
+        }
+      },
+      "MembersParlGroup": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MembersParlGroup"
+        }
+      },
+      "MembersCommittee": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MembersCommittee"
+        }
+      },
+      "BusinessRoles": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/BusinessRoles"
+        }
+      },
+      "Citizenships": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/Citizenships"
+        }
+      },
+      "MembersCommitteeHistory": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MembersCommitteeHistory"
+        }
+      },
+      "MemberCouncilHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MemberCouncilHistories"
+        }
+      },
+      "Votings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/Votings"
+        }
+      },
+      "Transcripts": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/Transcripts"
+        }
+      },
+      "MemberPartyHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MemberPartyHistories"
+        }
+      },
+      "MemberParlGroupHistories": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/MemberCouncil(ID=4102,Language='DE')/MemberParlGroupHistories"
+        }
+      },
+      "ID": 4102,
+      "Language": "DE",
+      "IdPredecessor": null,
+      "PersonNumber": 4102,
+      "PersonIdCode": 3016,
+      "Active": true,
+      "FirstName": "Kathrin",
+      "LastName": "Bertschy",
+      "GenderAsString": "f",
+      "Canton": 2,
+      "CantonName": "Bern",
+      "CantonAbbreviation": "BE",
+      "Council": 1,
+      "CouncilName": "Nationalrat",
+      "CouncilAbbreviation": "NR",
+      "ParlGroupNumber": 137,
+      "ParlGroupName": "Grünliberale Fraktion",
+      "ParlGroupAbbreviation": "GL",
+      "ParlGroupFunction": 1,
+      "ParlGroupFunctionText": "Mitglied",
+      "Party": 1336,
+      "PartyName": "Grünliberale Partei",
+      "PartyAbbreviation": "glp",
+      "MilitaryRank": null,
+      "MilitaryRankText": null,
+      "MaritalStatus": null,
+      "MaritalStatusText": null,
+      "Nationality": "Schweiz",
+      "BirthPlace_City": "Thun",
+      "BirthPlace_Canton": "BE",
+      "Mandates": "Vizepräsidentin und Mitglied der Geschäftsleitung der glp Schweiz: 2016-2020, Geschäftsleitungsmitglied glp Kanton Bern: seit 2008; Legislative der Stadt Bern: von Januar 2009 bis Dezember 2011",
+      "AdditionalMandate": null,
+      "AdditionalActivity": null,
+      "OfficialName": "Bertschy",
+      "DateJoining": "/Date(1701648000000)/",
+      "DateLeaving": null,
+      "DateElection": "/Date(1697932800000)/",
+      "DateOath": "/Date(1701648000000)/",
+      "DateResignation": null,
+      "Modified": "/Date(1780563175600)/",
+      "NumberOfChildren": null,
+      "Citizenship": "Bern (BE),Düdingen (FR)",
+      "DateOfBirth": "/Date(299721600000)/",
+      "DateOfDeath": null
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 1,
+    "total_records": 6,
+    "total_pages": 6,
+    "current_page": 1,
+    "has_more": true,
+    "next_page": "https://api.openparldata.ch/v1/affairs/?body_key=1711&search=Klima&offset=1&limit=1",
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/affairs/?body_key=1711&search=Klima&offset=0&limit=1",
+    "last_page": "https://api.openparldata.ch/v1/affairs/?body_key=1711&search=Klima&offset=5&limit=1",
+    "self": "https://api.openparldata.ch/v1/affairs/?body_key=1711&search=Klima&limit=1"
+  },
+  "data": [
+    {
+      "id": 95954,
+      "url_api": "https://api.openparldata.ch/v1/affairs/95954",
+      "body_key": "1711",
+      "external_id": "703",
+      "external_alternative_id": null,
+      "number": "2925 SR - 2",
+      "title": {
+        "de": "Biodiversitäts- und Klimamassnahmen"
+      },
+      "body_id": 306,
+      "type_external_id": "9",
+      "type_harmonized_id": 8,
+      "type_harmonized_wikidata_id": "Q1505023",
+      "state_external_id": null,
+      "state_name_harmonized_id": null,
+      "begin_date": "2025-02-27T00:00:00",
+      "end_date": null,
+      "active": null,
+      "updated_external_at": null,
+      "updated_at": "2026-08-15T02:47:24",
+      "created_at": "2025-08-14T07:44:48",
+      "title_long": {
+        "de": "Interpellation der SP-Fraktion vom 19. August 2024 betreffend Biodiversitäts- und Klimamassnahmen"
+      },
+      "type_name": {
+        "de": "Interpellation"
+      },
+      "type_harmonized": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "rm": "interpellaziun",
+        "en": "Interpellation"
+      },
+      "state_name": {},
+      "state_name_harmonized": {},
+      "url_external": {
+        "de": "https://ratsinfo.stadtzug.ch/geschaefte/703"
+      },
+      "links": {
+        "contributors": "https://api.openparldata.ch/v1/affairs/95954/contributors",
+        "docs": "https://api.openparldata.ch/v1/affairs/95954/docs",
+        "events": "https://api.openparldata.ch/v1/affairs/95954/events",
+        "texts": "https://api.openparldata.ch/v1/affairs/95954/texts",
+        "speeches": "https://api.openparldata.ch/v1/affairs/95954/speeches",
+        "votings": "https://api.openparldata.ch/v1/affairs/95954/votings",
+        "agendas": "https://api.openparldata.ch/v1/affairs/95954/agendas",
+        "meetings": "https://api.openparldata.ch/v1/affairs/95954/meetings",
+        "bodies": "https://api.openparldata.ch/v1/affairs/95954/bodies",
+        "external_links": "https://api.openparldata.ch/v1/affairs/95954/external_links"
+      }
+    }
+  ]
+}

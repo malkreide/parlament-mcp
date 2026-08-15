@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "offset": 0,
+    "limit": 1,
+    "total_records": 103,
+    "total_pages": 103,
+    "current_page": 1,
+    "has_more": true,
+    "next_page": "https://api.openparldata.ch/v1/affairs/?body_key=351&search=Klima&offset=1&limit=1",
+    "prev_page": null,
+    "first_page": "https://api.openparldata.ch/v1/affairs/?body_key=351&search=Klima&offset=0&limit=1",
+    "last_page": "https://api.openparldata.ch/v1/affairs/?body_key=351&search=Klima&offset=102&limit=1",
+    "self": "https://api.openparldata.ch/v1/affairs/?body_key=351&search=Klima&limit=1"
+  },
+  "data": [
+    {
+      "id": 335885,
+      "url_api": "https://api.openparldata.ch/v1/affairs/335885",
+      "body_key": "351",
+      "external_id": "ddfae2bed932451d9d9e5400c75e7fcb",
+      "external_alternative_id": null,
+      "number": "2026.SR.0245",
+      "title": {
+        "de": "Unterricht unter Hitze – was ist aus der Arbeitsgruppe «Optimierung Raumklima» geworden?"
+      },
+      "body_id": 353,
+      "type_external_id": "173ac47d8e05457ca1b723eae5244eb7",
+      "type_harmonized_id": 8,
+      "type_harmonized_wikidata_id": "Q1505023",
+      "state_external_id": null,
+      "state_name_harmonized_id": null,
+      "begin_date": "2026-07-02T00:00:00",
+      "end_date": null,
+      "active": null,
+      "updated_external_at": null,
+      "updated_at": "2026-08-15T02:47:43",
+      "created_at": "2026-07-04T05:53:12",
+      "title_long": {
+        "de": "Interpellation: Unterricht unter Hitze – was ist aus der Arbeitsgruppe «Optimierung Raumklima» geworden?"
+      },
+      "type_name": {
+        "de": "Interpellation"
+      },
+      "type_harmonized": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "rm": "interpellaziun",
+        "en": "Interpellation"
+      },
+      "state_name": {
+        "de": "Eingereicht"
+      },
+      "state_name_harmonized": {},
+      "url_external": {
+        "de": "https://stadtrat.bern.ch/de/geschaefte/detail.php?gid=ddfae2bed932451d9d9e5400c75e7fcb"
+      },
+      "links": {
+        "contributors": "https://api.openparldata.ch/v1/affairs/335885/contributors",
+        "docs": "https://api.openparldata.ch/v1/affairs/335885/docs",
+        "events": "https://api.openparldata.ch/v1/affairs/335885/events",
+        "texts": "https://api.openparldata.ch/v1/affairs/335885/texts",
+        "speeches": "https://api.openparldata.ch/v1/affairs/335885/speeches",
+        "votings": "https://api.openparldata.ch/v1/affairs/335885/votings",
+        "agendas": "https://api.openparldata.ch/v1/affairs/335885/agendas",
+        "meetings": "https://api.openparldata.ch/v1/affairs/335885/meetings",
+        "bodies": "https://api.openparldata.ch/v1/affairs/335885/bodies",
+        "external_links": "https://api.openparldata.ch/v1/affairs/335885/external_links"
+      }
+    }
+  ]
+}
