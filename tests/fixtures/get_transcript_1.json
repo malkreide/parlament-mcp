@@ -1,0 +1,58 @@
+{
+  "d": {
+    "__metadata": {
+      "id": "https://ws.parlament.ch/OData.svc/Transcript(ID=378407L,Language='DE')",
+      "uri": "https://ws.parlament.ch/OData.svc/Transcript(ID=378407L,Language='DE')",
+      "type": "itsystems.Pd.DataServices.DataModel.Transcript"
+    },
+    "Subjects": {
+      "__deferred": {
+        "uri": "https://ws.parlament.ch/OData.svc/Transcript(ID=378407L,Language='DE')/Subjects"
+      }
+    },
+    "MembersCouncil": {
+      "__deferred": {
+        "uri": "https://ws.parlament.ch/OData.svc/Transcript(ID=378407L,Language='DE')/MembersCouncil"
+      }
+    },
+    "Businesses": {
+      "__deferred": {
+        "uri": "https://ws.parlament.ch/OData.svc/Transcript(ID=378407L,Language='DE')/Businesses"
+      }
+    },
+    "ID": "378407",
+    "Language": "DE",
+    "IdSubject": "72132",
+    "VoteId": null,
+    "PersonNumber": 4198,
+    "Type": 1,
+    "Text": "<pd_text><p>Das Stimmvolk beschloss den Atomausstieg im Jahr 2017. Seither hat es den Weg für eine sichere Stromversorgung mit erneuerbaren Energien geebnet und diesen Weg auch mehrfach bestätigt. Die erneute Debatte zeigt, dass allen voran der SVP Volksentscheide nur dann wichtig zu sein scheinen, wenn sie ihrer Meinung entsprechen. Selbst wenn eine Mehrheit anders entscheidet, sind Sie bereit, sehr weit zu gehen - bis hier drin im Ratssaal; wir konnten das gestern alle als Zeuginnen und Zeugen erleben.</p>\n<p>Die Lobby der fossilen Energie hält an einer Technologie des letzten Jahrhunderts fest. Es spricht alles, wirklich alles gegen den Neubau von Atomkraftwerken:</p>\n<p>Erstens sind sie zu gefährlich. Der Atomausstieg, der 2017 beschlossen wurde, stand auch und zu Recht unter dem Eindruck der Katastrophe von Fukushima, die uns schmerzlich vor Augen führte, dass AKW auch in Hochtechnologieländern ein riesiges Sicherheitsproblem darstellen. Ebenso führt uns der Krieg in der Ukraine die Gefährlichkeit von AKW vor Augen - AKW sind dort Angriffsziele, bis heute. Wir bleiben in der Abhängigkeit von Ländern wie Russland, wenn wir an der Atomkraftenergie festhalten.</p>\n<p>Zweitens sind sie viel zu teuer. Sie haben hier drin eine Debatte über die Kosten verweigert, obwohl AKW zu den teuersten Formen der Stromversorgung gehören. Das ist schlichtweg verantwortungslos, weil nämlich am Schluss die Steuerzahlerinnen und Steuerzahler das finanzielle Risiko tragen.</p>\n<p>Drittens kommen AKW viel zu spät. Es ist schlichtweg einfach unredlich und irreführend, hier mit Versorgungssicherheit zu argumentieren, obwohl wir alle wissen, dass es Jahrzehnte dauern würde, bis ein neues AKW in Betrieb genommen werden könnte. In dieser Zeit - das ist auch der Grund, weshalb die Lobby für fossile Energie diese AKW-Debatte möchte - wird die Debatte darüber verhindert, was wir bräuchten, um die Klimaziele zu erreichen, und was wir für eine saubere Versorgungssicherheit bräuchten, nämlich den Ausbau von erneuerbaren Energien. Die Debatte zum Atomstrom verstellt und verbaut den Weg hin zu mehr Solar-, Wind- und Wasserenergie, deren Nutzung weitaus günstiger, sicherer und klimafreundlicher ist und schneller realisiert werden kann. Kurz, AKW sind gefährlich, zu teuer, kommen zu spät, lassen uns in Abhängigkeit von Ländern wie Russland und binden finanzielle Mittel und Rechtssicherheiten, die für erneuerbare Energien eingesetzt werden können.</p>\n<p>Wir werden gemeinsam mit unseren Verbündeten das Referendum ergreifen, das steht fest. Wir sind überzeugt, dass das Stimmvolk einmal mehr, auch ein zweites Mal, den eingeschlagenen Weg unterstützen wird, den Weg hin zu einer Zukunft mit den erneuerbaren Energien und nicht mehr zurück in die Vergangenheit mit AKW.</p>\n</pd_text>",
+    "MeetingCouncilAbbreviation": "N",
+    "MeetingDate": "20260619",
+    "MeetingVerbalixOid": 4196,
+    "IdSession": "5214",
+    "SpeakerFirstName": "Mattea",
+    "SpeakerLastName": "Meyer",
+    "SpeakerFullName": "Meyer Mattea",
+    "SpeakerFunction": "Mit-F",
+    "CouncilId": 1,
+    "CouncilName": "Nationalrat",
+    "CantonId": 1,
+    "CantonName": "Zürich",
+    "CantonAbbreviation": "ZH",
+    "ParlGroupName": "Sozialdemokratische Fraktion",
+    "ParlGroupAbbreviation": "S",
+    "SortOrder": 2,
+    "Start": "/Date(1781861741002)/",
+    "End": "/Date(1781861932543)/",
+    "Function": "Mit-F",
+    "DisplaySpeaker": true,
+    "LanguageOfText": "DE",
+    "Modified": "/Date(1785315865131)/",
+    "StartTimeWithTimezone": "/Date(1781861741003+0120)/",
+    "EndTimeWithTimezone": "/Date(1781861932543+0120)/",
+    "VoteBusinessNumber": null,
+    "VoteBusinessShortNumber": null,
+    "VoteBusinessTitle": null
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "d": [
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Session(ID=5214,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5214,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Session"
+      },
+      "Meetings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5214,Language='DE')/Meetings"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5214,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Businesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5214,Language='DE')/Businesses"
+        }
+      },
+      "Votes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5214,Language='DE')/Votes"
+        }
+      },
+      "ID": 5214,
+      "Language": "DE",
+      "SessionNumber": 14,
+      "SessionName": "Sommersession 2026",
+      "Abbreviation": "SS 26",
+      "StartDate": "/Date(1780272000000)/",
+      "EndDate": "/Date(1781827200000)/",
+      "Title": "II/2026",
+      "Type": 2,
+      "TypeName": "Ordentliche Sessionen (je 3 Wochen)",
+      "Modified": "/Date(1781712634520)/",
+      "LegislativePeriodNumber": 52
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Session(ID=5213,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5213,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Session"
+      },
+      "Meetings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5213,Language='DE')/Meetings"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5213,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Businesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5213,Language='DE')/Businesses"
+        }
+      },
+      "Votes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5213,Language='DE')/Votes"
+        }
+      },
+      "ID": 5213,
+      "Language": "DE",
+      "SessionNumber": 13,
+      "SessionName": "Sondersession 4. 2026",
+      "Abbreviation": "Sonder SS 4. 26",
+      "StartDate": "/Date(1777248000000)/",
+      "EndDate": "/Date(1777507200000)/",
+      "Title": null,
+      "Type": 3,
+      "TypeName": "Sondersession (1 Woche)",
+      "Modified": "/Date(1777313356080)/",
+      "LegislativePeriodNumber": 52
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Session(ID=5212,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5212,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Session"
+      },
+      "Meetings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5212,Language='DE')/Meetings"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5212,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Businesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5212,Language='DE')/Businesses"
+        }
+      },
+      "Votes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Session(ID=5212,Language='DE')/Votes"
+        }
+      },
+      "ID": 5212,
+      "Language": "DE",
+      "SessionNumber": 12,
+      "SessionName": "Frühjahrssession 2026",
+      "Abbreviation": "FS 26",
+      "StartDate": "/Date(1772409600000)/",
+      "EndDate": "/Date(1773964800000)/",
+      "Title": "I/2026",
+      "Type": 2,
+      "TypeName": "Ordentliche Sessionen (je 3 Wochen)",
+      "Modified": "/Date(1773942657867)/",
+      "LegislativePeriodNumber": 52
+    }
+  ]
+}

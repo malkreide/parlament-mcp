@@ -1,0 +1,136 @@
+{
+  "d": [
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Vote(ID=35041,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=35041,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Vote"
+      },
+      "Votings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=35041,Language='DE')/Votings"
+        }
+      },
+      "Businesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=35041,Language='DE')/Businesses"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=35041,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Sessions": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=35041,Language='DE')/Sessions"
+        }
+      },
+      "ID": 35041,
+      "Language": "DE",
+      "RegistrationNumber": 31301,
+      "BusinessNumber": 20250022,
+      "BusinessShortNumber": "25.022",
+      "BusinessTitle": "«Für eine gerechte Energie- und Klimapolitik: Investieren für Wohlstand, Arbeit und Umwelt (Klimafonds-Initiative)». Volksinitiative ",
+      "BusinessAuthor": "",
+      "BillNumber": 1,
+      "BillTitle": "Bundesbeschluss über die Volksinitiative «Für eine gerechte Energie- und Klimapolitik: Investieren für Wohlstand, Arbeit und Umwelt (Klimafonds-Initiative)»",
+      "IdLegislativePeriod": 52,
+      "IdSession": 5210,
+      "SessionName": "Herbstsession 2025",
+      "Subject": "Schlussabstimmung",
+      "MeaningYes": "Annahme der Vorlage",
+      "MeaningNo": "Ablehnung der Vorlage",
+      "VoteEnd": "/Date(1758875590816)/",
+      "VoteEndWithTimezone": "/Date(1758875590817+0120)/"
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Vote(ID=34904,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34904,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Vote"
+      },
+      "Votings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34904,Language='DE')/Votings"
+        }
+      },
+      "Businesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34904,Language='DE')/Businesses"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34904,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Sessions": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34904,Language='DE')/Sessions"
+        }
+      },
+      "ID": 34904,
+      "Language": "DE",
+      "RegistrationNumber": 31164,
+      "BusinessNumber": 20250030,
+      "BusinessShortNumber": "25.030",
+      "BusinessTitle": "Abkommen über Klimawandel, Handel und Nachhaltigkeit. Genehmigung",
+      "BusinessAuthor": "",
+      "BillNumber": 1,
+      "BillTitle": "Bundesbeschluss über die Genehmigung des Abkommens über Klimawandel, Handel und Nachhaltigkeit",
+      "IdLegislativePeriod": 52,
+      "IdSession": 5210,
+      "SessionName": "Herbstsession 2025",
+      "Subject": "Gesamtabstimmung",
+      "MeaningYes": "Annahme der Vorlage",
+      "MeaningNo": "Ablehnung der Vorlage",
+      "VoteEnd": "/Date(1758188358908)/",
+      "VoteEndWithTimezone": "/Date(1758188358910+0120)/"
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Vote(ID=34903,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34903,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Vote"
+      },
+      "Votings": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34903,Language='DE')/Votings"
+        }
+      },
+      "Businesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34903,Language='DE')/Businesses"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34903,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Sessions": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Vote(ID=34903,Language='DE')/Sessions"
+        }
+      },
+      "ID": 34903,
+      "Language": "DE",
+      "RegistrationNumber": 31163,
+      "BusinessNumber": 20250030,
+      "BusinessShortNumber": "25.030",
+      "BusinessTitle": "Abkommen über Klimawandel, Handel und Nachhaltigkeit. Genehmigung",
+      "BusinessAuthor": "",
+      "BillNumber": 1,
+      "BillTitle": "Bundesbeschluss über die Genehmigung des Abkommens über Klimawandel, Handel und Nachhaltigkeit",
+      "IdLegislativePeriod": 52,
+      "IdSession": 5210,
+      "SessionName": "Herbstsession 2025",
+      "Subject": "Eintreten",
+      "MeaningYes": "Antrag der Mehrheit (Eintreten)",
+      "MeaningNo": "Antrag der Minderheit Dettling (Nichteintreten)",
+      "VoteEnd": "/Date(1758188298316)/",
+      "VoteEndWithTimezone": "/Date(1758188298317+0120)/"
+    }
+  ]
+}

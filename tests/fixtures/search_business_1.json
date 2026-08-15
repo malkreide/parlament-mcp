@@ -1,0 +1,379 @@
+{
+  "d": [
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Business"
+      },
+      "BusinessResponsibilities": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/BusinessResponsibilities"
+        }
+      },
+      "RelatedBusinesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/RelatedBusinesses"
+        }
+      },
+      "BusinessRoles": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/BusinessRoles"
+        }
+      },
+      "Publications": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Publications"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Sessions": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Sessions"
+        }
+      },
+      "Preconsultations": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Preconsultations"
+        }
+      },
+      "Bills": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Bills"
+        }
+      },
+      "Councils": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Councils"
+        }
+      },
+      "BusinessTypes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/BusinessTypes"
+        }
+      },
+      "Votes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Votes"
+        }
+      },
+      "SubjectsBusiness": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/SubjectsBusiness"
+        }
+      },
+      "BusinessStates": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/BusinessStates"
+        }
+      },
+      "Council": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Council"
+        }
+      },
+      "Transcripts": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263723,Language='DE')/Transcripts"
+        }
+      },
+      "ID": 20263723,
+      "Language": "DE",
+      "BusinessShortNumber": "26.3723",
+      "BusinessType": 8,
+      "BusinessTypeName": "Interpellation",
+      "BusinessTypeAbbreviation": "Ip.",
+      "Title": "Verbesserungspotential bei der Innovationsförderung gemäss Klimaschutzgesetz",
+      "Description": null,
+      "InitialSituation": null,
+      "Proceedings": null,
+      "DraftText": null,
+      "SubmittedText": "<p>Mit der Annahme des Klimaschutzgesetzes und dem Inkrafttreten der Innovationsförderung wurde ein kraftvolles Instrument (Programm ITINERO) geschaffen, um die Dekarbonisierung der Wirtschaft über neuartige Technologien und Prozesse voranzubringen (Art. 6 KIG). Rückmeldungen aus der Wirtschaft sowie die geringe Anzahl von finanzierten Projekten lassen jedoch Zweifel zu, dass diese Innovationsförderung seine Wirkung in der Praxis entfalten kann. Die Gründe dafür sind vielfältig und reichen von administrativer Komplexität bis zu den hohen Anforderungen im Bereich des Innovationsgrads.&nbsp;</p>",
+      "ReasonText": "<p>Der Bundesrat wird darum gebeten, folgende Fragen zu beantworten&nbsp;</p><ol><li>Wie viele Projekte (Anzahl, finanzielles Volumen) wurden bisher ins Programm ITINERO aufgenommen und wie bewertet der Bundesrat diese auch bezüglich ihrer technischen Ausrichtung und innovationsbezogenen Bedeutung generell und bezüglich der berücksichtigten Unternehmen?</li><li>Welche Annahmen hat der Bundesrat getroffen bezüglich der künftigen Inanspruchnahme der jährlich verfügbaren Mittel? Wie gedenkt der Bundesrat, die Vergabe der von Parlament und Volk gutgeheissenen 1,2 Mrd. CHF innerhalb der Laufzeit bis 2030 sicherzustellen?</li><li>Wie können die Prozesse vereinfacht bzw. angepasst werden, damit das Kreditvolumen ausgeschöpft werden kann, bei Berücksichtigung des technischen Reifegrads (Technology Readiness Level TRL) und der volkswirtschaftlichen Relevanz der Projekte?</li><li>Der Einsatz neuer Technologien führt in der Markteinführung über einen längeren Zeitraum zu einer Kostendifferenz im Vergleich zu etablierten Verfahren. Wäre entsprechend zu prüfen, ob auch für solche erhöhten Betriebskosten entsprechende befristete Beiträge ausgeschüttet werden können? Und könnten die Anforderungen an den Innovationsgehalt allenfalls angepasst werden, damit neue Technologien über längere Zeit von einer Förderung profitieren könnten?</li><li>Mit der Kürzung des Pilot- und Demonstrationsprogramms (P&amp;D) des Bundesamts für Energie (BFE) im Rahmen des Entlastungspakets 27 entfällt in den nächsten Jahren ein Instrument, um innovative Projekte an den Markt heranzuführen. Wäre es für den Bundesrat bei dieser Ausgangslage notwendig und denkbar, Pilotanlagen auch gestützt auf Art. 6 KIG im Rahmen des Programm ITINERO zuzulassen?</li><li>Ein wichtiger Hebel für eine grössere Wirkung der Innovationsförderung ist der Wissenstransfer in weitere Unternehmen und Branchen zur Förderung des breiten Einsatzes neuer Technologien. Unter welchen Bedingungen könnten solche Massnahmen im Rahmen des Programms ITINERO gefördert werden?&nbsp;</li><li>Schliesslich interessiert die Frage, wie der Bundesrat die Wirkung der bisher bewilligten ITINERO-Projekte auf die Erreichung des Ziels von Netto-Null-Emissionen im Jahr 2050 (gemäss At. 5 KIG) der berücksichtigten Unternehmen einschätzt und wie er die Wirkung des Programms ITINERO gesamthaft beurteilt hinsichtlich seines Beitrags zur Erreichung des generellen Netto-Null-Ziels für die Schweiz im Jahre 2050?</li></ol><p>&nbsp;</p>",
+      "DocumentationText": null,
+      "MotionText": null,
+      "FederalCouncilResponseText": null,
+      "FederalCouncilProposal": null,
+      "FederalCouncilProposalText": null,
+      "FederalCouncilProposalDate": null,
+      "SubmittedBy": "Stark Jakob",
+      "BusinessStatus": 202,
+      "BusinessStatusText": "Eingereicht",
+      "BusinessStatusDate": "/Date(1781740800000)/",
+      "ResponsibleDepartment": 9,
+      "ResponsibleDepartmentName": "Departement für Umwelt, Verkehr, Energie und Kommunikation",
+      "ResponsibleDepartmentAbbreviation": "UVEK",
+      "IsLeadingDepartment": true,
+      "Tags": "15|24|52|66",
+      "Category": null,
+      "Modified": "/Date(1783677174043)/",
+      "SubmissionDate": "/Date(1781740800000)/",
+      "SubmissionCouncil": 2,
+      "SubmissionCouncilName": "Ständerat",
+      "SubmissionCouncilAbbreviation": "SR",
+      "SubmissionSession": 5214,
+      "SubmissionLegislativePeriod": 52,
+      "FirstCouncil1": 2,
+      "FirstCouncil1Name": "Ständerat",
+      "FirstCouncil1Abbreviation": "SR",
+      "FirstCouncil2": null,
+      "FirstCouncil2Name": null,
+      "FirstCouncil2Abbreviation": null,
+      "TagNames": "Wirtschaft|Finanzwesen|Umwelt|Energie"
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Business"
+      },
+      "BusinessResponsibilities": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/BusinessResponsibilities"
+        }
+      },
+      "RelatedBusinesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/RelatedBusinesses"
+        }
+      },
+      "BusinessRoles": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/BusinessRoles"
+        }
+      },
+      "Publications": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Publications"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Sessions": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Sessions"
+        }
+      },
+      "Preconsultations": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Preconsultations"
+        }
+      },
+      "Bills": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Bills"
+        }
+      },
+      "Councils": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Councils"
+        }
+      },
+      "BusinessTypes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/BusinessTypes"
+        }
+      },
+      "Votes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Votes"
+        }
+      },
+      "SubjectsBusiness": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/SubjectsBusiness"
+        }
+      },
+      "BusinessStates": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/BusinessStates"
+        }
+      },
+      "Council": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Council"
+        }
+      },
+      "Transcripts": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20260429,Language='DE')/Transcripts"
+        }
+      },
+      "ID": 20260429,
+      "Language": "DE",
+      "BusinessShortNumber": "26.429",
+      "BusinessType": 4,
+      "BusinessTypeName": "Parlamentarische Initiative",
+      "BusinessTypeAbbreviation": "Pa. Iv.",
+      "Title": "Stärkung der Wirtschaftsleitung durch bewilligungsfreien Einbau von Klima-Split-Anlagen ohne Kühlleistungsbegrenzung",
+      "Description": null,
+      "InitialSituation": null,
+      "Proceedings": null,
+      "DraftText": null,
+      "SubmittedText": "<p>Die gesetzlichen Grundlagen sind so anzupassen, dass&nbsp;</p><p>a. die Installation von Split-Klimaanlagen künftig schweizweit bewilligungsfrei möglich ist; und&nbsp;</p><p>b.&nbsp;die zulässige Kühlleistung des Klimageräts von heute 12 Watt pro Quadratmeter gekühlter Raumfläche aufgehoben wird.</p><p>Der Bundesrat erhält die Kompetenz, Ausnahmen von dieser Liberalisierung auf Verordnungsebene festzulegen.</p>",
+      "ReasonText": "<p>Die Schweizer Medien titelten im letzten Sommer folgendes: «Experten geben Entwarnung. Viele schwitzen freiwillig in der Wohnung, weil Kühlen als Klimasünde gilt. Fachleute sagen jetzt aber, neue Geräte seien unproblematisch.» Sonntagszeitung vom 6. Juli 2025. «Moderne Klimageräte sind unbedenklich – aber vielerorts verhindern strenge Regeln den Einbau. Die Kantone wollen nicht, dass Eigentümer fixe Klimaanlagen installieren, statt Gebäude zu isolieren.» Sonntagszeitung vom 13. Juli 2025. «Oberste Lehrerin fordert Klimaanlagen. Die Hitze erschwert Kindern die Konzentration und schlägt älteren Menschen auf die Gesundheit.» NZZ vom 15. August 2025. «Hitze-Alarm im Hotelzimmer. Trotz länger werdender Hitzeperioden sind Klimaanlagen in Schweizer Hotels eine Seltenheit. Doch immer mehr Gäste verlangen danach.» CH Media vom 16. August 2025.</p><p>Die Schweizer Wirtschaftsleistung leidet unter nicht gekühlten Räumen: Arbeitnehmer erscheinen aufgrund der Hitze in Schlafzimmern schlecht ausgeschlafen am Arbeitsplatz, die drückende Hitze in den Büro-Räumlichkeiten senkt die Konzentration, Hotelgäste sind unzufrieden mit der Schweizer Hotellerie-Infrastruktur und die Hitze in Industriebetrieben erhöht die Wahrscheinlichkeit von Unfällen.</p><p>Gleichzeitig gelten moderne Klimaanlagen nicht mehr per se als umweltschädigend. Es gibt unproblematische Kältemittel. Zudem ist im Sommer dank Photovoltaikanlagen genügend Strom vorhanden. Dennoch ist der fixe Einbau in der Schweiz bei bestehenden Gebäuden kaum möglich. Nicht zuletzt deshalb schaffen sich viele für ihre Wohn- und Büroräume mobile Klimageräte an, die als ineffizient gelten, weil es für diese keine Bewilligung braucht.</p><p>Dieser Missstand soll behoben werden, indem in einer gesetzlichen Grundlage geregelt wird, dass&nbsp;die Installation von Split-Klimaanlagen künftig schweizweit bewilligungsfrei möglich ist und die zulässige Kühlleistung des Klimageräts von heute 12 Watt pro Quadratmeter gekühlter Raumfläche aufgehoben wird. Der Bundesrat soll die Kompetenz erhalten, Ausnahmen von dieser Liberalisierung auf Verordnungsebene festzulegen.</p>",
+      "DocumentationText": null,
+      "MotionText": null,
+      "FederalCouncilResponseText": null,
+      "FederalCouncilProposal": null,
+      "FederalCouncilProposalText": null,
+      "FederalCouncilProposalDate": null,
+      "SubmittedBy": "Burgherr Thomas",
+      "BusinessStatus": 202,
+      "BusinessStatusText": "Eingereicht",
+      "BusinessStatusDate": "/Date(1781136000000)/",
+      "ResponsibleDepartment": null,
+      "ResponsibleDepartmentName": null,
+      "ResponsibleDepartmentAbbreviation": null,
+      "IsLeadingDepartment": null,
+      "Tags": "52|66|2846",
+      "Category": null,
+      "Modified": "/Date(1785173169403)/",
+      "SubmissionDate": "/Date(1781136000000)/",
+      "SubmissionCouncil": 1,
+      "SubmissionCouncilName": "Nationalrat",
+      "SubmissionCouncilAbbreviation": "NR",
+      "SubmissionSession": 5214,
+      "SubmissionLegislativePeriod": 52,
+      "FirstCouncil1": 1,
+      "FirstCouncil1Name": "Nationalrat",
+      "FirstCouncil1Abbreviation": "NR",
+      "FirstCouncil2": null,
+      "FirstCouncil2Name": null,
+      "FirstCouncil2Abbreviation": null,
+      "TagNames": "Umwelt|Energie|Raumplanung und Wohnungswesen"
+    },
+    {
+      "__metadata": {
+        "id": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')",
+        "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')",
+        "type": "itsystems.Pd.DataServices.DataModel.Business"
+      },
+      "BusinessResponsibilities": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/BusinessResponsibilities"
+        }
+      },
+      "RelatedBusinesses": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/RelatedBusinesses"
+        }
+      },
+      "BusinessRoles": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/BusinessRoles"
+        }
+      },
+      "Publications": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Publications"
+        }
+      },
+      "LegislativePeriods": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/LegislativePeriods"
+        }
+      },
+      "Sessions": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Sessions"
+        }
+      },
+      "Preconsultations": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Preconsultations"
+        }
+      },
+      "Bills": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Bills"
+        }
+      },
+      "Councils": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Councils"
+        }
+      },
+      "BusinessTypes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/BusinessTypes"
+        }
+      },
+      "Votes": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Votes"
+        }
+      },
+      "SubjectsBusiness": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/SubjectsBusiness"
+        }
+      },
+      "BusinessStates": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/BusinessStates"
+        }
+      },
+      "Council": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Council"
+        }
+      },
+      "Transcripts": {
+        "__deferred": {
+          "uri": "https://ws.parlament.ch/OData.svc/Business(ID=20263627,Language='DE')/Transcripts"
+        }
+      },
+      "ID": 20263627,
+      "Language": "DE",
+      "BusinessShortNumber": "26.3627",
+      "BusinessType": 5,
+      "BusinessTypeName": "Motion",
+      "BusinessTypeAbbreviation": "Mo.",
+      "Title": "Mobilität auf Klimakurs bringen. Einstiegshürde abschaffen, Halbtax abschaffen, halber Preis für alle",
+      "Description": null,
+      "InitialSituation": null,
+      "Proceedings": null,
+      "DraftText": null,
+      "SubmittedText": "<p>Der Bundesrat wird beauftragt, sich für die Abschaffung des Halbtax einzusetzen und damit den halben Preis zum Normalpreis zu machen.</p>",
+      "ReasonText": "<p>Um die Klimaziele zu erreichen, spielt der Öffentliche Verkehr neben dem Velo- und Fussverkehr eine wesentliche Rolle. Der Entwicklung, dass der private Autoverkehr billiger wird und der ÖV im Verhältnis teurer, muss entschieden entgegnet werden.</p><p>Die Preise für den öffentlichen Verkehr steigen in der Schweiz schneller als diejenige für den Autoverkehr, wie der Blick auf die Preisentwicklung seit 1990 zeigt. Mit der fortschreitenden Elektrifizierung des MIV und effizienteren Fahrzeugen werden die Kosten weiter sinken. Damit verliert der ÖV an Attraktivität gegenüber dem Auto. Diese Entwicklung ist zu korrigieren, denn mit der Zunahme des Anteils des Autoverkehrs am Modalsplit lassen sich die Klimaziele nicht erreichen. Eine Zunahme des Autoverkehrs ist besonders im Freizeitverkehr zu beobachten. Besonders für Menschen, welche nur gelegentlich den ÖV benützen, erweist sich das Halbtax als Einstiegshürde mit starker negativer Lenkungswirkung: Ein Halbtax lohnt sich nur bei einer einigermassen regelmässigen Nutzung des ÖVs.</p>",
+      "DocumentationText": null,
+      "MotionText": null,
+      "FederalCouncilResponseText": null,
+      "FederalCouncilProposal": null,
+      "FederalCouncilProposalText": null,
+      "FederalCouncilProposalDate": null,
+      "SubmittedBy": "Schlatter Marionna",
+      "BusinessStatus": 202,
+      "BusinessStatusText": "Eingereicht",
+      "BusinessStatusDate": "/Date(1781136000000)/",
+      "ResponsibleDepartment": 9,
+      "ResponsibleDepartmentName": "Departement für Umwelt, Verkehr, Energie und Kommunikation",
+      "ResponsibleDepartmentAbbreviation": "UVEK",
+      "IsLeadingDepartment": true,
+      "Tags": "15|48|52",
+      "Category": null,
+      "Modified": "/Date(1784359869417)/",
+      "SubmissionDate": "/Date(1781136000000)/",
+      "SubmissionCouncil": 1,
+      "SubmissionCouncilName": "Nationalrat",
+      "SubmissionCouncilAbbreviation": "NR",
+      "SubmissionSession": 5214,
+      "SubmissionLegislativePeriod": 52,
+      "FirstCouncil1": 1,
+      "FirstCouncil1Name": "Nationalrat",
+      "FirstCouncil1Abbreviation": "NR",
+      "FirstCouncil2": null,
+      "FirstCouncil2Name": null,
+      "FirstCouncil2Abbreviation": null,
+      "TagNames": "Wirtschaft|Verkehr|Umwelt"
+    }
+  ]
+}
