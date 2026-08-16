@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Hinzugefügt
 
+- **Die Pruefsummen im Fixture-Nachweis waren Zierde.** `PROVENANCE.md` fuehrt
+  je Datei einen SHA-256 — um genau einen Fall zu fangen: eine Aufzeichnung,
+  die nach dem Lauf von Hand nachgebessert wurde. Eine korrigierte Antwort ist
+  wieder eine erfundene, und von aussen ist ihr das nicht anzusehen.
+  Nachgerechnet hat sie kein Test. `test_die_pruefsumme_im_nachweis_stimmt`
+  tut es jetzt, ueber die Bytes auf der Platte statt ueber den Loader — genau
+  die hat der Recorder gehasht.
+
 - **Aufgezeichnete Fixtures statt handgeschriebener Erfolgs-Antworten.**
   `tests/fixtures/` hält jetzt sieben echte Antworten — eine je Werkzeug —,
   aufgezeichnet mit `scripts/record_fixtures.py` an demselben Ort, an dem der
