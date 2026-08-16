@@ -50,7 +50,13 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "pytest-cov>=5.0.0",
     "respx>=0.21.0",
-    "ruff>=0.4.0",
+    # Exakter Pin, und die einzige Stelle, an der die ruff-Version dieses
+    # Unterprojekts steht — dieselbe Zahl wie im Root, weil beide Gate-Saetze
+    # dieselben Regeln fahren muessen. Eine Spanne liess lokalen Lauf und CI
+    # auseinanderlaufen; der `pip install ruff==<version>`-Schritt im zweiten
+    # CI-Job ist entfallen. `test_werkzeug_versionen.py` haelt beide Pins
+    # zusammen, damit sie nicht getrennt driften.
+    "ruff==0.16.1",
 ]
 
 [project.scripts]
