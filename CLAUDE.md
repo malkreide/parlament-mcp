@@ -59,6 +59,9 @@ installiertes ruff unter `~/.local/bin` beschattet ein frisch per pip
 installiertes. `ruff --version` vor jedem Lauf prüfen, sonst meldet ein
 `python -m ruff` einen anderen Befund als die CI.
 
+Vor dem Lauf `ruff --version` prüfen: ein älteres ruff früher im `PATH`
+schlägt den Pin, ohne dass der Install etwas meldet.
+
 **Gates, wörtlich aus der CI (Root, Python 3.11/3.12/3.13):**
 
 ```bash
