@@ -77,6 +77,20 @@ ruff check src/ tests/ scripts/
 ruff format --check src/ tests/ scripts/
 ```
 
+**Die zwei Gate-Sätze sind nicht gleich stark.** Der Root-Server hat ein
+Versions-Sync, `openparldata-mcp/` nicht: dessen `scripts/` enthält nur
+`record_fixtures.py`, es gibt dort kein `server.json` und keinen zweiten
+Guard. Die `0.1.0` in `openparldata-mcp/pyproject.toml` steht allein und wird
+von nichts gehalten — beim Anheben also von Hand.
+
+`security.yml` hat **zwei** Jobs, nicht nur den Hash-Check aus der Liste
+oben: davor läuft `secret-scan` (gitleaks). Beide auf `push`/`pull_request`
+gegen `main`. Lokal stellt keiner der Befehle den gitleaks-Job nach.
+
+Beide Matrizen (`test`, `test-openparldata`) fahren 3.11/3.12/3.13 ohne
+`if:`-Ausnahme, aber ohne `fail-fast: false` — eine rote 3.11 bricht die
+übrigen ab, bevor sie etwas sagen.
+
 **Live-Tests:** `.github/workflows/live-test.yml` läuft per Cron (`0 4 * * *`)
 plus `workflow_dispatch`, mit einem Job je Server. DRIFT-005 ist für beide
 erfüllt.
