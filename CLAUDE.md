@@ -48,9 +48,13 @@ Ein Codex-Review auf einem PR wird beantwortet oder behoben, nie ignoriert.
 Zwei Projekte, zwei Gate-Sätze: Bundes-Server (Root, `src/parlament_mcp`) und
 `openparldata-mcp/` (eigene `pyproject.toml`, eigener CI-Job).
 
-**ruff:** `ruff==0.16.1`, in beiden CI-Jobs gepinnt (`.github/workflows/ci.yml`).
-Eine `.pre-commit-config.yaml` gibt es nicht, es existiert also kein lokales Gate
-zum Abgleichen — die Version von Hand setzen. Achtung: ein per `uv tool`
+**ruff:** `ruff==0.16.1`, exakt gepinnt im `[dev]`-Extra — je einmal in
+`pyproject.toml` und in `openparldata-mcp/pyproject.toml`, für jedes Projekt
+sein eigenes Gate. Ein Install des Extras reicht also, von Hand nachsetzen ist
+nicht mehr nötig. Keine zweite Version in die Workflows schreiben: ein solcher
+Schritt läuft nach dem Install und überstimmt den Pin still — er stand in beiden
+CI-Jobs (`test_werkzeug_versionen.py` hält beides fest). Eine
+`.pre-commit-config.yaml` gibt es nicht. Achtung bleibt: ein per `uv tool`
 installiertes ruff unter `~/.local/bin` beschattet ein frisch per pip
 installiertes. `ruff --version` vor jedem Lauf prüfen, sonst meldet ein
 `python -m ruff` einen anderen Befund als die CI.
@@ -69,8 +73,8 @@ python -m parlament_mcp.tool_hashes --check   # security.yml, SEC-022
 
 ```bash
 PYTHONPATH=src pytest tests/ -m "not live"
-ruff check src/ tests/
-ruff format --check src/ tests/
+ruff check src/ tests/ scripts/
+ruff format --check src/ tests/ scripts/
 ```
 
 **Live-Tests:** `.github/workflows/live-test.yml` läuft per Cron (`0 4 * * *`)

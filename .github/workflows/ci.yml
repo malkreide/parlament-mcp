@@ -29,11 +29,10 @@ jobs:
         run: |
           PYTHONPATH=src pytest tests/ -m "not live"
 
-      # Pin ruff so an upstream release cannot change the default rule set or
-      # formatter and break CI on unrelated, untouched code.
-      - name: Install pinned ruff
-        run: pip install ruff==0.16.1
-
+      # Kein eigener ruff-Install mehr: `pip install -e ".[dev]"` oben bringt den
+      # Pin aus pyproject mit. Der Schritt stand hier, lief nach dem Install und
+      # gewann gegen pyproject — den Pin dort zu aendern haette in der CI nichts
+      # bewirkt. Die Version steht jetzt nur an einer Stelle je Projekt.
       - name: Lint
         run: ruff check src/ tests/ scripts/
 
@@ -70,13 +69,11 @@ jobs:
       - name: Run tests
         run: PYTHONPATH=src pytest tests/ -m "not live"
 
-      # Dieselbe Pinnung wie im Job "test". Ohne sie käme ruff aus dem dev-Extra
-      # (`ruff>=0.4.0`), also in der jeweils neuesten Version — dieser Job wurde
-      # damit ohne jede Codeänderung rot, sobald upstream eine Regel oder der
-      # Formatter sich änderte.
-      - name: Install pinned ruff
-        run: pip install ruff==0.16.1
-
+      # Wie im Job "test" kein eigener ruff-Install mehr. Die Sorge, die hier
+      # stand — ohne Pin käme ruff in der jeweils neuesten Version und der Job
+      # würde ohne Codeänderung rot — ist damit nicht weg, sondern an die
+      # richtige Stelle gewandert: `openparldata-mcp/pyproject.toml` pinnt jetzt
+      # selbst, und der Install oben bringt diesen Pin mit.
       - name: Lint
         run: ruff check src/ tests/ scripts/
 

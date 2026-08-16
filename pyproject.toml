@@ -48,7 +48,15 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "pytest-cov>=5.0.0",
     "respx>=0.21.0",
-    "ruff>=0.4.0",
+    # Exakter Pin, und die einzige Stelle, an der die ruff-Version dieses
+    # Projekts steht. Als hier eine Spanne stand, loeste `pip install -e
+    # ".[dev]"` auf die jeweils neueste Version auf, waehrend ci.yml
+    # `ruff==0.16.1` darueber installierte — lokaler Lauf und Gate waren sich
+    # also ueber die Version uneinig, und die CLAUDE.md musste das mit "die
+    # Version von Hand setzen" auffangen. Der CI-Schritt ist entfallen.
+    # `openparldata-mcp/pyproject.toml` traegt denselben Pin fuer sein eigenes
+    # Gate; `test_werkzeug_versionen.py` haelt beide zusammen.
+    "ruff==0.16.1",
 ]
 # OTLP-Export für Distributed Tracing (OBS-006). Ohne diese Extra werden Spans
 # erzeugt, aber nicht exportiert (nützlich lokal / in Tests).
