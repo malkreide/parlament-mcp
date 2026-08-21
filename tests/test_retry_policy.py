@@ -19,6 +19,21 @@ from parlament_mcp import transcripts as tx
 
 URL = f"{tx.ODATA_BASE}/Transcript"
 
+# Wanduhr-Zahlen fuer den Deadline-Test weiter unten, weit genug auseinander,
+# dass Scheduler-Jitter das Ergebnis nicht mehr kippen kann. Gemessen auf 3.11
+# ueber 15 Laeufe des Test-Rumpfs selbst, durch pytest, damit jede Fixture
+# steht: 0.123-0.140s gegen ein Budget von 0.05s. Allein der erste
+# ``httpx.AsyncClient`` im Prozess kostet davon rund 0.076s — mehr als das
+# Budget — der Test mass also ueberwiegend Setup, nicht Deadline. Die alte
+# Schranke von 0.5s liess 0.375s absoluten Spielraum, und CI-Jitter ist absolut,
+# nicht proportional: In swiss-efv-mcp machte ein belasteter Runner am
+# 21.08.2026 aus 0.105s ganze 0.55s und riss dieselbe Zusicherung. Ein groesseres
+# Budget verkuerzt diesen Stillstand nicht, es macht ihn klein *gegenueber* dem,
+# was gemessen wird.
+_BUDGET = 0.5
+_CUT_BY = 2.5
+_SLOW_RESPONSE = 8.0
+
 
 def _resp(status: int, retry_after: str | None = None) -> httpx.Response:
     headers = {"Retry-After": retry_after} if retry_after is not None else {}
@@ -205,24 +220,43 @@ async def test_a_slow_response_is_cut_by_the_wall_clock_deadline():
 
     Bewusst ohne ``fake_clock``: Diese Zusicherung hängt an echter Zeit, und eine
     Uhr, die nur beim Schlafen vorrückt, könnte sie nicht widerlegen.
+
+    Die Spannen sind absichtlich weit — die Messung dahinter steht bei
+    ``_BUDGET`` oben. Der erste Client und der erste Aufruf durch ihn liegen vor
+    dem Start der Uhr, damit das gemessene Fenster die Deadline traegt und
+    sonst nichts.
     """
     import asyncio as real_asyncio
     import time
 
+    # Aufwaermen auf dem unangetasteten Standardbudget: zahlt, was ein frischer
+    # Client und der erste Aufruf durch ihn kosten, ausserhalb des Fensters, das
+    # unten gemessen wird.
+    route = respx.get(URL).mock(return_value=httpx.Response(200, json={"value": []}))
+    async with httpx.AsyncClient() as warm:
+        await tx._fetch(warm, URL, {})
+
     async def _slow(request):
-        await real_asyncio.sleep(1.0)
+        await real_asyncio.sleep(_SLOW_RESPONSE)
         return httpx.Response(200, json={"value": []})
 
-    respx.get(URL).mock(side_effect=_slow)
-    started = time.monotonic()
+    route.mock(side_effect=_slow)
     async with httpx.AsyncClient() as http:
+        # Die Uhr startet *innerhalb* des Kontextmanagers: Bauen und Schliessen
+        # des Clients kosteten mehr als das alte Budget von 0.05s, und das ist
+        # Setup, nicht Deadline.
+        started = time.monotonic()
         with pytest.raises(TimeoutError):
-            await tx._fetch(http, URL, {}, total_budget=0.05)
-    elapsed = time.monotonic() - started
-    # Die Zusicherung ist die Zeit, nicht der Zähler: respx verbucht den Aufruf
-    # gar nicht mehr, weil die Deadline ihn mitten im Flug abbricht — genau das
-    # ist der Beleg. Ohne die Deadline liefe die Antwort ihre volle Sekunde.
-    assert elapsed < 0.5, f"Deadline hat nicht geschnitten: {elapsed:.2f}s"
+            await tx._fetch(http, URL, {}, total_budget=_BUDGET)
+        elapsed = time.monotonic() - started
+
+    # Absichtlich zweiseitig. Die obere Schranke ist die Zusicherung: Eine
+    # Antwort, die _SLOW_RESPONSE gebraucht haette, wurde geschnitten. Die
+    # untere sagt, dass der Schnitt vom Budget kam und nicht davon, dass etwas
+    # sofort scheiterte — eine falsch gerechnete Deadline segelt durch eine
+    # obere Schranke allein hindurch.
+    assert elapsed >= _BUDGET / 2, f"zu frueh geschnitten fuer das Budget: {elapsed:.3f}s"
+    assert elapsed < _CUT_BY, f"Deadline hat nicht geschnitten: {elapsed:.2f}s"
 
 
 # --- Die Naht, und warum sie nicht `asyncio.sleep` ist -----------------------
