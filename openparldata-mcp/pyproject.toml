@@ -56,7 +56,7 @@ dev = [
     # auseinanderlaufen; der `pip install ruff==<version>`-Schritt im zweiten
     # CI-Job ist entfallen. `test_werkzeug_versionen.py` haelt beide Pins
     # zusammen, damit sie nicht getrennt driften.
-    "ruff==0.16.1",
+    "ruff==0.16.3",
 ]
 
 [project.scripts]
