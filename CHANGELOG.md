@@ -7,7 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Behoben
+
+- **Browser-Clients scheiterten am Preflight.** Spec `2026-07-28` routet eine
+  Streamable-HTTP-Anfrage über `Mcp-Method`, `Mcp-Name` und
+  `Mcp-Protocol-Version`; die CORS-Freigabeliste nannte keinen davon, dafür mit
+  `Mcp-Session-Id` den Header genau der Session-Mechanik, die dieselbe Revision
+  abgeschafft hat. Ein Browser darf einen nicht safelisteten Header nicht
+  senden, wenn der Server ihn nicht nennt: die Anfrage starb vor dem ersten
+  MCP-Byte, während stdio und Python, für die kein Preflight gilt, weiterliefen.
+  `tests/test_cors.py` fährt jeden Header einzeln gegen die zusammengebaute App
+  und hält die Liste gegen die Konstanten aus `mcp.shared.inbound`.
+
 ### Hinzugefügt
+
+- **Frischehinweise auf `tools/list` und `server/discover`** (SEP-2549, Spec
+  `2026-07-28`): `ttlMs` 300000, `cacheScope` `public`. Das SDK setzt sonst
+  «sofort veraltet, nie geteilt» und lässt damit jeden Client bei jeder
+  Verbindung neu auflisten — für eine Liste, die beim Import feststeht und für
+  jeden Aufrufer dieselbe ist. `prompts/list` und `resources/list` bleiben
+  ungesetzt: dieser Server registriert weder das eine noch das andere.
 
 - **Die Pruefsummen im Fixture-Nachweis waren Zierde.** `PROVENANCE.md` fuehrt
   je Datei einen SHA-256 — um genau einen Fall zu fangen: eine Aufzeichnung,
