@@ -9,12 +9,23 @@ from __future__ import annotations
 
 import sys
 
+from mcp.types.version import LATEST_HANDSHAKE_VERSION
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# MCP-Spec-Version, gegen die dieser Server getestet/gepinnt ist (ARCH-012).
-# Wird im README und CHANGELOG referenziert; das SDK handhabt die eigentliche
-# Protokoll-Negotiation, hier dokumentieren wir die getestete Ziel-Version.
-PROTOCOL_VERSION = "2025-06-18"
+# Die Revision, die `server_start` ins Log schreibt (ARCH-012).
+#
+# Hier stand `"2025-06-18"` — drei Revisionen alt. Ein Literal an dieser Stelle
+# ist eine zweite Wahrheit neben dem SDK, und zweite Wahrheiten driften: seit
+# dem Umstieg auf `mcp` 2.x handelt dieser Server `2025-11-25` aus, geloggt
+# wurde weiter die alte Zahl. Ein Log, das etwas anderes sagt als die Leitung,
+# ist beim Debuggen schlimmer als gar keines.
+#
+# Deshalb abgeleitet statt geschrieben. `LATEST_HANDSHAKE_VERSION` und nicht
+# `LATEST_PROTOCOL_VERSION`: Letzteres ist ein Alias auf die moderne
+# Envelope-Aera, waehrend der Wert hier die Aera beschreibt, in der heutige
+# Clients sprechen. `tests/test_protocol_version.py` pinnt beide, die Ableitung
+# kann also nicht unbemerkt wandern.
+PROTOCOL_VERSION = LATEST_HANDSHAKE_VERSION
 
 # Datenquelle / Lizenz (CH-004 — OGD-CH-Attribution).
 DATA_SOURCE = "Curia Vista – Schweizer Parlament (ws.parlament.ch)"
