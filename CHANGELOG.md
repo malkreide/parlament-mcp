@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `tests/test_cors.py` fährt jeden Header einzeln gegen die zusammengebaute App
   und hält die Liste gegen die Konstanten aus `mcp.shared.inbound`.
 
+- **`server_start` loggte eine drei Revisionen alte Protokoll-Version.**
+  `PROTOCOL_VERSION` stand auf `2025-06-18`, waehrend der Server seit dem
+  Umstieg auf `mcp` 2.x `2025-11-25` aushandelt. Ein Log, das etwas anderes
+  sagt als die Leitung, ist beim Debuggen schlimmer als gar keines. Die
+  Konstante wird jetzt aus `LATEST_HANDSHAKE_VERSION` abgeleitet statt ein
+  zweites Mal hingeschrieben; ein Test faengt ab, dass daraus wieder ein
+  Literal wird. Beide READMEs nannten dieselbe alte Zahl und sind nachgezogen.
+
 ### Hinzugefügt
 
 - **Frischehinweise auf `tools/list` und `server/discover`** (SEP-2549, Spec
@@ -62,6 +70,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   Die handgeschriebenen Stubs bleiben für die Fehlerpfade — Timeout, 5xx, leere
   Trefferliste —, die sich nicht auf Zuruf aufzeichnen lassen.
+
+- **Protokoll-Gate: beide Spec-Aeren gepinnt und geprueft**
+  (`tests/test_protocol_version.py`). `mcp` 2.x bedient zwei Aeren ueber
+  denselben Server — den `initialize`-Handshake, der bei `2025-11-25`
+  deckelt, und den Pro-Request-Envelope, der `2026-07-28` erreicht.
+  `LATEST_PROTOCOL_VERSION` ist ein Alias auf die **moderne** Aera; wer nur
+  dagegen pinnt, laesst genau die Aera frei wandern, die heutige Clients
+  aushandeln. Beide sind jetzt einzeln gepinnt, ein Dependabot-Bump von
+  `mcp` kann keine davon still verschieben.
+
+  Ohne gemessenen Teil: dieser Server baut keine ASGI-App, durch die sich ein
+  `initialize` schicken liesse. Das Gate haengt deshalb an den SDK-Konstanten —
+  die schwaechere Form, im Docstring benannt statt verschwiegen.
+
+  Beide READMEs beschreiben die Aeren; ein Test haelt jede Sprache einzeln
+  dagegen — im Portfolio sind EN und DE desselben Repos schon dreimal
+  auseinandergelaufen, weil nur eine Fassung nachgezogen wurde.
 
 ### Changed
 
