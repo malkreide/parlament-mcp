@@ -9,6 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Behoben
 
+- **`DELETE` fehlte in `allow_methods` — in beiden Servern dieses Repositorys.**
+  Auf streamable-http beendet die Methode eine Session ausdrücklich; der
+  Preflight wies sie mit 400 ab. Ein Browser-Client konnte Sessions öffnen, aber
+  nie schliessen. Das SDK bedient sie sehr wohl (`_handle_delete_request` in
+  `mcp.server.streamable_http`; dessen 405-Antwort wirbt mit
+  `Allow: GET, POST, DELETE`).
+
+- **`openparldata-mcp`: die Routing-Header der Spec `2026-07-28` fehlten.**
+  `Mcp-Method`, `Mcp-Name` und `Mcp-Protocol-Version` tragen seit dieser
+  Revision die Wegwahl einer streamable-http-Anfrage. Ein Browser darf einen
+  nicht safelisteten Header gar nicht erst senden, wenn der Server ihn nicht
+  nennt — **jede** Cross-Origin-Anfrage starb am Preflight, vor dem ersten
+  MCP-Byte. Gemessen vorher: `mcp-method` → 400, `mcp-protocol-version` → 400.
+
+  Der Schwester-Server im selben Repository führte die Header längst; das
+  Subprojekt war bei der damaligen Umstellung übersehen worden. `Last-Event-ID`
+  kommt mit auf die Liste — er setzt einen abgerissenen SSE-Strom fort.
+
+  Ohne diesen Punkt hätte der `DELETE`-Fix nichts gebracht: Wer nicht einmal
+  eine Anfrage durchbringt, kann auch keine Session beenden.
+
+### Hinzugefügt
+
+- **`openparldata-mcp/tests/test_cors.py`.** Das Subprojekt hatte keine
+  CORS-Tests — deshalb blieb beides unbemerkt.
+
+### Behoben
+
 - **Browser-Clients scheiterten am Preflight.** Spec `2026-07-28` routet eine
   Streamable-HTTP-Anfrage über `Mcp-Method`, `Mcp-Name` und
   `Mcp-Protocol-Version`; die CORS-Freigabeliste nannte keinen davon, dafür mit
