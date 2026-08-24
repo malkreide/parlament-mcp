@@ -1221,6 +1221,36 @@ def build_transport_security(host: str, port: int):
     )
 
 
+# Die Header, nach denen Spec 2026-07-28 eine Anfrage routet — in der
+# Schreibweise des SDK (`mcp.shared.inbound`). Sie fehlten hier, und ein Browser
+# darf einen nicht safelisteten Header gar nicht erst senden, wenn der Server
+# ihn nicht nennt: **jede** Cross-Origin-Anfrage starb am Preflight, vor dem
+# ersten MCP-Byte. stdio- und Python-Clients kennen keinen Preflight und merkten
+# nichts davon — deshalb fiel es nicht auf.
+#
+# Gemessen vor der Behebung: `mcp-method` -> 400, `mcp-protocol-version` -> 400.
+CORS_ROUTING_HEADERS = ["Mcp-Method", "Mcp-Name", "Mcp-Protocol-Version"]
+
+# `Last-Event-ID` setzt einen abgerissenen SSE-Strom fort
+# (`LAST_EVENT_ID_HEADER` in `mcp.server.streamable_http`). Fehlt er, bricht nur
+# die Wiederaufnahme nach Paketverlust — die unangenehmste Art, einen Fehler zu
+# entdecken.
+CORS_ALLOW_HEADERS = [
+    "Content-Type",
+    "Authorization",
+    *CORS_ROUTING_HEADERS,
+    "Mcp-Session-Id",
+    "Last-Event-ID",
+]
+
+# `DELETE` beendet auf streamable-http eine Session ausdruecklich. Es fehlte
+# hier, und der Preflight wies die Methode mit 400 ab — ein Browser-Client
+# konnte Sessions oeffnen, aber nie schliessen. Das SDK bedient sie sehr wohl:
+# `_handle_delete_request` in `mcp.server.streamable_http`, und dessen eigene
+# 405-Antwort wirbt mit `Allow: GET, POST, DELETE`.
+CORS_ALLOW_METHODS = ["GET", "POST", "DELETE", "OPTIONS"]
+
+
 def create_http_app():
     """Starlette-ASGI-App für Streamable HTTP mit CORS.
 
@@ -1260,8 +1290,8 @@ def create_http_app():
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
-        allow_methods=["GET", "POST", "OPTIONS"],
-        allow_headers=["Content-Type", "Mcp-Session-Id", "Authorization"],
+        allow_methods=CORS_ALLOW_METHODS,
+        allow_headers=CORS_ALLOW_HEADERS,
         expose_headers=["Mcp-Session-Id"],
         allow_credentials=bool(origins),
     )
