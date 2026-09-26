@@ -15,6 +15,9 @@ updates:
         patterns:
           - "opentelemetry*"
           - "structlog"
+      python-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -25,3 +28,6 @@ updates:
         patterns:
           - "actions/upload-artifact"
           - "actions/download-artifact"
+      github-actions:
+        patterns:
+          - "*"
