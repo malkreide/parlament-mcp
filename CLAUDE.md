@@ -287,12 +287,13 @@ wie der Code: Nichts ist rot, weil nichts geprüft wird, worauf es ankommt.
 Zwei Projekte, zwei Gate-Sätze: Bundes-Server (Root, `src/parlament_mcp`) und
 `openparldata-mcp/` (eigene `pyproject.toml`, eigener CI-Job).
 
-**ruff:** `ruff==0.16.3`, exakt gepinnt im `[dev]`-Extra — je einmal in
-`pyproject.toml` und in `openparldata-mcp/pyproject.toml`, für jedes Projekt
-sein eigenes Gate. Ein Install des Extras reicht also, von Hand nachsetzen ist
-nicht mehr nötig. Keine zweite Version in die Workflows schreiben: ein solcher
-Schritt läuft nach dem Install und überstimmt den Pin still — er stand in beiden
-CI-Jobs (`test_werkzeug_versionen.py` hält beides fest). Eine
+**ruff:** exakt gepinnt im `[dev]`-Extra — je einmal in `pyproject.toml` und
+in `openparldata-mcp/pyproject.toml`, für jedes Projekt sein eigenes Gate. Die
+Version dort nachlesen, nicht hier: `tests/test_ruff_pin_doku.py` hält sie aus
+dieser Datei draussen. Ein Install des Extras reicht also, von Hand nachsetzen
+ist nicht mehr nötig. Keine zweite Version in die Workflows schreiben: ein
+solcher Schritt läuft nach dem Install und überstimmt den Pin still — er stand
+in beiden CI-Jobs (`test_werkzeug_versionen.py` hält beides fest). Eine
 `.pre-commit-config.yaml` gibt es nicht. Achtung bleibt: ein per `uv tool`
 installiertes ruff unter `~/.local/bin` beschattet ein frisch per pip
 installiertes. `ruff --version` vor jedem Lauf prüfen, sonst meldet ein
