@@ -47,9 +47,9 @@ import httpx
 WURZEL = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(WURZEL / "src"))
 
-from openparldata_mcp import bodies as body_cache
-from openparldata_mcp import client as api_client
-from openparldata_mcp import server
+from openparldata_mcp import bodies as body_cache  # noqa: E402
+from openparldata_mcp import client as api_client  # noqa: E402
+from openparldata_mcp import server  # noqa: E402
 
 FIXTURES = WURZEL / "tests" / "fixtures"
 
