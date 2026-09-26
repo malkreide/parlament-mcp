@@ -56,7 +56,7 @@ dev = [
     # Version von Hand setzen" auffangen. Der CI-Schritt ist entfallen.
     # `openparldata-mcp/pyproject.toml` traegt denselben Pin fuer sein eigenes
     # Gate; `test_werkzeug_versionen.py` haelt beide zusammen.
-    "ruff==0.16.3",
+    "ruff==0.16.9",
 ]
 # OTLP-Export für Distributed Tracing (OBS-006). Ohne diese Extra werden Spans
 # erzeugt, aber nicht exportiert (nützlich lokal / in Tests).
