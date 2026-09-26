@@ -6,6 +6,19 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Geändert
+
+- **ruff-Regelsatz explizit festgelegt** (`[tool.ruff.lint]`, derselbe Satz wie
+  in der Wurzel von `parlament-mcp`: `E, F, W, I, UP`, ohne `E501`). Bisher
+  fehlte `select`, und damit galt ruffs Default — der mit ruff 0.16 von 59 auf
+  413 Regeln gewachsen ist (gemessen: 0.15.8 aktiviert E4/E7/E9/F, 0.16.x
+  zusätzlich B, SIM, RUF, PL, DTZ und weitere). Welche Regeln das Subprojekt
+  prüften, bestimmte damit die installierte ruff-Version, nicht das Projekt;
+  ein Bump des Pins hätte den Job `test-openparldata` ohne Codeänderung rot
+  färben können. Der festgelegte Satz meldete genau drei Befunde: `E402` für
+  die Imports nach `sys.path.insert` in `scripts/record_fixtures.py`. Sie
+  tragen jetzt `# noqa: E402`, wie dieselbe Stelle im Bundes-Server.
+
 ### Hinzugefügt
 
 - **Aufgezeichnete Fixtures statt handgeschriebener Erfolgs-Antworten.**
