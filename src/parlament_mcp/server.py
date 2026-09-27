@@ -138,7 +138,17 @@ CACHE_HINTS = {
     "server/discover": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
 }
 
-mcp = MCPServer("parlament_mcp", lifespan=_lifespan, cache_hints=CACHE_HINTS)
+# `version` stempelt Spec 2026-07-28 in die Resultate (etwa `tools/list`), als
+# `_meta`-Eintrag `io.modelcontextprotocol/serverInfo` — der Handshake, der die
+# Angabe frueher einmal trug, entfaellt in dieser Aera. Ohne das Argument stand
+# dort `"version": ""`: eine Luecke, die sich wie eine Angabe liest. Der Wert
+# kommt aus den Paket-Metadaten, wie beim User-Agent, und kann nicht driften.
+mcp = MCPServer(
+    "parlament_mcp",
+    version=__version__,
+    lifespan=_lifespan,
+    cache_hints=CACHE_HINTS,
+)
 
 # Geschäftstyp-IDs (Curia Vista)
 BUSINESS_TYPE_NAMES = {

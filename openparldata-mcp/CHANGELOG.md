@@ -8,6 +8,30 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Geändert
 
+- **Nativ auf Spec `2026-07-28`.** Der Server bediente die Envelope-Ära schon
+  über das SDK, aber mit dessen Voreinstellungen — gemessen über
+  streamable-http: `tools/list` mit `ttlMs=0`, `cacheScope=private` und
+  `serverInfo.version` leer, während der Bundes-Server im selben Repository
+  `300000`/`public` meldete. Jetzt:
+  - **Frischehinweise (SEP-2549)** auf `tools/list` und `server/discover`,
+    `300000` ms, `public` — die 13 Tools stehen beim Import fest und hängen
+    nicht vom Aufrufer ab (`tests/test_cache_hints.py`).
+  - **`serverInfo` mit Version**, gelesen aus den Paket-Metadaten statt aus
+    einem zweiten Literal `"0.1.0"` in `__init__.py`, das niemand hielt
+    (`tests/test_server_info.py`).
+  - **`PROTOCOL_VERSION` abgeleitet** aus `LATEST_HANDSHAKE_VERSION`. Geloggt
+    wurde `2025-06-18`, ausgehandelt `2025-11-25`.
+  - **Protokoll-Pin wie im Bundes-Server**: beide Ären gegen das SDK gepinnt
+    und je über eine echte Client-Verbindung gemessen
+    (`tests/test_protocol_version.py`), dokumentiert in einem neuen
+    README-Abschnitt (EN/DE).
+
+  Die Tests sprechen den Server über `Client(mcp)` an und fahren damit den
+  Lifespan, der den Body-Cache vorwärmt. Die neue Fixture `offline_lifespan`
+  beantwortet diese eine Anfrage, damit kein Test ins Netz geht.
+
+### Geändert
+
 - **ruff-Regelsatz explizit festgelegt** (`[tool.ruff.lint]`, derselbe Satz wie
   in der Wurzel von `parlament-mcp`: `E, F, W, I, UP`, ohne `E501`). Bisher
   fehlte `select`, und damit galt ruffs Default — der mit ruff 0.16 von 59 auf

@@ -22,10 +22,12 @@ import time
 from contextlib import asynccontextmanager
 from typing import Any, Literal
 
+from mcp.server.caching import CacheHint
 from mcp.server.mcpserver import Context, MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from pydantic import BaseModel, ConfigDict, Field
 
+from openparldata_mcp import __version__
 from openparldata_mcp import bodies as body_cache
 from openparldata_mcp.client import (
     aclose,
@@ -67,7 +69,35 @@ async def _lifespan(_server: MCPServer):
         await aclose()
 
 
-mcp = MCPServer("openparldata_mcp", lifespan=_lifespan)
+# SEP-2549, Spec 2026-07-28: die auflistenden Methoden tragen `ttlMs` und
+# `cacheScope`. Das SDK setzt beides auf «sofort veraltet, nie geteilt» — ohne
+# `cache_hints` listet jeder moderne Client bei jeder Verbindung neu auf, fuer
+# eine Liste, die beim Import feststeht. Gemessen vorher: `tools/list` ueber
+# streamable-http in der Aera `2026-07-28` mit `ttlMs=0`, `cacheScope=private`;
+# der Bundes-Server im selben Repository meldete `300000`/`public`.
+#
+# `public` folgt aus der Sache: die 13 Tools werden per Dekorator beim Import
+# registriert, es gibt keine Filterung nach Aufrufer. Haengt eine Liste einmal
+# vom Aufrufer ab, muss der Scope im selben Commit auf `private` wechseln.
+#
+# `prompts/list` und `resources/list` bleiben ungesetzt: dieser Server
+# registriert weder Prompts noch Ressourcen.
+LIST_CACHE_TTL_MS = 300_000
+
+CACHE_HINTS = {
+    "tools/list": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
+    "server/discover": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
+}
+
+# `version` stempelt Spec 2026-07-28 in die Resultate (etwa `tools/list`), als
+# `_meta`-Eintrag `io.modelcontextprotocol/serverInfo`; ohne das Argument stand
+# dort `"version": ""`.
+mcp = MCPServer(
+    "openparldata_mcp",
+    version=__version__,
+    lifespan=_lifespan,
+    cache_hints=CACHE_HINTS,
+)
 
 
 # ─────────────────────────── Instrumentierung ──────────────────────────────────

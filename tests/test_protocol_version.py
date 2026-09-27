@@ -28,10 +28,11 @@ Nachgemessen statt aus Konstantennamen geschlossen: die Aushandlung steht in
 
 — sie haengt an keinem Transport, gilt also fuer stdio ebenso wie fuer HTTP.
 
-Ohne gemessenen Teil: dieses Repo baut keine ASGI-App, durch die sich ein
-`initialize` schicken liesse. Die Zusicherungen unten haengen deshalb an den
-SDK-Konstanten. Das ist die schwaechere Form, und sie steht hier benannt statt
-unausgesprochen.
+Die Konstanten allein waeren die schwaechere Form: sie sagen, was das SDK
+kann, nicht was dieser Server aushandelt. Deshalb stehen unten zusaetzlich
+gemessene Zusicherungen — eine echte `Client`-Verbindung je Aera gegen den
+registrierten Server, und die ausgehandelte Revision wird von der Verbindung
+abgelesen, nicht aus einer Konstante geschlossen.
 """
 
 from __future__ import annotations
@@ -39,11 +40,14 @@ from __future__ import annotations
 import pathlib
 import re
 
+from mcp import Client
 from mcp.types.version import (
     LATEST_HANDSHAKE_VERSION,
     LATEST_MODERN_VERSION,
     LATEST_PROTOCOL_VERSION,
 )
+
+from parlament_mcp.server import mcp
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
 
@@ -137,3 +141,21 @@ def test_die_geloggte_revision_ist_die_des_sdk_und_kein_literal() -> None:
     from parlament_mcp.config import PROTOCOL_VERSION
 
     assert PROTOCOL_VERSION == LATEST_HANDSHAKE_VERSION
+
+
+async def test_ein_heutiger_client_handelt_die_handshake_revision_aus() -> None:
+    """Gemessen statt aus der Konstante geschlossen: ein `initialize` gegen den
+    registrierten Server, die Revision von der Verbindung abgelesen."""
+    async with Client(mcp, mode="legacy") as client:
+        assert client.protocol_version == DOCUMENTED_HANDSHAKE_VERSION
+
+
+async def test_ein_moderner_client_erreicht_die_moderne_revision() -> None:
+    """`auto` probt `server/discover` und faellt nur bei einem Legacy-Server auf
+    den Handshake zurueck. Landet dieser Server dort, spricht er die moderne
+    Aera nicht — genau das soll hier auffallen."""
+    async with Client(mcp, mode="auto") as client:
+        assert client.protocol_version == DOCUMENTED_MODERN_VERSION
+        tools = await client.list_tools()
+
+    assert tools.tools, "moderne Verbindung steht, listet aber keine Werkzeuge"

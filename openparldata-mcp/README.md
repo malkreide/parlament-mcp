@@ -96,6 +96,25 @@ sync/staleness cost without a functional gain today.
 6. **Error handling.** 404 → `{"detail": …}`; `offset > 100000` → RFC-7807 body
    with `max_offset`. Both are translated into readable tool errors.
 
+## MCP protocol version
+
+This server speaks **two protocol eras** over the same endpoint; the client's
+first request on a connection decides which one applies.
+
+| Era | Revision | Who reaches it |
+|---|---|---|
+| `initialize` handshake | `2024-11-05` … **`2025-11-25`** | What today's clients speak. |
+| Per-request envelope | **`2026-07-28`** | Clients that probe `server/discover` or send the `2026-07-28` `_meta` envelope. |
+
+In the `2026-07-28` era, `tools/list` and `server/discover` carry cache hints
+(`ttlMs=300000`, `cacheScope=public`, SEP-2549), and results such as
+`tools/list` carry the package version in `io.modelcontextprotocol/serverInfo`.
+Both revisions are pinned against the installed SDK and measured over a real client connection
+per era in [`tests/test_protocol_version.py`](tests/test_protocol_version.py);
+a bump of `mcp` cannot move either one silently. When that gate fails, read
+the spec changelog first, then move the constant, both READMEs and
+[`CHANGELOG.md`](CHANGELOG.md) together.
+
 ## Install & run
 
 ```bash

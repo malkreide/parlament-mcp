@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Geändert
+
+- **Spec `2026-07-28`: `serverInfo` trägt jetzt die Version.** In der
+  Envelope-Ära gibt es keinen Handshake mehr, der Name und Version überträgt;
+  das SDK stempelt stattdessen `io.modelcontextprotocol/serverInfo` in die
+  `_meta` der Resultate. Der Server gab `MCPServer` keine `version` mit, auf
+  der Leitung stand `"version": ""`. Jetzt die Paketversion aus den Metadaten —
+  in beiden Ären dieselbe (`tests/test_server_info.py`, mit Negativkontrolle).
+
+- **Protokoll-Pin gemessen statt nur aus Konstanten geschlossen.**
+  `tests/test_protocol_version.py` fährt je Ära eine echte `Client`-Verbindung
+  gegen den registrierten Server: `legacy` handelt `2025-11-25` aus, `auto`
+  landet über `server/discover` auf `2026-07-28`. Der Satz, dieses Repo baue
+  keine App, durch die sich ein `initialize` schicken liesse, stimmte nicht
+  mehr und ist aus Test und beiden READMEs entfernt.
+
 ### Behoben
 
 - **`DELETE` fehlte in `allow_methods` — in beiden Servern dieses Repositorys.**
