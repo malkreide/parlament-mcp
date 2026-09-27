@@ -29,6 +29,7 @@ import httpx
 from mcp.server.caching import CacheHint
 from mcp.server.mcpserver import Context, MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
+from mcp.types import ServerCapabilities
 from pydantic import BaseModel, ConfigDict, Field
 
 from parlament_mcp import transcripts
@@ -149,6 +150,56 @@ mcp = MCPServer(
     lifespan=_lifespan,
     cache_hints=CACHE_HINTS,
 )
+
+
+def advertise_only_registered_primitives(server: MCPServer) -> None:
+    """`prompts` und `resources` nur ankuendigen, wenn etwas registriert ist.
+
+    Das SDK leitet die Capabilities aus den vorhandenen Handlern ab, und
+    `MCPServer` registriert die Handler fuer Prompts und Ressourcen immer.
+    Gemessen vor dieser Funktion, in beiden Aeren: `prompts` und `resources`
+    angekuendigt, in `2026-07-28` sogar mit `subscribe=True` und
+    `listChanged=True` — ein Versprechen von Benachrichtigungen ueber eine
+    Flaeche, die es nicht gibt. Ein Client, der Capabilities ernst nimmt, fragt
+    daraufhin leere Listen ab oder bietet dem Modell ein leeres Menue an.
+
+    Geprueft wird bei jedem Aufruf, nicht einmal beim Import: sobald ein Prompt,
+    eine Ressource oder ein Template registriert ist, erscheint die Capability
+    wieder unveraendert so, wie das SDK sie ableitet.
+
+    Die Handler bleiben bestehen. Wer trotzdem `prompts/list` fragt, bekommt
+    weiter eine leere Liste statt «Method not found» — Clients, die ohne Blick
+    auf die Capabilities auflisten, sollen daran nicht scheitern.
+
+    Greift auf private Stellen des SDK zu (`_lowlevel_server`, die Manager).
+    Verschwindet eine davon mit einem Update innerhalb von `mcp` 2.x, gilt
+    wieder die Ableitung des SDK: eine zu breite Ankuendigung ist ein
+    Schoenheitsfehler, ein `AttributeError` im `initialize` waere ein Ausfall.
+    Auffallen soll der Bruch in `tests/test_capabilities.py`, nicht im Betrieb.
+    """
+    lowlevel = server._lowlevel_server
+    derive = lowlevel.get_capabilities
+
+    def get_capabilities(*args: Any, **kwargs: Any) -> ServerCapabilities:
+        capabilities = derive(*args, **kwargs)
+        try:
+            no_prompts = not server._prompt_manager.list_prompts()
+            resources = server._resource_manager
+            no_resources = not resources.list_resources() and not resources.list_templates()
+        except AttributeError:
+            return capabilities
+        update: dict[str, None] = {}
+        if no_prompts:
+            update["prompts"] = None
+        if no_resources:
+            update["resources"] = None
+        return capabilities.model_copy(update=update)
+
+    lowlevel.get_capabilities = get_capabilities  # type: ignore[method-assign]
+
+
+advertise_only_registered_primitives(mcp)
+
 
 # Geschäftstyp-IDs (Curia Vista)
 BUSINESS_TYPE_NAMES = {

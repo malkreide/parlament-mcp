@@ -6,6 +6,16 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Behoben
+
+- **Capabilities kündigten Prompts und Ressourcen an, die es nicht gibt.**
+  Gemessen, in beiden Ären und über streamable-http: `prompts` und `resources`
+  angekündigt, in `2026-07-28` mit `subscribe=True` — bei 13 Tools und sonst
+  nichts. `advertise_only_registered_primitives` blendet beide aus, solange
+  nichts registriert ist; die Handler bleiben, `prompts/list` liefert weiter
+  eine leere Liste. Dieselbe Funktion wie im Bundes-Server
+  (`tests/test_capabilities.py`).
+
 ### Geändert
 
 - **Nativ auf Spec `2026-07-28`.** Der Server bediente die Envelope-Ära schon

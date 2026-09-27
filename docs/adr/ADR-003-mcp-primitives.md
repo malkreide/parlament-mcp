@@ -24,3 +24,8 @@ MCP kennt drei Primitive: Tools (Verben), Resources (Substantive), Prompts
 - Tool-Budget bleibt klein (6 Tools, ARCH-006 ✓).
 - Migration ausgewählter get_*-Tools zu Resources ist als Phase-2-Task in
   `docs/roadmap.md` vorgemerkt.
+- Die Capability-Ankündigung folgt dieser Wahl: `prompts` und `resources`
+  erscheinen weder im `initialize` noch in `server/discover`, solange nichts
+  registriert ist (`advertise_only_registered_primitives` in `server.py`,
+  `tests/test_capabilities.py`). Registriert Phase 2 eine Ressource, erscheint
+  die Capability ohne weitere Änderung wieder.
