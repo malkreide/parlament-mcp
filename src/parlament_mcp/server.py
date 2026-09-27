@@ -152,8 +152,10 @@ mcp = MCPServer(
 )
 
 
-def advertise_only_registered_primitives(server: MCPServer) -> None:
-    """`prompts` und `resources` nur ankuendigen, wenn etwas registriert ist.
+def advertise_honest_capabilities(server: MCPServer) -> None:
+    """Nur ankuendigen, was der Server anbietet und einloest.
+
+    **`prompts` und `resources` nur, wenn etwas registriert ist.**
 
     Das SDK leitet die Capabilities aus den vorhandenen Handlern ab, und
     `MCPServer` registriert die Handler fuer Prompts und Ressourcen immer.
@@ -176,29 +178,41 @@ def advertise_only_registered_primitives(server: MCPServer) -> None:
     wieder die Ableitung des SDK: eine zu breite Ankuendigung ist ein
     Schoenheitsfehler, ein `AttributeError` im `initialize` waere ein Ausfall.
     Auffallen soll der Bruch in `tests/test_capabilities.py`, nicht im Betrieb.
+
+    **`tools.listChanged` nie.** In `2026-07-28` setzt das SDK das Flag, sobald
+    `subscriptions/listen` bedient wird — also immer. Es verspricht
+    `notifications/tools/list_changed`, und die sendet hier niemand: die Tools
+    stehen beim Import fest, und das SDK meldet auch `add_tool`/`remove_tool`
+    nicht von selbst. Ein Client, der dem Flag glaubt, haelt einen Strom offen
+    und wartet auf ein Ereignis, das nicht kommt; verlassen soll er sich
+    stattdessen auf `ttlMs` aus den Cache-Hinweisen. Im Handshake stand das
+    Flag schon auf `False`. Aendert ein Commit die Tool-Liste zur Laufzeit,
+    muss er diesen Punkt im selben Zug zuruecknehmen —
+    `tests/test_capabilities.py` sucht dafuer nach den Aufrufen.
     """
     lowlevel = server._lowlevel_server
     derive = lowlevel.get_capabilities
 
     def get_capabilities(*args: Any, **kwargs: Any) -> ServerCapabilities:
         capabilities = derive(*args, **kwargs)
+        update: dict[str, Any] = {}
+        if capabilities.tools is not None and capabilities.tools.list_changed:
+            update["tools"] = capabilities.tools.model_copy(update={"list_changed": False})
         try:
-            no_prompts = not server._prompt_manager.list_prompts()
+            if not server._prompt_manager.list_prompts():
+                update["prompts"] = None
             resources = server._resource_manager
-            no_resources = not resources.list_resources() and not resources.list_templates()
+            if not resources.list_resources() and not resources.list_templates():
+                update["resources"] = None
         except AttributeError:
-            return capabilities
-        update: dict[str, None] = {}
-        if no_prompts:
-            update["prompts"] = None
-        if no_resources:
-            update["resources"] = None
+            update.pop("prompts", None)
+            update.pop("resources", None)
         return capabilities.model_copy(update=update)
 
     lowlevel.get_capabilities = get_capabilities  # type: ignore[method-assign]
 
 
-advertise_only_registered_primitives(mcp)
+advertise_honest_capabilities(mcp)
 
 
 # Geschäftstyp-IDs (Curia Vista)

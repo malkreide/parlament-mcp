@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Behoben
 
+- **`tools.listChanged` versprach in `2026-07-28` Benachrichtigungen, die nie
+  kommen — in beiden Servern dieses Repositorys.** Das SDK setzt das Flag in
+  der modernen Ära, sobald `subscriptions/listen` bedient wird, also immer.
+  Keiner der beiden Server sendet je `notifications/tools/list_changed`: Die
+  Tools stehen beim Import fest, und das SDK meldet `add_tool`/`remove_tool`
+  auch nicht von selbst. Ein Client, der dem Flag glaubt, hält einen Strom
+  offen für ein Ereignis, das nicht kommt. Gemessen vorher über
+  streamable-http: Handshake `False`, `2026-07-28` `True`; jetzt in beiden
+  `False`. Frische regeln die Cache-Hinweise (`ttlMs`).
+
+  Umgesetzt in derselben Funktion wie die Prompts-/Ressourcen-Korrektur, die
+  dafür von `advertise_only_registered_primitives` in
+  `advertise_honest_capabilities` umbenannt ist. Der Teil hängt an keiner
+  privaten SDK-Stelle und greift auch im Fallback. Ein Test sucht im Quellcode
+  nach `add_tool`, `remove_tool`, `notify_tools_changed` und der
+  Benachrichtigung selbst — wer die Tool-Liste zur Laufzeit veränderlich
+  macht, stösst dort darauf, dass das Flag im selben Commit zurück muss.
+
 - **Capabilities kündigten Prompts und Ressourcen an, die es nicht gibt — in
   beiden Servern dieses Repositorys.** `MCPServer` registriert die Handler für
   Prompts und Ressourcen immer, und das SDK leitet die Capabilities aus den
@@ -18,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ernst nimmt, listet daraufhin leere Verzeichnisse ab oder zeigt ein leeres
   Menü.
 
-  `advertise_only_registered_primitives` blendet beide aus, solange nichts
+  `advertise_honest_capabilities` blendet beide aus, solange nichts
   registriert ist, und prüft das bei jedem Aufruf: Eine spätere Registrierung
   bringt die Capability ohne weitere Änderung zurück. Die Handler bleiben —
   wer trotzdem `prompts/list` fragt, bekommt eine leere Liste statt «Method

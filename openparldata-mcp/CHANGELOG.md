@@ -8,10 +8,16 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Behoben
 
+- **`tools.listChanged` versprach in `2026-07-28` Benachrichtigungen, die nie
+  kommen.** Gemessen über streamable-http: Handshake `False`, moderne Ära
+  `True`, obwohl der Server keine `notifications/tools/list_changed` sendet.
+  Jetzt in beiden Ären `False`; dieselbe Funktion wie im Bundes-Server, jetzt
+  `advertise_honest_capabilities` (`tests/test_capabilities.py`).
+
 - **Capabilities kündigten Prompts und Ressourcen an, die es nicht gibt.**
   Gemessen, in beiden Ären und über streamable-http: `prompts` und `resources`
   angekündigt, in `2026-07-28` mit `subscribe=True` — bei 13 Tools und sonst
-  nichts. `advertise_only_registered_primitives` blendet beide aus, solange
+  nichts. `advertise_honest_capabilities` blendet beide aus, solange
   nichts registriert ist; die Handler bleiben, `prompts/list` liefert weiter
   eine leere Liste. Dieselbe Funktion wie im Bundes-Server
   (`tests/test_capabilities.py`).
