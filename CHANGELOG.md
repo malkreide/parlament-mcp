@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-09-27
+
+Nachtrag zur Umstellung auf Spec `2026-07-28`: der Server sendet keine
+Logmeldungen mehr an den Client. Aufgefallen beim Smoke-Test gegen das
+publizierte Paket 0.4.0. Tools, Parameter und Rückgabeformate bleiben gleich.
+
+### Behoben
+
+- **SEP-2577: jeder Tool-Aufruf schickte Logmeldungen an den Client.** Der
+  Tool-Wrapper rief `ctx.info("<tool> aufgerufen")`, die Transkript-Suche
+  zusätzlich `ctx.info("… Abfrage läuft")`. Spec `2026-07-28` kündigt die
+  logging-Capability ab, und das SDK warnt dafür in **beiden** Ären. Gemessen
+  an 0.4.0 über eine echte Verbindung mit einem Client, der jede Stufe
+  abonniert: `parlament_search_transcripts` lieferte je Ära 2 Meldungen und 6
+  `MCPDeprecationWarning`; jetzt 0 und 0. Der Server kündigte die
+  logging-Capability schon vorher nicht an und bedient `logging/setLevel` nicht.
+
+  Verloren geht nichts: dieselbe Information steht im structlog-Strom auf
+  stderr (`tool_invoked`, `tool_succeeded`, `tool_failed`) und im OTel-Span je
+  Aufruf. Der tote `ctx`-Parameter von `transcripts.search_transcripts` ist
+  entfernt. Der Audit-Nachweis zu SDK-003 vom 2026-05-30 nannte den
+  `ctx.info`-Lifecycle als Beleg; er beschreibt damit nicht mehr den Code.
+
+  `tests/test_sep_2577.py` misst Meldungen und Warnungen je Ära, mit einer
+  Negativkontrolle, die zeigt, dass der Aufbau eine gesendete Meldung sieht,
+  und einer Wache im Quelltext. Die erste Fassung des Tests blieb gegen den
+  alten Code in der modernen Ära grün: sie machte die Warnung zur Exception,
+  und der Wrapper verschluckte Exceptions aus dem Logging. Jetzt wird
+  aufgezeichnet statt geworfen.
+
 ## [0.4.0] - 2026-09-27
 
 Der erste Release, der die MCP-Spec `2026-07-28` nativ bedient. Minor statt

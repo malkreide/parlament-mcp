@@ -333,8 +333,13 @@ def _fmt_business(b: dict) -> dict:
 
 
 def _instrument(name: str):
-    """Decorator: pro Tool-Call ein OTel-Span + strukturiertes Logging (OBS-003/006)
-    und – sofern verfügbar – ein ctx.info-Lifecycle-Event (SDK-003).
+    """Decorator: pro Tool-Call ein OTel-Span + strukturiertes Logging (OBS-003/006).
+
+    Keine Logmeldung an den Client. Hier stand ein ``ctx.info``-Lifecycle-Event
+    (SDK-003); Spec 2026-07-28 kuendigt die logging-Capability ab (SEP-2577),
+    und das SDK warnt dafuer in beiden Aeren. Dieselbe Information steht im
+    structlog-Strom auf stderr und im Span — dort, wo der Betreiber sie liest.
+    ``tests/test_sep_2577.py`` haelt fest, dass ein Aufruf nichts mehr sendet.
 
     Lässt die Signatur via functools.wraps intakt, damit MCPServer weiterhin das
     Pydantic-Eingabeschema baut und ``ctx`` injiziert.
@@ -344,11 +349,6 @@ def _instrument(name: str):
         @functools.wraps(fn)
         async def wrapper(params, ctx: Context | None = None):
             log = _logger.bind(tool=name)
-            if ctx is not None:
-                try:
-                    await ctx.info(f"{name} aufgerufen")
-                except Exception:  # ctx-Logging darf den Tool-Call nie brechen
-                    pass
             with tool_span(f"mcp.tool.{name}", **{"mcp.tool.name": name}):
                 log.info("tool_invoked")
                 try:
@@ -913,7 +913,7 @@ async def parlament_search_transcripts(
 
     <example>speaker_name='Munz', session_id=5202, keyword='Volksschule'</example>
     """
-    return await transcripts.search_transcripts(_get_client(), params, ctx)
+    return await transcripts.search_transcripts(_get_client(), params)
 
 
 @mcp.tool(

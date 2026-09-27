@@ -542,7 +542,7 @@ def _hit_from_record(rec: dict[str, Any]) -> TranscriptHit:
 
 
 async def search_transcripts(
-    client: httpx.AsyncClient, params: SearchTranscriptsInput, ctx: Any | None = None
+    client: httpx.AsyncClient, params: SearchTranscriptsInput
 ) -> TranscriptSearchResponse:
     """Transkripte suchen und als kurze, zitierfähige Auszüge zurückgeben."""
     _validate_coverage(params.date_from, params.date_to)
@@ -573,12 +573,6 @@ async def search_transcripts(
     }
     if params.offset:
         query["$skip"] = str(params.offset)
-
-    if ctx is not None:
-        try:
-            await ctx.info("parlament_search_transcripts: Abfrage läuft")
-        except Exception:
-            pass
 
     data = await _fetch(client, f"{ODATA_BASE}/Transcript", query)
     records = data.get("d", []) if isinstance(data, dict) else []
