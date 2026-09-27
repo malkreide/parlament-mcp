@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Behoben
+
+- **Capabilities kündigten Prompts und Ressourcen an, die es nicht gibt — in
+  beiden Servern dieses Repositorys.** `MCPServer` registriert die Handler für
+  Prompts und Ressourcen immer, und das SDK leitet die Capabilities aus den
+  Handlern ab. Gemessen, in beiden Ären und über streamable-http: `prompts` und
+  `resources` angekündigt, in `2026-07-28` sogar mit `subscribe=True` und
+  `listChanged=True`. Registriert sind nur Tools. Ein Client, der Capabilities
+  ernst nimmt, listet daraufhin leere Verzeichnisse ab oder zeigt ein leeres
+  Menü.
+
+  `advertise_only_registered_primitives` blendet beide aus, solange nichts
+  registriert ist, und prüft das bei jedem Aufruf: Eine spätere Registrierung
+  bringt die Capability ohne weitere Änderung zurück. Die Handler bleiben —
+  wer trotzdem `prompts/list` fragt, bekommt eine leere Liste statt «Method
+  not found». Die Funktion greift auf private Stellen des SDK zu
+  (`_lowlevel_server`, die Manager); fehlt eine davon nach einem SDK-Update,
+  gilt wieder die Ableitung des SDK statt eines `AttributeError` im
+  `initialize`. `tests/test_capabilities.py` fährt die
+  Ankündigung je Ära über eine echte Verbindung, mit Negativkontrolle, die
+  anzeigt, wenn das SDK selbst ehrlich ableitet.
+
 ### Geändert
 
 - **Spec `2026-07-28`: `serverInfo` trägt jetzt die Version.** In der
