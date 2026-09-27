@@ -9,10 +9,20 @@ from __future__ import annotations
 
 import sys
 
+from mcp.types.version import LATEST_HANDSHAKE_VERSION
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# MCP-Spec-Version, gegen die dieser Server getestet/gepinnt ist.
-PROTOCOL_VERSION = "2025-06-18"
+# Die Revision, die `server_start` ins Log schreibt.
+#
+# Hier stand `"2025-06-18"` — zwei Revisionen alt. Seit dem Umstieg auf `mcp`
+# 2.x handelt der Server im Handshake `2025-11-25` aus und bedient daneben die
+# Envelope-Aera `2026-07-28`; geloggt wurde weiter die alte Zahl. Ein Log, das
+# etwas anderes sagt als die Leitung, ist beim Debuggen schlimmer als keines.
+#
+# Abgeleitet statt geschrieben, wie im Bundes-Server. `LATEST_HANDSHAKE_VERSION`
+# und nicht `LATEST_PROTOCOL_VERSION`: Letzteres ist ein Alias auf die moderne
+# Aera. `tests/test_protocol_version.py` pinnt beide.
+PROTOCOL_VERSION = LATEST_HANDSHAKE_VERSION
 
 # ─────────────────────────── Datenquelle / Lizenz ──────────────────────────────
 BASE_URL = "https://api.openparldata.ch/v1"

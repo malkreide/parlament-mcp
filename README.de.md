@@ -272,9 +272,16 @@ aus der jeweils anderen Aera wird abgewiesen.
 Beide Revisionen sind in
 [`tests/test_protocol_version.py`](tests/test_protocol_version.py) gepinnt und
 werden gegen das installierte SDK geprueft; ein Dependabot-Bump von `mcp` kann
-also keine der beiden still verschieben. Dieser Server baut keine ASGI-App, durch die sich ein `initialize`
-schicken liesse; das Gate sichert deshalb die SDK-Konstanten statt einer
-gemessenen Antwort — die schwaechere Form, benannt statt verschwiegen.
+also keine der beiden still verschieben. Dieselbe Datei misst zusaetzlich die
+Aushandlung: eine echte Client-Verbindung je Aera gegen den registrierten
+Server, die Revision wird von der Verbindung abgelesen statt aus einer
+Konstante geschlossen.
+
+In der Aera `2026-07-28` gibt es keinen Handshake mehr, der die Identitaet des
+Servers traegt; das SDK stempelt `io.modelcontextprotocol/serverInfo` stattdessen
+in die `_meta` der Resultate. Der Server gibt dort seine Paketversion mit
+([`tests/test_server_info.py`](tests/test_server_info.py)), beide Aeren melden
+also dieselbe Version.
 
 Zu beachten: `LATEST_PROTOCOL_VERSION` im SDK ist ein Alias auf die **moderne**
 Aera, nicht auf die Handshake-Aera — wer nur dagegen pinnt, laesst genau die

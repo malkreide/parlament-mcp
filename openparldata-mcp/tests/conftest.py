@@ -41,3 +41,24 @@ def _reset_state():
     client_mod._client_loop = None
     client_mod._last_success_epoch = None
     yield
+
+
+@pytest.fixture
+def offline_lifespan():
+    """Fuer Tests, die den Server ueber einen echten `Client` ansprechen.
+
+    Der Lifespan waermt den Body-Cache vor und fragt dafuer die Live-API. Ein
+    `Client(mcp)` faehrt den Lifespan mit — ohne diese Fixture ginge jeder
+    solche Test ins Netz. `respx` beantwortet genau diese eine Anfrage und
+    laesst jede andere scheitern.
+    """
+    import httpx
+    import respx
+
+    from openparldata_mcp.config import BASE_URL
+
+    with respx.mock(assert_all_called=False) as router:
+        router.get(f"{BASE_URL}/bodies/").mock(
+            return_value=httpx.Response(200, json=BODIES_FIXTURE)
+        )
+        yield router

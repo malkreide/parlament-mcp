@@ -239,9 +239,15 @@ other era is refused.
 Both revisions are pinned in
 [`tests/test_protocol_version.py`](tests/test_protocol_version.py) and asserted
 against the installed SDK, so a Dependabot bump of `mcp` cannot move either one
-silently. This server builds no ASGI app to send an `initialize` through, so
-the gate asserts the SDK constants rather than a measured response — the
-weaker form, named rather than left unsaid.
+silently. The same file also measures the negotiation: one real client
+connection per era against the registered server, reading the revision off the
+connection instead of inferring it from a constant.
+
+In the `2026-07-28` era there is no handshake to carry the server's identity;
+the SDK stamps `io.modelcontextprotocol/serverInfo` into the result `_meta`
+instead. The server passes its package version there
+([`tests/test_server_info.py`](tests/test_server_info.py)), so both eras report
+the same version.
 
 Note that the SDK's `LATEST_PROTOCOL_VERSION` is an alias for the **modern**
 era, not for the handshake era — pinning against it alone would leave the era

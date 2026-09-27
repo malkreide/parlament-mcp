@@ -96,6 +96,26 @@ Sync-/Aktualitätskosten ohne heutigen funktionalen Gewinn.
 6. **Fehlerverhalten.** 404 → `{"detail": …}`; `offset > 100000` → RFC-7807-Body
    mit `max_offset`. Beide werden in verständliche Tool-Fehler übersetzt.
 
+## MCP-Protokoll-Version
+
+Dieser Server bedient **zwei Protokoll-Aeren** ueber denselben Endpunkt; die
+erste Anfrage einer Verbindung entscheidet, welche gilt.
+
+| Aera | Revision | Wer sie erreicht |
+|---|---|---|
+| `initialize`-Handshake | `2024-11-05` … **`2025-11-25`** | Was heutige Clients sprechen. |
+| Pro-Request-Envelope | **`2026-07-28`** | Clients, die `server/discover` proben oder den `2026-07-28`-`_meta`-Envelope senden. |
+
+In der Aera `2026-07-28` tragen `tools/list` und `server/discover`
+Frischehinweise (`ttlMs=300000`, `cacheScope=public`, SEP-2549), und Resultate
+wie `tools/list` tragen die Paketversion in `io.modelcontextprotocol/serverInfo`.
+Beide Revisionen sind gegen das installierte SDK gepinnt und je Aera ueber eine
+echte Client-Verbindung gemessen, in
+[`tests/test_protocol_version.py`](tests/test_protocol_version.py); ein Bump von
+`mcp` kann keine der beiden still verschieben. Faellt das Gate: erst das
+Spec-Changelog lesen, dann Konstante, beide READMEs und
+[`CHANGELOG.md`](CHANGELOG.md) gemeinsam bewegen.
+
 ## Installation & Betrieb
 
 ```bash
