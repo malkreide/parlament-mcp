@@ -7,111 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Behoben
+## [0.4.0] - 2026-09-27
 
-- **`tools.listChanged` versprach in `2026-07-28` Benachrichtigungen, die nie
-  kommen — in beiden Servern dieses Repositorys.** Das SDK setzt das Flag in
-  der modernen Ära, sobald `subscriptions/listen` bedient wird, also immer.
-  Keiner der beiden Server sendet je `notifications/tools/list_changed`: Die
-  Tools stehen beim Import fest, und das SDK meldet `add_tool`/`remove_tool`
-  auch nicht von selbst. Ein Client, der dem Flag glaubt, hält einen Strom
-  offen für ein Ereignis, das nicht kommt. Gemessen vorher über
-  streamable-http: Handshake `False`, `2026-07-28` `True`; jetzt in beiden
-  `False`. Frische regeln die Cache-Hinweise (`ttlMs`).
+Der erste Release, der die MCP-Spec `2026-07-28` nativ bedient. Minor statt
+Patch, weil sich ändert, was ein Client zu sehen bekommt:
 
-  Umgesetzt in derselben Funktion wie die Prompts-/Ressourcen-Korrektur, die
-  dafür von `advertise_only_registered_primitives` in
-  `advertise_honest_capabilities` umbenannt ist. Der Teil hängt an keiner
-  privaten SDK-Stelle und greift auch im Fallback. Ein Test sucht im Quellcode
-  nach `add_tool`, `remove_tool`, `notify_tools_changed` und der
-  Benachrichtigung selbst — wer die Tool-Liste zur Laufzeit veränderlich
-  macht, stösst dort darauf, dass das Flag im selben Commit zurück muss.
+- **Capabilities:** `prompts` und `resources` werden nicht mehr angekündigt,
+  `tools.listChanged` steht in beiden Ären auf `false`. Ein Client, der auf die
+  alte Ankündigung hin `prompts/list` oder `resources/list` aufrief, bekommt
+  weiter leere Listen; einer, der auf `notifications/tools/list_changed`
+  wartete, wartet jetzt nicht mehr vergeblich.
+- **Browser-Clients kommen durch den Preflight:** Die CORS-Freigabe nennt
+  jetzt die Routing-Header der Spec (`Mcp-Method`, `Mcp-Name`,
+  `Mcp-Protocol-Version`) und `DELETE`. In 0.3.5 wies der Preflight jede
+  Cross-Origin-Anfrage ab, die einen dieser Header trug, und Sessions liessen
+  sich aus dem Browser nicht beenden.
+- **`serverInfo.version`** trägt die Paketversion statt `""`.
 
-- **Capabilities kündigten Prompts und Ressourcen an, die es nicht gibt — in
-  beiden Servern dieses Repositorys.** `MCPServer` registriert die Handler für
-  Prompts und Ressourcen immer, und das SDK leitet die Capabilities aus den
-  Handlern ab. Gemessen, in beiden Ären und über streamable-http: `prompts` und
-  `resources` angekündigt, in `2026-07-28` sogar mit `subscribe=True` und
-  `listChanged=True`. Registriert sind nur Tools. Ein Client, der Capabilities
-  ernst nimmt, listet daraufhin leere Verzeichnisse ab oder zeigt ein leeres
-  Menü.
+Die Abhängigkeit bleibt `mcp[cli]>=2.0.0,<3`: die Testsuite läuft gegen
+`mcp` 2.0.0, 2.0.1, 2.1.0, 2.1.1 und 2.2.0 grün.
 
-  `advertise_honest_capabilities` blendet beide aus, solange nichts
-  registriert ist, und prüft das bei jedem Aufruf: Eine spätere Registrierung
-  bringt die Capability ohne weitere Änderung zurück. Die Handler bleiben —
-  wer trotzdem `prompts/list` fragt, bekommt eine leere Liste statt «Method
-  not found». Die Funktion greift auf private Stellen des SDK zu
-  (`_lowlevel_server`, die Manager); fehlt eine davon nach einem SDK-Update,
-  gilt wieder die Ableitung des SDK statt eines `AttributeError` im
-  `initialize`. `tests/test_capabilities.py` fährt die
-  Ankündigung je Ära über eine echte Verbindung, mit Negativkontrolle, die
-  anzeigt, wenn das SDK selbst ehrlich ableitet.
-
-### Geändert
-
-- **Spec `2026-07-28`: `serverInfo` trägt jetzt die Version.** In der
-  Envelope-Ära gibt es keinen Handshake mehr, der Name und Version überträgt;
-  das SDK stempelt stattdessen `io.modelcontextprotocol/serverInfo` in die
-  `_meta` der Resultate. Der Server gab `MCPServer` keine `version` mit, auf
-  der Leitung stand `"version": ""`. Jetzt die Paketversion aus den Metadaten —
-  in beiden Ären dieselbe (`tests/test_server_info.py`, mit Negativkontrolle).
-
-- **Protokoll-Pin gemessen statt nur aus Konstanten geschlossen.**
-  `tests/test_protocol_version.py` fährt je Ära eine echte `Client`-Verbindung
-  gegen den registrierten Server: `legacy` handelt `2025-11-25` aus, `auto`
-  landet über `server/discover` auf `2026-07-28`. Der Satz, dieses Repo baue
-  keine App, durch die sich ein `initialize` schicken liesse, stimmte nicht
-  mehr und ist aus Test und beiden READMEs entfernt.
-
-### Behoben
-
-- **`DELETE` fehlte in `allow_methods` — in beiden Servern dieses Repositorys.**
-  Auf streamable-http beendet die Methode eine Session ausdrücklich; der
-  Preflight wies sie mit 400 ab. Ein Browser-Client konnte Sessions öffnen, aber
-  nie schliessen. Das SDK bedient sie sehr wohl (`_handle_delete_request` in
-  `mcp.server.streamable_http`; dessen 405-Antwort wirbt mit
-  `Allow: GET, POST, DELETE`).
-
-- **`openparldata-mcp`: die Routing-Header der Spec `2026-07-28` fehlten.**
-  `Mcp-Method`, `Mcp-Name` und `Mcp-Protocol-Version` tragen seit dieser
-  Revision die Wegwahl einer streamable-http-Anfrage. Ein Browser darf einen
-  nicht safelisteten Header gar nicht erst senden, wenn der Server ihn nicht
-  nennt — **jede** Cross-Origin-Anfrage starb am Preflight, vor dem ersten
-  MCP-Byte. Gemessen vorher: `mcp-method` → 400, `mcp-protocol-version` → 400.
-
-  Der Schwester-Server im selben Repository führte die Header längst; das
-  Subprojekt war bei der damaligen Umstellung übersehen worden. `Last-Event-ID`
-  kommt mit auf die Liste — er setzt einen abgerissenen SSE-Strom fort.
-
-  Ohne diesen Punkt hätte der `DELETE`-Fix nichts gebracht: Wer nicht einmal
-  eine Anfrage durchbringt, kann auch keine Session beenden.
+Einträge, die `openparldata-mcp/` betreffen, stehen hier, weil sie im selben
+Repository landeten; das Subprojekt wird mit diesem Release nicht veröffentlicht
+(siehe `openparldata-mcp/CHANGELOG.md`).
 
 ### Hinzugefügt
 
 - **`openparldata-mcp/tests/test_cors.py`.** Das Subprojekt hatte keine
   CORS-Tests — deshalb blieb beides unbemerkt.
-
-### Behoben
-
-- **Browser-Clients scheiterten am Preflight.** Spec `2026-07-28` routet eine
-  Streamable-HTTP-Anfrage über `Mcp-Method`, `Mcp-Name` und
-  `Mcp-Protocol-Version`; die CORS-Freigabeliste nannte keinen davon, dafür mit
-  `Mcp-Session-Id` den Session-Header, der für sich genommen keine Anfrage
-  routet. Ein Browser darf einen nicht safelisteten Header nicht senden, wenn
-  der Server ihn nicht nennt: die Anfrage starb vor dem ersten MCP-Byte,
-  während stdio und Python, für die kein Preflight gilt, weiterliefen.
-  `tests/test_cors.py` fährt jeden Header einzeln gegen die zusammengebaute App
-  und hält die Liste gegen die Konstanten aus `mcp.shared.inbound`.
-
-- **`server_start` loggte eine drei Revisionen alte Protokoll-Version.**
-  `PROTOCOL_VERSION` stand auf `2025-06-18`, waehrend der Server seit dem
-  Umstieg auf `mcp` 2.x `2025-11-25` aushandelt. Ein Log, das etwas anderes
-  sagt als die Leitung, ist beim Debuggen schlimmer als gar keines. Die
-  Konstante wird jetzt aus `LATEST_HANDSHAKE_VERSION` abgeleitet statt ein
-  zweites Mal hingeschrieben; ein Test faengt ab, dass daraus wieder ein
-  Literal wird. Beide READMEs nannten dieselbe alte Zahl und sind nachgezogen.
-
-### Hinzugefügt
 
 - **Frischehinweise auf `tools/list` und `server/discover`** (SEP-2549, Spec
   `2026-07-28`): `ttlMs` 300000, `cacheScope` `public`. Das SDK setzt sonst
@@ -189,21 +112,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   der Freigabeliste, faellt genau dieser eine Test, und die sieben bestehenden
   bleiben gruen.
 
-### Changed
-
-- **Der Backoff-Schlaf wird ueber einen Modul-Alias gepatcht, nicht ueber
-  `asyncio.sleep`.** Die Tests nullten die Wartezeit mit
-  `monkeypatch.setattr(<modul>.asyncio, "sleep", ...)`. Das liest sich lokal,
-  ersetzt `sleep` aber auf dem geteilten Modulobjekt — fuer httpx, respx,
-  pytest-asyncio und jeden anderen Importeur im Prozess. Das Modul legt die
-  Naht jetzt als `_sleep = asyncio.sleep` offen; gepatcht wird diese.
-  `test_der_retry_geht_ueber_den_alias` haelt sie: umgeht der Retry den Alias,
-  faellt der Test in Sekundenbruchteilen. Ohne ihn fiel gar nichts — die Suite
-  wurde nur ein Vielfaches langsamer, und eine laengere Laufzeit ist kein
-  Signal, das jemand liest.
-
-### Added
-
 - **Retry-Politik gegenueber Curia Vista** (ARCH-014): `Retry-After` wird
   gelesen und schlaegt die eigene Backoff-Kurve, der Backoff ist gestreut, und
   ein Gesamtbudget begrenzt den ganzen Aufruf.
@@ -227,6 +135,112 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Volltextsuchen dauern bis ~40 s, und ein Budget unter 30 s wuerde legitime
   Suchen abwuergen. Ein Test haelt diese Abweichung fest, damit sie eine
   dokumentierte Entscheidung bleibt.
+
+### Geändert
+
+- **Spec `2026-07-28`: `serverInfo` trägt jetzt die Version.** In der
+  Envelope-Ära gibt es keinen Handshake mehr, der Name und Version überträgt;
+  das SDK stempelt stattdessen `io.modelcontextprotocol/serverInfo` in die
+  `_meta` der Resultate. Der Server gab `MCPServer` keine `version` mit, auf
+  der Leitung stand `"version": ""`. Jetzt die Paketversion aus den Metadaten —
+  in beiden Ären dieselbe (`tests/test_server_info.py`, mit Negativkontrolle).
+
+- **Protokoll-Pin gemessen statt nur aus Konstanten geschlossen.**
+  `tests/test_protocol_version.py` fährt je Ära eine echte `Client`-Verbindung
+  gegen den registrierten Server: `legacy` handelt `2025-11-25` aus, `auto`
+  landet über `server/discover` auf `2026-07-28`. Der Satz, dieses Repo baue
+  keine App, durch die sich ein `initialize` schicken liesse, stimmte nicht
+  mehr und ist aus Test und beiden READMEs entfernt.
+
+- **Der Backoff-Schlaf wird ueber einen Modul-Alias gepatcht, nicht ueber
+  `asyncio.sleep`.** Die Tests nullten die Wartezeit mit
+  `monkeypatch.setattr(<modul>.asyncio, "sleep", ...)`. Das liest sich lokal,
+  ersetzt `sleep` aber auf dem geteilten Modulobjekt — fuer httpx, respx,
+  pytest-asyncio und jeden anderen Importeur im Prozess. Das Modul legt die
+  Naht jetzt als `_sleep = asyncio.sleep` offen; gepatcht wird diese.
+  `test_der_retry_geht_ueber_den_alias` haelt sie: umgeht der Retry den Alias,
+  faellt der Test in Sekundenbruchteilen. Ohne ihn fiel gar nichts — die Suite
+  wurde nur ein Vielfaches langsamer, und eine laengere Laufzeit ist kein
+  Signal, das jemand liest.
+
+### Behoben
+
+- **`tools.listChanged` versprach in `2026-07-28` Benachrichtigungen, die nie
+  kommen — in beiden Servern dieses Repositorys.** Das SDK setzt das Flag in
+  der modernen Ära, sobald `subscriptions/listen` bedient wird, also immer.
+  Keiner der beiden Server sendet je `notifications/tools/list_changed`: Die
+  Tools stehen beim Import fest, und das SDK meldet `add_tool`/`remove_tool`
+  auch nicht von selbst. Ein Client, der dem Flag glaubt, hält einen Strom
+  offen für ein Ereignis, das nicht kommt. Gemessen vorher über
+  streamable-http: Handshake `False`, `2026-07-28` `True`; jetzt in beiden
+  `False`. Frische regeln die Cache-Hinweise (`ttlMs`).
+
+  Umgesetzt in derselben Funktion wie die Prompts-/Ressourcen-Korrektur, die
+  dafür von `advertise_only_registered_primitives` in
+  `advertise_honest_capabilities` umbenannt ist. Der Teil hängt an keiner
+  privaten SDK-Stelle und greift auch im Fallback. Ein Test sucht im Quellcode
+  nach `add_tool`, `remove_tool`, `notify_tools_changed` und der
+  Benachrichtigung selbst — wer die Tool-Liste zur Laufzeit veränderlich
+  macht, stösst dort darauf, dass das Flag im selben Commit zurück muss.
+
+- **Capabilities kündigten Prompts und Ressourcen an, die es nicht gibt — in
+  beiden Servern dieses Repositorys.** `MCPServer` registriert die Handler für
+  Prompts und Ressourcen immer, und das SDK leitet die Capabilities aus den
+  Handlern ab. Gemessen, in beiden Ären und über streamable-http: `prompts` und
+  `resources` angekündigt, in `2026-07-28` sogar mit `subscribe=True` und
+  `listChanged=True`. Registriert sind nur Tools. Ein Client, der Capabilities
+  ernst nimmt, listet daraufhin leere Verzeichnisse ab oder zeigt ein leeres
+  Menü.
+
+  `advertise_honest_capabilities` blendet beide aus, solange nichts
+  registriert ist, und prüft das bei jedem Aufruf: Eine spätere Registrierung
+  bringt die Capability ohne weitere Änderung zurück. Die Handler bleiben —
+  wer trotzdem `prompts/list` fragt, bekommt eine leere Liste statt «Method
+  not found». Die Funktion greift auf private Stellen des SDK zu
+  (`_lowlevel_server`, die Manager); fehlt eine davon nach einem SDK-Update,
+  gilt wieder die Ableitung des SDK statt eines `AttributeError` im
+  `initialize`. `tests/test_capabilities.py` fährt die
+  Ankündigung je Ära über eine echte Verbindung, mit Negativkontrolle, die
+  anzeigt, wenn das SDK selbst ehrlich ableitet.
+
+- **`DELETE` fehlte in `allow_methods` — in beiden Servern dieses Repositorys.**
+  Auf streamable-http beendet die Methode eine Session ausdrücklich; der
+  Preflight wies sie mit 400 ab. Ein Browser-Client konnte Sessions öffnen, aber
+  nie schliessen. Das SDK bedient sie sehr wohl (`_handle_delete_request` in
+  `mcp.server.streamable_http`; dessen 405-Antwort wirbt mit
+  `Allow: GET, POST, DELETE`).
+
+- **`openparldata-mcp`: die Routing-Header der Spec `2026-07-28` fehlten.**
+  `Mcp-Method`, `Mcp-Name` und `Mcp-Protocol-Version` tragen seit dieser
+  Revision die Wegwahl einer streamable-http-Anfrage. Ein Browser darf einen
+  nicht safelisteten Header gar nicht erst senden, wenn der Server ihn nicht
+  nennt — **jede** Cross-Origin-Anfrage starb am Preflight, vor dem ersten
+  MCP-Byte. Gemessen vorher: `mcp-method` → 400, `mcp-protocol-version` → 400.
+
+  Der Schwester-Server im selben Repository führte die Header längst; das
+  Subprojekt war bei der damaligen Umstellung übersehen worden. `Last-Event-ID`
+  kommt mit auf die Liste — er setzt einen abgerissenen SSE-Strom fort.
+
+  Ohne diesen Punkt hätte der `DELETE`-Fix nichts gebracht: Wer nicht einmal
+  eine Anfrage durchbringt, kann auch keine Session beenden.
+
+- **Browser-Clients scheiterten am Preflight.** Spec `2026-07-28` routet eine
+  Streamable-HTTP-Anfrage über `Mcp-Method`, `Mcp-Name` und
+  `Mcp-Protocol-Version`; die CORS-Freigabeliste nannte keinen davon, dafür mit
+  `Mcp-Session-Id` den Session-Header, der für sich genommen keine Anfrage
+  routet. Ein Browser darf einen nicht safelisteten Header nicht senden, wenn
+  der Server ihn nicht nennt: die Anfrage starb vor dem ersten MCP-Byte,
+  während stdio und Python, für die kein Preflight gilt, weiterliefen.
+  `tests/test_cors.py` fährt jeden Header einzeln gegen die zusammengebaute App
+  und hält die Liste gegen die Konstanten aus `mcp.shared.inbound`.
+
+- **`server_start` loggte eine drei Revisionen alte Protokoll-Version.**
+  `PROTOCOL_VERSION` stand auf `2025-06-18`, waehrend der Server seit dem
+  Umstieg auf `mcp` 2.x `2025-11-25` aushandelt. Ein Log, das etwas anderes
+  sagt als die Leitung, ist beim Debuggen schlimmer als gar keines. Die
+  Konstante wird jetzt aus `LATEST_HANDSHAKE_VERSION` abgeleitet statt ein
+  zweites Mal hingeschrieben; ein Test faengt ab, dass daraus wieder ein
+  Literal wird. Beide READMEs nannten dieselbe alte Zahl und sind nachgezogen.
 
 
 ## [0.3.5] - 2026-08-02
